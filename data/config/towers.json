@@ -1,0 +1,25 @@
+{
+    "shooter": {
+        "cost": [],
+        "rarity": ["common", "uncommon", "rare", "legendary", "mythical"],
+        "damage": [10, 15, 20, 25, 50]
+    },
+    "minigun": {
+
+    },
+    "bomber": {
+
+    },
+    "siren": {
+
+    },
+    "medusa": {
+
+    },
+    "phoenix": {
+
+    },
+    "dragon": {
+
+    }
+}

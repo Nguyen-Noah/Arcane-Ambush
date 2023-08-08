@@ -1,0 +1,22 @@
+{
+    "left": {
+        "toggle": "hold",
+        "button": ["keyboard", [97]]
+    },
+    "right": {
+        "toggle": "hold",
+        "button": ["keyboard", [100]]
+    },
+    "up": {
+        "toggle": "hold",
+        "button": ["keyboard", [119]]
+    },
+    "down": {
+        "toggle": "hold",
+        "button": ["keyboard", [115]]
+    },
+    "swap_inventory": {
+        "toggle": "press",
+        "button": ["keyboard", [103]]
+    }
+}

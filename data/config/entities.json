@@ -1,0 +1,22 @@
+{
+    "player": {
+        "health": 100,
+        "speed": 100,
+        "rank": -1
+    },
+    "slime": {
+        "health": 10,
+        "speed": 50,
+        "rank": 1
+    },
+    "mega_slime": {
+        "health": 25,
+        "speed": 50,
+        "rank": 2
+    },
+    "king_slime": {
+        "health": 100,
+        "speed": 50,
+        "rank": 3
+    }
+}
