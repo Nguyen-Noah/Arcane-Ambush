@@ -1,5 +1,3 @@
-import pygame
-from .config import config
 from .builder import Builder
 from .inventory import Inventory
 

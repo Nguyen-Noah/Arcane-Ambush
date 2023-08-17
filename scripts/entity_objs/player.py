@@ -37,27 +37,6 @@ class Player(Entity):
 
             self.frame_motion += movement_vector
 
-    def swing(self):
-        self.atk_cd = self.game.window.dt * self.active_animation.data.config['speed']
-        if not self.attacking:
-            self.set_action('attack', self.direction)
-            timer = 0
-            for time in self.active_animation.data.config['frames']:
-                timer += time
-            
-            if self.active_animation.frame < (timer - self.active_animation.data.config['frames'][3]):
-                self.attacking = True
-
-            angle = math.atan2(self.game.input.mouse_pos[1] - self.center[1] + self.game.world.camera.true_pos[1], self.game.input.mouse_pos[0] - self.center[0] + self.game.world.camera.true_pos[0])
-            self.aim_angle = angle
-            if (self.rotation % 360 < 270) and (self.rotation % 360 > 90):
-                self.game.world.world_animations.spawn('dagger_slash', [self.center[0], self.center[1]], self.aim_angle, flip=[True, self.flip[0]])
-            else:
-                if self.direction == 'down' or self.direction == 'up':
-                    self.game.world.world_animations.spawn('dagger_slash', [self.center[0], self.center[1]], self.aim_angle, flip=[False, not self.flip[0]])
-                else:
-                    self.game.world.world_animations.spawn('dagger_slash', [self.center[0], self.center[1]], self.aim_angle, flip=[False, self.flip[0]])
-
     def print_hitbox(self):
         pygame.draw.rect(self.game.window.display, 'blue', (self.rect[0] - self.game.world.camera.true_pos[0], self.rect[1] - self.game.world.camera.true_pos[1], self.rect[2], self.rect[3]), 1)
 
@@ -96,7 +75,7 @@ class Player(Entity):
         # weapon
         if self.game.input.mouse_state['left_click'] or self.attacking:
             self.atk_counter += self.game.window.dt
-            self.swing()
+            self.skills[0].use()
             if self.atk_counter > self.atk_cd:
                 self.attacking = False
                 self.allow_movement = True
