@@ -26,7 +26,7 @@ class Game:
     def run(self):
         while True:
             if not self.game_state:
-                self.load_map('data/maps/update3.json')
+                self.load_map('data/maps/level0.json')
                 self.game_state = True
             self.update()
 

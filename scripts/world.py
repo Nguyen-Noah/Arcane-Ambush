@@ -6,6 +6,7 @@ from .tile_map import TileMap
 from . import spritesheet_loader
 from .hitboxes import Hitboxes
 from .weapon_anim import WeaponAnimations
+from .standalone_animations import StandaloneAnimations
 import cProfile
 
 class World:
@@ -18,7 +19,8 @@ class World:
         self.tile_map = TileMap((16, 16), self.game.window.base_resolution)
         self.tile_map.load_map(map_id)
 
-        self.world_animations = WeaponAnimations(self.game)
+        self.weapon_animations = WeaponAnimations(self.game)
+        self.world_animations = StandaloneAnimations(self.game)
 
         self.entities = EntityManager(self.game)
         self.player = self.entities.gen_player()
@@ -41,6 +43,7 @@ class World:
         self.collideables = []
         self.render_list = []
         for layer in render_list:
+            self.weapon_animations.render(surf, self.camera.pos)
             self.world_animations.render(surf, self.camera.pos)
             for tile in layer:
                 offset = [-32, -32]
@@ -69,5 +72,6 @@ class World:
 
     def update(self):
         self.camera.update()
+        self.weapon_animations.update()
         self.world_animations.update()
         self.entities.spawn_entities()

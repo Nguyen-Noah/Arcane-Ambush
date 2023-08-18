@@ -7,6 +7,7 @@ class Player(Entity):
         super().__init__(*args, **kwargs)
         self.velocity = [0, 0]
         self.allow_movement = True
+        self.moving = False
         self.direction = 'down'
         self.money = 100
         self.skills = [SKILLS['dagger'](self.game, self), None, None, None]
@@ -19,14 +20,18 @@ class Player(Entity):
 
     def attempt_move(self, axis, direction):
         if self.allow_movement:
+            
             if axis == 0:
                 self.flip[0] = direction < 0
                 self.direction = 'side'
-            else:
-                if direction == 1:
-                    self.direction = 'down'
-                else:
-                    self.direction = 'up'
+            #else:
+                #if direction == 1:
+                    #self.direction = 'down'
+                #else:
+                    #self.direction = 'up'
+            if not self.moving:
+                self.game.world.world_animations.spawn('player_dust', [self.center[0], self.center[1]], flip=self.flip)
+
             movement_vector = pygame.math.Vector2(0, 0)
             movement_vector[axis] = direction
 
@@ -36,6 +41,7 @@ class Player(Entity):
             movement_vector *= self.speed * self.game.window.dt
 
             self.frame_motion += movement_vector
+        self.moving = True
 
     def print_hitbox(self):
         pygame.draw.rect(self.game.window.display, 'blue', (self.rect[0] - self.game.world.camera.true_pos[0], self.rect[1] - self.game.world.camera.true_pos[1], self.rect[2], self.rect[3]), 1)
@@ -71,6 +77,7 @@ class Player(Entity):
                 self.set_action('walk', self.direction)
             else:
                 self.set_action('idle', self.direction)
+                self.moving = False
 
         # weapon
         if self.game.input.mouse_state['left_click'] or self.attacking:

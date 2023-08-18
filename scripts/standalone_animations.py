@@ -11,7 +11,7 @@ class StandaloneAnimations:
         self.game = game
         self.animations = []
 
-    def spawn(self, animation_id, location, rotation, flip=[False, False]):
+    def spawn(self, animation_id, location, flip=[False, False]):
         self.animations.append(StandaloneAnimation(self.game.assets.animations.new(animation_id), location, flip))
 
     def update(self):
