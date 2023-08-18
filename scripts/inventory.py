@@ -1,18 +1,21 @@
 import pygame
 
 class InventorySlot:
-    def __init__(self, game, icon, cooldown):
+    def __init__(self, game, icon):
         self.game = game
         self.icon = icon
-        self.cooldown = cooldown
 
     def update(self):
-        self.cooldown -= self.game.window.dt
+        pass
 
     def render(self, surf, pos, tilesize):
         surf.blit(self.game.assets.skills[self.icon], (pos + 1, self.game.window.display.get_height() - tilesize + 1))
-        rect = pygame.draw.rect(pos, self.game.window.display.get_height() - tilesize, tilesize, tilesize)
-        surf.blit(rect)
+        
+        if self.game.world.player.attacking:
+            cd = (self.game.world.player.atk_counter / self.game.world.player.atk_cd) * tilesize
+            cd_surf = pygame.Surface((tilesize - 4, tilesize - 4), pygame.SRCALPHA)
+            pygame.draw.rect(cd_surf, (255, 255, 255, 100), pygame.Rect(0, cd, tilesize, tilesize))
+            surf.blit(cd_surf, (pos + 2, self.game.window.display.get_height() - tilesize + 2))
 
 class Inventory:
     def __init__(self, game):
@@ -21,14 +24,14 @@ class Inventory:
         self.inventory_count = 0
         self.inventory = []
 
-    def add(self, icon, cooldown):
+    def add(self, icon):
         if self.inventory_count < self.max_slots:
-            self.inventory.append(InventorySlot(self.game, icon, cooldown))
+            self.inventory.append(InventorySlot(self.game, icon))
             self.inventory_count += 1
 
     def update(self):
         if self.game.input.mouse_state['right_click']:
-            self.add('dagger', 1)
+            self.add('dagger')
 
         for slot in self.inventory:
             slot.update()

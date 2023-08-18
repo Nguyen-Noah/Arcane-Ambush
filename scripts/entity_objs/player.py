@@ -14,7 +14,7 @@ class Player(Entity):
 
         self.attacking = False
         self.atk_counter = 0
-        self.atk_cd = 1
+        self.atk_cd = 0.4
         
         self.counter = [False, False]
 
@@ -83,6 +83,8 @@ class Player(Entity):
         if self.game.input.mouse_state['left_click'] or self.attacking:
             self.atk_counter += self.game.window.dt
             self.skills[0].use()
+            print(self.attacking)
+            #print(self.atk_counter)
             if self.atk_counter > self.atk_cd:
                 self.attacking = False
                 self.allow_movement = True
