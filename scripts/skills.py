@@ -26,6 +26,7 @@ class Skill:
 class Dagger(Skill):
     def __init__(self, game, owner):
         super().__init__(game, owner, 'dagger')
+        self.cooldown = 0.4
 
     def use(self):
         self.owner.atk_cd = self.game.window.dt * self.owner.active_animation.data.config['speed']

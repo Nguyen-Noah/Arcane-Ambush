@@ -1,6 +1,7 @@
 import pygame, math
 from ..entity import Entity
 from ..skills import SKILLS
+from ..inventory import Inventory
 
 class Player(Entity):
     def __init__(self, *args, **kwargs):
@@ -11,12 +12,22 @@ class Player(Entity):
         self.direction = 'down'
         self.money = 100
         self.skills = [SKILLS['dagger'](self.game, self), None, None, None]
+        self.inventory = Inventory(self)
 
         self.attacking = False
         self.atk_counter = 0
-        self.atk_cd = 0.4
         
         self.counter = [False, False]
+
+    def give_item(self, item, slot_group='items'):
+        # remove existing active tags
+        item.tags = [tag for tag in item.tags if tag != 'active']
+
+        if not len(self.inventory.get_custom_group('active_weapons')):
+            self.weapon_hide = 3
+        if slot_group == 'active':
+            item.tags.append('active')
+        self.inventory.add_item(item, slot_group if slot_group != 'active' else 'items')
 
     def attempt_move(self, axis, direction):
         if self.allow_movement:
@@ -83,9 +94,7 @@ class Player(Entity):
         if self.game.input.mouse_state['left_click'] or self.attacking:
             self.atk_counter += self.game.window.dt
             self.skills[0].use()
-            print(self.attacking)
-            #print(self.atk_counter)
-            if self.atk_counter > self.atk_cd:
+            if self.atk_counter > self.skills[0].cooldown:
                 self.attacking = False
                 self.allow_movement = True
                 self.atk_counter = 0

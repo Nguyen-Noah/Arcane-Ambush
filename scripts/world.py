@@ -7,6 +7,8 @@ from . import spritesheet_loader
 from .hitboxes import Hitboxes
 from .weapon_anim import WeaponAnimations
 from .standalone_animations import StandaloneAnimations
+from .particles import ParticleManager
+from .vfx import VFX
 import cProfile
 
 class World:
@@ -21,6 +23,7 @@ class World:
 
         self.weapon_animations = WeaponAnimations(self.game)
         self.world_animations = StandaloneAnimations(self.game)
+        self.particles = ParticleManager(self.game)
 
         self.entities = EntityManager(self.game)
         self.player = self.entities.gen_player()
@@ -75,3 +78,4 @@ class World:
         self.weapon_animations.update()
         self.world_animations.update()
         self.entities.spawn_entities()
+        self.hitboxes.update()
