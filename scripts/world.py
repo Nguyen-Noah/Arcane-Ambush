@@ -30,7 +30,7 @@ class World:
 
         self.camera = Camera(self.game)
         self.camera.set_restriction(self.player.pos)
-        self.camera.set_tracked_entity(self.entities.player)
+        self.camera.set_tracked_entity(self.player)
 
         self.hitboxes = Hitboxes(self.game)
 

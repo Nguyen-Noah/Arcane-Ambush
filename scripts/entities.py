@@ -3,6 +3,7 @@ from .entity_objs.player import Player
 from .spawner import Spawner
 from .entity import Entity
 from .core_funcs import itr
+from .weapons import create_weapon
 
 class EntityManager:
     def __init__(self, game):
@@ -12,8 +13,11 @@ class EntityManager:
 
     def gen_player(self):
         self.entities.append(Player(self.game, (480, 138), (19, 22), 'player'))
+        self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'dagger'), 'active')
+
         self.player = self.entities[-1]
-        return self.player
+        self.player.load_actives()
+        return self.entities[-1]
 
     def spawn_entities(self):
         self.spawner.update(self.game.window.dt)

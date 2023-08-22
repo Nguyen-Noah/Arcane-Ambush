@@ -1,7 +1,7 @@
 import math, random
 from ..weapon import Weapon
 
-class Dagger(Weapon):
+class DaggerWeapon(Weapon):
     def attack(self):
         self.invisible = 0.2
 

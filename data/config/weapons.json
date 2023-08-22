@@ -1,6 +1,6 @@
 {
     "dagger": {
-        "projective_type": "none",
+        "projectile_type": "none",
         "capacity": "-1",
         "attack_rate": 0.12,
         "combo": 3,

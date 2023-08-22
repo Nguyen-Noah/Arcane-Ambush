@@ -2,13 +2,16 @@ import pygame, math, random, time
 from .projectiles import Projectile
 from .config import config
 from .core_funcs import advance
+from .item import Item
 
-class Weapon:
-    def __init__(self, game, owner, type,):
+class Weapon(Item):
+    def __init__(self, game, owner, type, amount=1, tags=[]):
+        super().__init__(game, owner, type, amount, tags=tags)
         self.game = game
         self.owner = owner
         self.type = type
         self.rotation = 0
+        self.is_weapon = True
         self.projectile_type = config['weapons'][self.type]['projectile_type']
         self.capacity = config['weapons'][self.type]['capacity']
         self.attack_rate = config['weapons'][self.type]['attack_rate']
@@ -56,4 +59,4 @@ class Weapon:
             else:
                 self.flip = False
             img = pygame.transform.rotate(img, -self.rotation)
-            surf.blit(img, (loc[0] - img.get_width() // 2, loc[1] - img.get_height() // 2 - 1))
+            surf.blit(img, (loc[0] - (img.get_width() // 2) - (math.cos(math.radians(self.rotation)) * 5), loc[1] - (img.get_height() // 2) - (math.sin(math.radians(-self.rotation)) * 5) + 4))

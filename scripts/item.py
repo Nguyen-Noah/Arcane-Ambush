@@ -22,3 +22,15 @@ class Item:
             'amount': self.amount,
             'tags': self.tags
         }
+
+    def stackable(self, item):
+        if self.is_weapon or self.is_skill:
+            return False
+
+        if self.type == item.type:
+            return True
+
+        return False
+
+def create_item(owner, type, amount=1, tags=[]):
+    return Item(owner.game, owner, type, amount=amount, tags=tags)

@@ -52,7 +52,7 @@ class Entity:
         if not self.centered:
             return pygame.Rect(self.pos[0] // 1, self.pos[1] // 1, self.size[0], self.size[1])
         else:
-            return pygame.Rect((self.pos[0] - self.size[0] // 2) // 1, (self.pos[1] - self.size[1] // 2))
+            return pygame.Rect((self.pos[0] + self.size[0] // 2) // 1, (self.pos[1] + self.size[1] // 2))
 
     @property
     def center(self):
