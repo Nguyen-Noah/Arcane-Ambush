@@ -37,6 +37,7 @@ class EntityManager:
                 alive = entity.update(self.game.window.dt)
                 if not alive:
                     entities.remove(entity)
+                #surf.blit(entity.mask.to_surface(unsetcolor=(0, 0, 0, 0), setcolor=(255, 255, 255, 255)), (entity.pos[0] - self.game.world.camera.true_pos[0], entity.pos[1] - entity.height - self.game.world.camera.true_pos[1]))
                 entity.render(surf, self.game.world.camera.true_pos)
             else:
                 surf.blit(entity[0], (math.floor(entity[1][0]), math.floor(entity[1][1])))

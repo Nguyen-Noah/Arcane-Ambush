@@ -1,5 +1,6 @@
-import pygame
+import pygame, math, random
 from .config import config
+from .core_funcs import clip
 
 def collision_list(obj, obj_list):
     hit_list = []
@@ -22,13 +23,18 @@ class Entity:
         self.opacity = 255
         self.height = 0
         self.alive = True
+        self.hurt = 0
+        self.alive = True
         if self.type in config['entities']:
             self.max_health = config['entities'][self.type]['health']
             self.speed = config['entities'][self.type]['speed']
         self.bounce = 0
+        self.health = self.max_health
 
-        if self.type + '_idle_down' in self.game.assets.animations.animations:
-            self.set_action('idle', 'down')
+        if self.type + '_walk_side' in self.game.assets.animations.animations:
+            self.set_action('walk', 'side')
+
+        self.gen_mask()
 
     @property
     def img(self):
@@ -59,7 +65,7 @@ class Entity:
         if self.centered:
             return self.pos.copy()
         else:
-            return [self.pos[0] + self.size[0] // 2, self.pos[1] + self.size[1] // 2]
+            return [self.rect[0] + (self.size[0] // 2), self.rect[1] + (self.size[1] // 2)]
 
     def set_action(self, action_id, direction, force=False):
         if force:
@@ -103,6 +109,44 @@ class Entity:
                 self.pos[1] += self.size[1] // 2
         return directions
 
+    def print_hitbox(self):
+        pygame.draw.rect(self.game.window.display, 'blue', (self.rect[0] - self.game.world.camera.true_pos[0], self.rect[1] - self.game.world.camera.true_pos[1], self.rect[2], self.rect[3]), 1)
+
+    def die(self):
+        SIZE = 7
+        entity_img = self.img.copy()
+
+        # create death particles
+        for y in range(entity_img.get_height() // SIZE + 1):
+            for x in range(entity_img.get_width() // SIZE + 1):
+                img = clip(entity_img, x * SIZE, y * SIZE, SIZE, SIZE)
+                if not (img.get_width() * img.get_height()):
+                    continue
+                angle = math.atan2(y * SIZE + SIZE / 2 - entity_img.get_height() / 2, x * SIZE + SIZE / 2 - entity_img.get_width() / 2)
+                dis = math.sqrt((y * SIZE + SIZE / 2 - entity_img.get_height() / 2) ** 2 + (x * SIZE + SIZE / 2 - entity_img.get_width() / 2) ** 2)
+                dis *= 4
+                self.game.world.destruction_particles.add_particle(img, [self.pos[0] + x * SIZE + SIZE // 2, self.pos[1] + y * SIZE + SIZE // 2], [math.cos(angle) * math.sqrt(dis) + random.randint(0, 30) - 15, math.sin(angle) * math.sqrt(dis) - 50 + random.randint(0, 30) - 15, random.randint(0, 1800) - 900], duration=20 + random.random() * 3)
+
+    def damage(self, amount):
+        self.hurt = 1
+        self.health -= amount
+        if self.health <= 0:
+            self.die()
+            return True
+        return False
+
+    def gen_mask(self):
+        self.mask = pygame.mask.from_surface(self.img)
+
+    def calculate_render_offset(self, offset=(0, 0)):
+        offset = list(offset)
+        if self.active_animation:
+            offset[0] += self.active_animation.data.config['offset'][0]
+            offset[1] += self.active_animation.data.config['offset'][1]
+        if self.centered:
+            offset[0] += self.img.get_width() // 2
+            offset[1] += self.img.get_height() // 2
+        return offset
 
     def render(self, surf, offset=(0, 0)):
         offset = list(offset)
@@ -116,6 +160,7 @@ class Entity:
 
     def update(self, dt):
         if self.active_animation:
+            self.print_hitbox()
             self.active_animation.play(dt)
         
         return self.alive

@@ -8,6 +8,7 @@ from .hitboxes import Hitboxes
 from .weapon_anim import WeaponAnimations
 from .standalone_animations import StandaloneAnimations
 from .particles import ParticleManager
+from .destruction_particles import DestructionParticles
 from .vfx import VFX
 import cProfile
 
@@ -22,8 +23,10 @@ class World:
         self.tile_map.load_map(map_id)
 
         self.weapon_animations = WeaponAnimations(self.game)
+        self.destruction_particles = DestructionParticles(self.game)
         self.world_animations = StandaloneAnimations(self.game)
         self.particles = ParticleManager(self.game)
+        self.vfx = VFX(self.game)
 
         self.entities = EntityManager(self.game)
         self.player = self.entities.gen_player()
@@ -63,6 +66,8 @@ class World:
                     #self.collideables.append(img.get_rect(topleft=(tile[0][0] + offset[0], tile[0][1] + offset[1])))
                 else:
                     surf.blit(img, (math.floor(tile[0][0] - self.camera.true_pos[0] + offset[0]), math.floor(tile[0][1] - self.camera.true_pos[1] + offset[1])))
+        self.vfx.render_back(surf)
+        self.vfx.render_front(surf)
 
     def obs_rect(self, tile, img):
         # 0 -> big tree, 1 -> short tree, 2 -> alive bush, 3 -> stump, 4 -> fence, 5 -> log, 6 -> right-facing lamp, 7 -> down-facing lamp, 8 -> left-facing lamp, 9 -> broken lamp
@@ -77,5 +82,6 @@ class World:
         self.camera.update()
         self.weapon_animations.update()
         self.world_animations.update()
+        self.vfx.update()
         self.entities.spawn_entities()
         self.hitboxes.update()

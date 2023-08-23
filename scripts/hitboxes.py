@@ -27,7 +27,7 @@ class Hitbox:
             for entity in self.game.world.entities.entities:
                 if (entity not in self.ignore) and (entity.type != 'item'):
                     entity_offset = entity.calculate_render_offset()
-                    collision = tracked_mask.overlap(entity.mask, (int((entity.pos[0] - entity_offset[0]) - offset[0]), int((entity.pos[1] - entity_offset[1]) - offset[1])))
+                    collision = tracked_mask.overlap(entity.mask, (int((entity.pos[0] - entity_offset[0]) - offset[0] - self.game.world.camera.true_pos[0]), int((entity.pos[1] - entity_offset[1]) - offset[1] - self.game.world.camera.true_pos[1])))
                     #collision_point = (entity.pos[0] - entity_offset[0] + collision[0], entity.pos[1] - entity_offset[1] + collision[1])
                     if collision:
                         collision_point = [offset[0] + collision[0], offset[1] + collision[1]]
@@ -37,9 +37,9 @@ class Hitbox:
                             entity.velocity[0] += math.cos(self.angle) * 300 * self.config['knockback']
                             entity.velocity[1] += math.sin(self.angle) * 300 * self.config['knockback']
                             killed = entity.damage(self.config['power'])
-                            if killed:
-                                if self.owner.type == 'player':
-                                    self.owner.process_kill(entity)
+                            #if killed:
+                                #if self.owner.type == 'player':
+                                    #self.owner.process_kill(entity)
                             for i in range(random.randint(10, 15)):
                                 self.game.world.vfx.spawn_group('arrow_impact_sparks', collision_point.copy(), self.angle)
                             for i in range(random.randint(14, 20)):
@@ -60,7 +60,6 @@ class Hitboxes:
 
     def update(self):
         for i, hitbox in itr(self.hitboxes):
-            print(hitbox)
             alive = hitbox.update(self.game.window.dt)
             if not alive:
                 self.hitboxes.pop(i)

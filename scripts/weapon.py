@@ -23,6 +23,7 @@ class Weapon(Item):
         self.last_attack = 0
         self.flip = False
         self.invisible = 0
+        self.accuracy = 1
 
     @property
     def rank(self):
@@ -59,4 +60,4 @@ class Weapon(Item):
             else:
                 self.flip = False
             img = pygame.transform.rotate(img, -self.rotation)
-            surf.blit(img, (loc[0] - (img.get_width() // 2) - (math.cos(math.radians(self.rotation)) * 5), loc[1] - (img.get_height() // 2) - (math.sin(math.radians(-self.rotation)) * 5) + 4))
+            surf.blit(img, (loc[0] - (img.get_width() // 2) + (math.cos(math.radians(self.rotation)) * 8), loc[1] - (img.get_height() // 2) - (math.sin(math.radians(-self.rotation)) * 8) + 4))

@@ -28,7 +28,6 @@ class Player(Entity):
     @property
     def weapon(self):
         if self.selected_slot < len(self.inventory.get_custom_group('active_weapons')):
-            print('weapon', self.inventory.get_custom_group('active_weapons')[self.selected_slot])
             return self.inventory.get_custom_group('active_weapons')[self.selected_slot]
         else:
             return None
@@ -77,10 +76,7 @@ class Player(Entity):
 
             self.frame_motion += movement_vector
         self.moving = True
-
-    def print_hitbox(self):
-        pygame.draw.rect(self.game.window.display, 'blue', (self.rect[0] - self.game.world.camera.true_pos[0], self.rect[1] - self.game.world.camera.true_pos[1], self.rect[2], self.rect[3]), 1)
-
+        
     def update(self, dt):
         self.frame_motion = self.velocity.copy()
 
@@ -119,7 +115,8 @@ class Player(Entity):
         # weapon
         if self.game.input.mouse_state['left_click'] or self.attacking:
             self.atk_counter += self.game.window.dt
-            self.skills[0].use()
+            self.weapon.attack()
+            #self.skills[0].use()
             if self.atk_counter > self.skills[0].charge_rate:
                 self.attacking = False
                 self.allow_movement = True
@@ -127,7 +124,7 @@ class Player(Entity):
 
         # collisions and move
         self.collisions = self.move(self.frame_motion, self.game.world.collideables)
-        self.print_hitbox()
+        pygame.draw.circle(self.game.window.display, 'red', (self.center[0] - self.game.world.camera.true_pos[0], self.center[1] - self.game.world.camera.true_pos[1]), 6)
 
         # inventory
         if self.game.input.mouse_state['scroll_up']:
