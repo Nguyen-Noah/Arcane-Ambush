@@ -67,6 +67,7 @@ class World:
                 else:
                     surf.blit(img, (math.floor(tile[0][0] - self.camera.true_pos[0] + offset[0]), math.floor(tile[0][1] - self.camera.true_pos[1] + offset[1])))
         self.vfx.render_back(surf)
+        self.destruction_particles.render(surf, self.camera.true_pos)
         self.vfx.render_front(surf)
 
     def obs_rect(self, tile, img):
@@ -82,6 +83,7 @@ class World:
         self.camera.update()
         self.weapon_animations.update()
         self.world_animations.update()
+        self.destruction_particles.update()
         self.vfx.update()
         self.entities.spawn_entities()
         self.hitboxes.update()

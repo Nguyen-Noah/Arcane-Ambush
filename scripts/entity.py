@@ -24,7 +24,6 @@ class Entity:
         self.height = 0
         self.alive = True
         self.hurt = 0
-        self.alive = True
         if self.type in config['entities']:
             self.max_health = config['entities'][self.type]['health']
             self.speed = config['entities'][self.type]['speed']
@@ -126,6 +125,7 @@ class Entity:
                 dis = math.sqrt((y * SIZE + SIZE / 2 - entity_img.get_height() / 2) ** 2 + (x * SIZE + SIZE / 2 - entity_img.get_width() / 2) ** 2)
                 dis *= 4
                 self.game.world.destruction_particles.add_particle(img, [self.pos[0] + x * SIZE + SIZE // 2, self.pos[1] + y * SIZE + SIZE // 2], [math.cos(angle) * math.sqrt(dis) + random.randint(0, 30) - 15, math.sin(angle) * math.sqrt(dis) - 50 + random.randint(0, 30) - 15, random.randint(0, 1800) - 900], duration=20 + random.random() * 3)
+        self.alive = False
 
     def damage(self, amount):
         self.hurt = 1

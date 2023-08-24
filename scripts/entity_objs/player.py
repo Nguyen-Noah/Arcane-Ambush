@@ -115,7 +115,7 @@ class Player(Entity):
         # weapon
         if self.game.input.mouse_state['left_click'] or self.attacking:
             self.atk_counter += self.game.window.dt
-            self.weapon.attack()
+            self.weapon.attempt_attack()
             #self.skills[0].use()
             if self.atk_counter > self.skills[0].charge_rate:
                 self.attacking = False

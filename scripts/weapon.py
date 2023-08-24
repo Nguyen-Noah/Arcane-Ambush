@@ -16,7 +16,7 @@ class Weapon(Item):
         self.capacity = config['weapons'][self.type]['capacity']
         self.attack_rate = config['weapons'][self.type]['attack_rate']
         self.combo = 0
-        self.combo = config['weapons'][self.type]['combo']
+        self.combo_limit = config['weapons'][self.type]['combo']
         self.combo_cooldown = config['weapons'][self.type]['combo_cooldown']
         self.range = config['weapons'][self.type]['range']
         self.max_rank = config['weapons'][self.type]['max_rank']
@@ -34,13 +34,12 @@ class Weapon(Item):
         # cant attack without an owner
         if self.owner:
             self.owner.weapon_hide = 3
-
-            if (self.ammo > 0) or (self.ammo_type == 'infinite'):
+        
+            if self.combo == self.combo_limit:
                 self.combo = 0
 
             if self.combo < self.combo_limit:
                 if (time.time() - self.last_attack > self.attack_rate):
-                    self.ammo -= 1
                     self.last_attack = time.time()
                     self.attack()
                     self.combo += 1
