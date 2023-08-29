@@ -1,5 +1,5 @@
 {
-    "shooter": {
+    "wizard_tower": {
         "cost": [],
         "rarity": ["common", "uncommon", "rare", "legendary", "mythical"],
         "damage": [10, 15, 20, 25, 50]

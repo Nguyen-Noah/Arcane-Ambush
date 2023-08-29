@@ -10,13 +10,13 @@ from .standalone_animations import StandaloneAnimations
 from .particles import ParticleManager
 from .destruction_particles import DestructionParticles
 from .vfx import VFX
-import cProfile
 
 class World:
     def __init__(self, game):
         self.game = game
         self.loaded = False
         self.collideables = []
+        self.builder_mode = False
 
     def load(self, map_id):
         self.tile_map = TileMap((16, 16), self.game.window.base_resolution)
@@ -32,14 +32,12 @@ class World:
         self.player = self.entities.gen_player()
 
         self.camera = Camera(self.game)
-        self.camera.set_restriction(self.player.pos)
+        #self.camera.set_restriction(self.player.pos)
         self.camera.set_tracked_entity(self.player)
 
         self.hitboxes = Hitboxes(self.game)
 
         self.master_clock = 0
-
-        #self.profiler = cProfile.Profile()
 
     def render(self, surf):
         if not self.loaded:
@@ -63,7 +61,6 @@ class World:
                     self.collideables.append(self.obs_rect(tile, img))
                     pygame.draw.rect(surf, 'blue', (tile[0][0] + offset[0], tile[0][1] + offset[1], img.get_rect().x, img.get_rect().y), 1)
                     self.render_list.append([img, (tile[0][0] - self.camera.true_pos[0] + offset[0], tile[0][1] - self.camera.true_pos[1] + offset[1])])
-                    #self.collideables.append(img.get_rect(topleft=(tile[0][0] + offset[0], tile[0][1] + offset[1])))
                 else:
                     surf.blit(img, (math.floor(tile[0][0] - self.camera.true_pos[0] + offset[0]), math.floor(tile[0][1] - self.camera.true_pos[1] + offset[1])))
         self.vfx.render_back(surf)
@@ -78,7 +75,6 @@ class World:
         pygame.draw.rect(self.game.window.display, 'red', (hitbox[0] - self.camera.true_pos[0], hitbox[1] - self.camera.true_pos[1], hitbox[2], hitbox[3]), 1)
         return pygame.Rect(hitbox)
         
-
     def update(self):
         self.camera.update()
         self.weapon_animations.update()
@@ -87,3 +83,14 @@ class World:
         self.vfx.update()
         self.entities.spawn_entities()
         self.hitboxes.update()
+
+        if self.game.input.states['open_build_mode']:
+            self.game.input.hold_reset()
+            self.builder_mode = True
+            self.game.input.input_mode = 'builder'
+        if self.game.input.states['close_build_mode']:
+            self.builder_mode = False
+            self.game.input.input_mode = 'core'
+
+        if self.builder_mode:
+            self.game.window.add_freeze(0.001, 0.1)

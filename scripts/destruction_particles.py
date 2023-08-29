@@ -18,6 +18,7 @@ class DestructionParticles:
             'gravity': gravity,
             'add': add,
         }
+        self.cutoff = particle_data['loc'][0] + 3
         self.particles.append(particle_data)
 
     def update(self):
@@ -27,17 +28,17 @@ class DestructionParticles:
             hit = False
             if not particle['stationary']:
                 particle['loc'][0] += (particle['vel'][0]) * dt
-                if self.game.world.tile_map.tile_collide(particle['loc']):
-                    particle['vel'][0] *= -0.4
-                    particle['vel'][1] *= 0.8
-                    particle['vel'][2] *= 0.5
-                    hit = True
                 particle['loc'][1] += (particle['vel'][1]) * dt
-                if self.game.world.tile_map.tile_collide(particle['loc']):
-                    particle['vel'][1] *= -0.4
-                    particle['vel'][0] *= 0.8
-                    particle['vel'][2] *= 0.5
-                    hit = True
+                #if particle['loc'][0] <= self.cutoff:
+                #if self.game.world.tile_map.tile_collide(particle['loc']):
+                particle['vel'][0] *= -0.4
+                particle['vel'][1] *= 0.8
+                particle['vel'][2] *= 0.5
+                #hit = True
+                #if self.game.world.tile_map.tile_collide(particle['loc']):
+                particle['vel'][1] *= -0.4
+                particle['vel'][0] *= 0.8
+                particle['vel'][2] *= 0.5
                 if hit:
                     if abs(particle['vel'][0]) + abs(particle['vel'][1]) < 1:
                         particle['stationary'] = True

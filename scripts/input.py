@@ -9,6 +9,8 @@ class Input:
         self.states = {}
         self.mouse_pos = (0, 0)
 
+        self.input_mode = 'core'
+
         self.reset()
 
     def reset(self):
@@ -25,6 +27,11 @@ class Input:
             'scroll_down': False,
             'scroll_up': False
         }
+
+    def hold_reset(self):
+        for binding in config['input']:
+            if config['input'][binding]['toggle'] == 'hold':
+                self.states[binding] = False
 
     def soft_reset(self):
         for binding in config['input']:
@@ -47,14 +54,18 @@ class Input:
 
             if event.type == KEYDOWN:
                 for binding in config['input']:
-                    if config['input'][binding]['toggle'] in ['hold', 'press']:
-                        if event.key in config['input'][binding]['button'][1]:
-                            self.states[binding] = True
+                    if set(config['input'][binding]['mode']).intersection({'all', self.input_mode}):
+                        if config['input'][binding]['button'][0] == 'keyboard':
+                            if config['input'][binding]['toggle'] in ['hold', 'press']:
+                                if event.key in config['input'][binding]['button'][1]:
+                                    self.states[binding] = True
             if event.type == KEYUP:
                 for binding in config['input']:
-                    if config['input'][binding]['toggle'] in ['hold', 'press']:
-                        if event.key in config['input'][binding]['button'][1]:
-                            self.states[binding] = False
+                    if set(config['input'][binding]['mode']).intersection({'all', self.input_mode}):
+                        if config['input'][binding]['button'][0] == 'keyboard':
+                            if config['input'][binding]['toggle'] in ['hold', 'press']:
+                                if event.key in config['input'][binding]['button'][1]:
+                                    self.states[binding] = False
 
             if event.type == MOUSEBUTTONDOWN:
                 if event.button == 1:

@@ -11,18 +11,15 @@ class Player(Entity):
         self.allow_movement = True
         self.moving = False
         self.direction = 'side'
+        self.last_move_attempt = 0
         self.money = 100
-        self.skills = [SKILLS['dagger'](self.game, self), None, None, None, None, None, None, None, None]
+        self.skills = [None, None, None, None, None, None, None, None, None]
         self.inventory = Inventory(self)
-        self.inventory.add_item(Item(self.game, self, 'dagger', tags=['active']), 'skills')
         self.selected_slot = 0
         self.weapon_hide = 0
-
-        self.last_move_attempt = 0
-
         self.attacking = False
         self.atk_counter = 0
-        
+        self.combo_counter = 0
         self.counter = [False, False]
 
     @property
@@ -52,19 +49,12 @@ class Player(Entity):
 
     def attempt_move(self, axis, direction):
         if self.allow_movement:
-            
             if axis == 0:
                 self.flip[0] = direction < 0
                 self.direction = 'side'
-            #else:
-                #if direction == 1:
-                    #self.direction = 'down'
-                #else:
-                    #self.direction = 'up'
             if not self.moving:
                 if direction != self.last_move_attempt:
                     self.game.world.world_animations.spawn('player_dust', [self.center[0], self.center[1]], flip=self.flip)
-                
 
             movement_vector = pygame.math.Vector2(0, 0)
             movement_vector[axis] = direction
@@ -113,11 +103,10 @@ class Player(Entity):
                 self.moving = False
 
         # weapon
-        if self.game.input.mouse_state['left_click'] or self.attacking:
+        if (self.game.input.mouse_state['left_click'] or self.attacking) and not self.game.world.builder_mode:
             self.atk_counter += self.game.window.dt
             self.weapon.attempt_attack()
-            #self.skills[0].use()
-            if self.atk_counter > self.skills[0].charge_rate:
+            if self.atk_counter > self.weapon.attack_rate:
                 self.attacking = False
                 self.allow_movement = True
                 self.atk_counter = 0

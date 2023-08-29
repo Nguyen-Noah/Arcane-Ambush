@@ -5,4 +5,9 @@ class MegaSlime(Slime):
         super().__init__(*args)
         
     def update(self, dt):
-        super().update(dt)
+        r = super().update(dt)
+
+        if not r:
+            return r
+
+        return self.alive

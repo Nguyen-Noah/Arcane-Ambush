@@ -13,7 +13,7 @@ class Game:
         self.world = World(self)
 
         self.game_state = None
-        
+
     def load_map(self, map_id):
         self.world.load(map_id)
 
