@@ -2,10 +2,10 @@ import pygame, math
 from .camera import Camera
 from .config import config
 from .entities import EntityManager
+from .towers import Towers
 from .tile_map import TileMap
 from . import spritesheet_loader
 from .hitboxes import Hitboxes
-from .weapon_anim import WeaponAnimations
 from .standalone_animations import StandaloneAnimations
 from .particles import ParticleManager
 from .destruction_particles import DestructionParticles
@@ -22,19 +22,25 @@ class World:
         self.tile_map = TileMap((16, 16), self.game.window.base_resolution)
         self.tile_map.load_map(map_id)
 
-        self.weapon_animations = WeaponAnimations(self.game)
+        # polish ----------------------------------------------------------------------- #
         self.destruction_particles = DestructionParticles(self.game)
         self.world_animations = StandaloneAnimations(self.game)
         self.particles = ParticleManager(self.game)
         self.vfx = VFX(self.game)
 
+        # entities --------------------------------------------------------------------- #
+        self.towers = Towers(self.game)
         self.entities = EntityManager(self.game)
+
+        # player ----------------------------------------------------------------------- #
         self.player = self.entities.gen_player()
 
+        # camera ----------------------------------------------------------------------- #
         self.camera = Camera(self.game)
-        #self.camera.set_restriction(self.player.pos)
+        self.camera.set_restriction(self.player.pos)
         self.camera.set_tracked_entity(self.player)
 
+        # hitboxes --------------------------------------------------------------------- #
         self.hitboxes = Hitboxes(self.game)
 
         self.master_clock = 0
@@ -47,7 +53,6 @@ class World:
         self.collideables = []
         self.render_list = []
         for layer in render_list:
-            self.weapon_animations.render(surf, self.camera.pos)
             self.world_animations.render(surf, self.camera.pos)
             for tile in layer:
                 offset = [-32, -32]
@@ -64,6 +69,7 @@ class World:
                 else:
                     surf.blit(img, (math.floor(tile[0][0] - self.camera.true_pos[0] + offset[0]), math.floor(tile[0][1] - self.camera.true_pos[1] + offset[1])))
         self.vfx.render_back(surf)
+        self.towers.render(surf, self.camera.true_pos)
         self.destruction_particles.render(surf, self.camera.true_pos)
         self.vfx.render_front(surf)
 
@@ -77,20 +83,29 @@ class World:
         
     def update(self):
         self.camera.update()
-        self.weapon_animations.update()
         self.world_animations.update()
         self.destruction_particles.update()
         self.vfx.update()
+        self.towers.update()
         self.entities.spawn_entities()
         self.hitboxes.update()
 
         if self.game.input.states['open_build_mode']:
+            self.entities.render_entities = False
             self.game.input.hold_reset()
+            self.camera.mode = 'freeroam'
+            self.camera.set_tracked_entity(None)
             self.builder_mode = True
             self.game.input.input_mode = 'builder'
         if self.game.input.states['close_build_mode']:
+            self.entities.render_entities = True
+            self.camera.set_tracked_entity(self.player)
+            self.camera.mode = None
             self.builder_mode = False
             self.game.input.input_mode = 'core'
 
         if self.builder_mode:
             self.game.window.add_freeze(0.001, 0.1)
+            self.player.weapon.invisible = 0.2
+
+            self.towers.add(self.game, self.game.input.mouse_pos, (18, 18), 'wizard_tower', 0)

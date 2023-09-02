@@ -46,14 +46,26 @@ class Renderer:
         ui_color = (255, 255, 255, 255)
 
         # ui
-        tilesize = 18
-        skill_count = 9
-        skills = self.game.world.entities.player.skills
-        for i in range(skill_count):
-            pos = self.game.window.display.get_width() // 2 - skill_count // 2 * tilesize + i * tilesize
-            surf.blit(self.game.assets.misc['inventory_slot'], (pos, self.game.window.display.get_height() - tilesize))
-            if skills[i]:
-                skills[i].render_skill(surf, (pos + 1, surf.get_height() + self.game.window.offset[1] - tilesize + 1))
+
+        # inventory
+        if self.game.world.builder_mode:
+            tilesize = 26
+            count = 5
+            owned_towers = self.game.world.player.owned_towers
+            for i in range(count):
+                pos = self.game.window.display.get_width() // 2 - count // 2 * tilesize + i * tilesize
+                surf.blit(self.game.assets.misc['builder_slot'], (pos, self.game.window.display.get_height() - tilesize))
+                if owned_towers[i]:
+                    pass
+        else:
+            tilesize = 18
+            skill_count = 9
+            skills = self.game.world.entities.player.skills
+            for i in range(skill_count):
+                pos = self.game.window.display.get_width() // 2 - skill_count // 2 * tilesize + i * tilesize
+                surf.blit(self.game.assets.misc['inventory_slot'], (pos, self.game.window.display.get_height() - tilesize))
+                if skills[i]:
+                    skills[i].render_skill(surf, (pos + 1, surf.get_height() + self.game.window.offset[1] - tilesize + 1))
 
         # weapon
         '''player = self.game.world.entities.player

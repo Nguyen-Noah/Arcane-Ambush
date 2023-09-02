@@ -14,6 +14,7 @@ class Player(Entity):
         self.last_move_attempt = 0
         self.money = 100
         self.skills = [None, None, None, None, None, None, None, None, None]
+        self.owned_towers = ['wizard_tower', None, None, None, None]
         self.inventory = Inventory(self)
         self.selected_slot = 0
         self.weapon_hide = 0
@@ -113,7 +114,7 @@ class Player(Entity):
 
         # collisions and move
         self.collisions = self.move(self.frame_motion, self.game.world.collideables)
-        pygame.draw.circle(self.game.window.display, 'red', (self.center[0] - self.game.world.camera.true_pos[0], self.center[1] - self.game.world.camera.true_pos[1]), 6)
+        #pygame.draw.circle(self.game.window.display, 'red', (self.center[0] - self.game.world.camera.true_pos[0], self.center[1] - self.game.world.camera.true_pos[1]), 6)
 
         # inventory
         if self.game.input.mouse_state['scroll_up']:

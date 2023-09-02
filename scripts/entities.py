@@ -10,9 +10,10 @@ class EntityManager:
         self.game = game
         self.entities = []
         self.spawner = Spawner(self.game)
+        self.render_entities = True
 
     def gen_player(self):
-        self.entities.append(Player(self.game, (480, 138), (19, 22), 'player'))
+        self.entities.append(Player(self.game, (480, 138), (12, 12), 'player'))
         self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'dagger'), 'active')
 
         self.player = self.entities[-1]
@@ -34,12 +35,13 @@ class EntityManager:
 
         for entity in sorted_entities:
             if isinstance(entity, Entity):
-                alive = entity.update(self.game.window.dt)
-                if not alive:
-                    entities.remove(entity)
-                entity.render(surf, self.game.world.camera.true_pos)
+                if self.render_entities or entity.type == 'player':
+                    alive = entity.update(self.game.window.dt)
+                    if not alive:
+                        entities.remove(entity)
+                    entity.render(surf, self.game.world.camera.true_pos)
             else:
-                surf.blit(entity[0], (math.floor(entity[1][0]), math.floor(entity[1][1])))
+                    surf.blit(entity[0], (math.floor(entity[1][0]), math.floor(entity[1][1])))
         self.entities = entities
 
 #TODO: combine entity, tower, and obstacle sorting to accomodate for Y-sorting

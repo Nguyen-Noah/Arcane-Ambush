@@ -2,7 +2,7 @@
     "dagger": {
         "projectile_type": "none",
         "capacity": "-1",
-        "attack_rate": 0.12,
+        "attack_rate": 0.3,
         "combo": 3,
         "combo_cooldown": 0.5,
         "range": 30,
