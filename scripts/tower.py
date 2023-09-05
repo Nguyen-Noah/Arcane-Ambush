@@ -22,6 +22,16 @@ class Tower:
         self.shooting = True
         self.img = load_img(path + self.type + '/' + str(self.rank) + '.png', colorkey)
 
+    @property
+    def rect(self):
+        width, height = self.img.get_size()
+        return pygame.Rect(self.pos[0] // 1, self.pos[1] // 1, width, height)
+
+    @property
+    def center(self):
+        rect = self.img.get_rect()
+        return ((self.pos[0] + rect[0] // 2) // 1, (self.pos[1] + rect[1] // 2) // 1)
+
     def target_enemy(self):
         #TODO: create algorithm to find closest, farthest, and strongest enemy
         entity_list = self.game.world.entities
@@ -38,4 +48,4 @@ class Tower:
         pass
 
     def render(self, surf, offset):
-        surf.blit(self.img, (self.pos[0] + self.size[1] // 1, self.pos[1] + self.size[1] // 1))
+        surf.blit(self.img, (self.pos[0] - offset[0] - (self.rect[2] // 2) // 1, self.pos[1] - offset[1] - (self.rect[3] // 2) // 1))

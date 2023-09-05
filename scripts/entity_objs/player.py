@@ -1,4 +1,5 @@
 import pygame, math
+from ..core_funcs import get_dis
 from ..entity import Entity
 from ..skills import SKILLS
 from ..inventory import Inventory
@@ -22,6 +23,7 @@ class Player(Entity):
         self.atk_counter = 0
         self.combo_counter = 0
         self.counter = [False, False]
+        self.aim_angle = 0
 
     @property
     def weapon(self):
@@ -112,11 +114,11 @@ class Player(Entity):
                 self.allow_movement = True
                 self.atk_counter = 0
 
-        # collisions and move
+        # collisions and move ---------------------------------------------------------- #
         self.collisions = self.move(self.frame_motion, self.game.world.collideables)
         #pygame.draw.circle(self.game.window.display, 'red', (self.center[0] - self.game.world.camera.true_pos[0], self.center[1] - self.game.world.camera.true_pos[1]), 6)
 
-        # inventory
+        # inventory -------------------------------------------------------------------- #
         if self.game.input.mouse_state['scroll_up']:
             self.weapon_hide = 3
             self.selected_slot -= 1
@@ -128,7 +130,7 @@ class Player(Entity):
                 if self.selected_slot >= len(self.inventory.get_custom_group('active_weapons')):
                     self.selected_slot = 0
 
-        # weapon stuff
+        # weapon stuff ----------------------------------------------------------------- #
         angle = math.atan2(self.game.input.mouse_pos[1] - self.center[1] + self.game.world.camera.render_offset[1], self.game.input.mouse_pos[0] - self.center[0] + self.game.world.camera.render_offset[0])
         self.aim_angle = angle
         if self.weapon:
@@ -138,6 +140,12 @@ class Player(Entity):
 
         return self.alive
     
+    def get_mouse_pos(self):
+        val = get_dis((self.rect[0] - self.game.world.camera.true_pos[0] + (self.size[0] // 2), self.rect[1] - self.game.world.camera.true_pos[1] + (self.size[1] // 2)), self.game.input.mouse_pos)
+        x_offset = (self.rect[0] + (self.size[0] // 2)) + (val * math.cos(self.aim_angle))
+        y_offset = (self.rect[1] + (self.size[1] // 2)) + (val * math.sin(self.aim_angle))
+        return (x_offset, y_offset)
+
     def render(self, surf, offset=(0, 0)):
         super().render(surf, offset)
         if self.weapon and self.weapon_hide:

@@ -1,5 +1,6 @@
 import pygame, math
 from .camera import Camera
+from .core_funcs import get_dis
 from .config import config
 from .entities import EntityManager
 from .towers import Towers
@@ -52,15 +53,18 @@ class World:
         render_list = self.tile_map.get_visible(self.camera.true_pos)
         self.collideables = []
         self.render_list = []
+
         for layer in render_list:
             self.world_animations.render(surf, self.camera.pos)
             for tile in layer:
+
                 offset = [-32, -32]
                 if tile[1][0] in self.game.assets.spritesheet_data:
                     tile_id = str(tile[1][1]) + ';' + str(tile[1][2])
                     if tile_id in self.game.assets.spritesheet_data[tile[1][0]]:
                         if 'tile_offset' in self.game.assets.spritesheet_data[tile[1][0]][tile_id]:
                             offset = self.game.assets.spritesheet_data[tile[1][0]][tile_id]['tile_offset']
+
                 img = spritesheet_loader.get_img(self.game.assets.spritesheets, tile[1])
                 if tile[1][0] == 'obstacles':
                     self.collideables.append(self.obs_rect(tile, img))
@@ -68,6 +72,7 @@ class World:
                     self.render_list.append([img, (tile[0][0] - self.camera.true_pos[0] + offset[0], tile[0][1] - self.camera.true_pos[1] + offset[1])])
                 else:
                     surf.blit(img, (math.floor(tile[0][0] - self.camera.true_pos[0] + offset[0]), math.floor(tile[0][1] - self.camera.true_pos[1] + offset[1])))
+
         self.vfx.render_back(surf)
         self.towers.render(surf, self.camera.true_pos)
         self.destruction_particles.render(surf, self.camera.true_pos)
@@ -90,10 +95,10 @@ class World:
         self.entities.spawn_entities()
         self.hitboxes.update()
 
+        # builder mode handler -------------------------------------------------------- #
         if self.game.input.states['open_build_mode']:
             self.entities.render_entities = False
             self.game.input.hold_reset()
-            self.camera.mode = 'freeroam'
             self.camera.set_tracked_entity(None)
             self.builder_mode = True
             self.game.input.input_mode = 'builder'
@@ -108,4 +113,5 @@ class World:
             self.game.window.add_freeze(0.001, 0.1)
             self.player.weapon.invisible = 0.2
 
-            self.towers.add(self.game, self.game.input.mouse_pos, (18, 18), 'wizard_tower', 0)
+            if self.game.input.mouse_state['left_click']:
+                self.towers.add(self.game, self.player.get_mouse_pos(), (18, 18), 'wizard_tower', 0)

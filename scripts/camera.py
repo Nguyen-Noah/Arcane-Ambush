@@ -25,6 +25,11 @@ class Camera:
         self.restriction_point = list(pos)
 
     def update(self):
+        if self.game.world.builder_mode:
+            self.rate = .0001
+        else:
+            self.rate = 0.25
+
         if self.mode == 'freeroam':
             x_direction = 0
             y_direction = 0
