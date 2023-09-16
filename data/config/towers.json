@@ -1,6 +1,7 @@
 {
     "wizard_tower": {
-        "cost": [],
+        "cost": [10, 50, 100, 250, 500],
+        "radius": 50,
         "rarity": ["common", "uncommon", "rare", "legendary", "mythical"],
         "damage": [10, 15, 20, 25, 50]
     },

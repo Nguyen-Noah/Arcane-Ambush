@@ -10,11 +10,12 @@ def collision_list(obj, obj_list):
     return hit_list
 
 class Entity:
-    def __init__(self, game, pos, size, type):
+    def __init__(self, game, pos, size, type, category):
         self.game = game
         self.pos = list(pos).copy()
         self.size = size
         self.type = type
+        self.category = category
         self.centered = False
         self.active_animation = None
         self.flip = [False, False]
@@ -24,6 +25,7 @@ class Entity:
         self.height = 0
         self.alive = True
         self.hurt = 0
+        self.age = 0
         if self.type in config['entities']:
             self.max_health = config['entities'][self.type]['health']
             self.speed = config['entities'][self.type]['speed']
@@ -162,5 +164,7 @@ class Entity:
         if self.active_animation:
             self.print_hitbox()
             self.active_animation.play(dt)
+
+        self.age += dt
         
         return self.alive

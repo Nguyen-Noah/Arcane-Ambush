@@ -1,6 +1,5 @@
 import pygame, math
 from .camera import Camera
-from .core_funcs import get_dis
 from .config import config
 from .entities import EntityManager
 from .towers import Towers
@@ -38,7 +37,7 @@ class World:
 
         # camera ----------------------------------------------------------------------- #
         self.camera = Camera(self.game)
-        self.camera.set_restriction(self.player.pos)
+        #self.camera.set_restriction(self.player.pos)
         self.camera.set_tracked_entity(self.player)
 
         # hitboxes --------------------------------------------------------------------- #
@@ -74,7 +73,7 @@ class World:
                     surf.blit(img, (math.floor(tile[0][0] - self.camera.true_pos[0] + offset[0]), math.floor(tile[0][1] - self.camera.true_pos[1] + offset[1])))
 
         self.vfx.render_back(surf)
-        self.towers.render(surf, self.camera.true_pos)
+        self.towers.render(surf)
         self.destruction_particles.render(surf, self.camera.true_pos)
         self.vfx.render_front(surf)
 
@@ -94,6 +93,7 @@ class World:
         self.towers.update()
         self.entities.spawn_entities()
         self.hitboxes.update()
+        self.towers.update()
 
         # builder mode handler -------------------------------------------------------- #
         if self.game.input.states['open_build_mode']:
@@ -110,7 +110,7 @@ class World:
             self.game.input.input_mode = 'core'
 
         if self.builder_mode:
-            self.game.window.add_freeze(0.001, 0.1)
+            self.game.window.add_freeze(0.0001, 0.1)
             self.player.weapon.invisible = 0.2
 
             if self.game.input.mouse_state['left_click']:
