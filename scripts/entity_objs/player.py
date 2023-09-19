@@ -12,6 +12,8 @@ class Player(Entity):
         self.allow_movement = True
         self.moving = False
         self.direction = 'side'
+        self.vx = 0
+        self.vy = 0
         self.last_move_attempt = 0
         self.money = 100
         self.skills = [None, None, None, None, None, None, None, None, None]
