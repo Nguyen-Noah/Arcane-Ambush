@@ -1,6 +1,6 @@
 {
     "scaled_resolution": [1080, 720],
-    "base_resolution": [350, 240],
+    "base_resolution": [360, 240],
     "offset": [0, 0],
     "background_color": "green",
     "title": "Tower Defense"

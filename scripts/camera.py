@@ -9,6 +9,7 @@ class Camera:
         self.track_entity = None
         self.restriction_point = None
         self.lock_distance = 225
+        self.mode = None
 
     def focus(self):
         self.update()
@@ -24,11 +25,31 @@ class Camera:
         self.restriction_point = list(pos)
 
     def update(self):
-        if self.track_entity:
-            self.set_target((self.track_entity.pos[0] - self.game.window.display.get_width() // 2, self.track_entity.pos[1] - self.game.window.display.get_height() // 2))
+        if self.game.world.builder_mode:
+            self.rate = .0001
+        else:
+            self.rate = 0.25
 
-        self.true_pos[0] += math.floor(self.target_pos[0] - self.true_pos[0]) / (self.rate / self.game.window.dt)
-        self.true_pos[1] += math.floor(self.target_pos[1] - self.true_pos[1]) / (self.rate / self.game.window.dt)
+        if self.mode == 'freeroam':
+            x_direction = 0
+            y_direction = 0
+            if self.game.input.states['pan_left']:
+                x_direction = -1
+            elif self.game.input.states['pan_right']:
+                x_direction = 1
+            if self.game.input.states['pan_up']:
+                y_direction = -1
+            elif self.game.input.states['pan_down']:
+                y_direction = 1
+            
+            self.true_pos[0] += x_direction * 1.5
+            self.true_pos[1] += y_direction * 1.5
+        else:
+            if self.track_entity:
+                self.set_target((self.track_entity.pos[0] - self.game.window.display.get_width() // 2, self.track_entity.pos[1] - self.game.window.display.get_height() // 2))
+
+            self.true_pos[0] += math.floor(self.target_pos[0] - self.true_pos[0]) / (self.rate / self.game.window.dt)
+            self.true_pos[1] += math.floor(self.target_pos[1] - self.true_pos[1]) / (self.rate / self.game.window.dt)
 
         if self.restriction_point:
             if self.true_pos[0] + self.game.window.display.get_width() // 2 - self.restriction_point[0] > self.lock_distance:

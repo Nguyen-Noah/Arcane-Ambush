@@ -1,0 +1,12 @@
+{
+    "dagger": {
+        "name": "Dagger",
+        "description": "dagger.",
+        "type": "weapon"
+    },
+    "potion": {
+        "name": "Health Potion",
+        "description": "Heals 10 health",
+        "type": "item"
+    }
+}

@@ -1,22 +1,62 @@
 {
     "left": {
         "toggle": "hold",
-        "button": ["keyboard", [97]]
+        "button": ["keyboard", [97]],
+        "mode": ["core"]
     },
     "right": {
         "toggle": "hold",
-        "button": ["keyboard", [100]]
+        "button": ["keyboard", [100]],
+        "mode": ["core"]
     },
     "up": {
         "toggle": "hold",
-        "button": ["keyboard", [119]]
+        "button": ["keyboard", [119]],
+        "mode": ["core"]
     },
     "down": {
         "toggle": "hold",
-        "button": ["keyboard", [115]]
+        "button": ["keyboard", [115]],
+        "mode": ["core"]
     },
-    "swap_inventory": {
+    "open_build_mode": {
         "toggle": "press",
-        "button": ["keyboard", [103]]
+        "button": ["keyboard", [103]],
+        "mode": ["core"]
+    },
+    "close_build_mode": {
+        "toggle": "press",
+        "button": ["keyboard", [103]],
+        "mode": ["builder"]
+    },
+    "pan_left": {
+        "toggle": "hold",
+        "button": ["keyboard", [97]],
+        "mode": ["builder"]
+    },
+    "pan_right": {
+        "toggle": "hold",
+        "button": ["keyboard", [100]],
+        "mode": ["builder"]
+    },
+    "pan_up": {
+        "toggle": "hold",
+        "button": ["keyboard", [119]],
+        "mode": ["builder"]
+    },
+    "pan_down": {
+        "toggle": "hold",
+        "button": ["keyboard", [115]],
+        "mode": ["builder"]
+    },
+    "exit": {
+        "toggle": "press",
+        "button": ["keyboard", [27]],
+        "mode": ["all"]
+    },
+      "log_fps": {
+        "toggle": "press",
+        "button": ["keyboard", [112]],
+        "mode": ["all"]
     }
 }

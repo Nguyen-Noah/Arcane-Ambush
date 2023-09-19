@@ -1,12 +1,10 @@
 import pygame, random
 from .particles import ParticleManager
-from .interface import Interface
 import cProfile
 
 class Renderer:
     def __init__(self, game):
         self.game = game
-        self.interface = Interface(self.game)
         self.particles = ParticleManager(self.game)
         #self.overlay_particles()
         self.profiler = cProfile.Profile()
@@ -45,9 +43,46 @@ class Renderer:
 
         #self.update_overlay_particles(surf)
 
+        ui_color = (255, 255, 255, 255)
+
         # ui
-        self.interface.render(surf)
-        self.interface.update()
+
+        # inventory
+        if self.game.world.builder_mode:
+            tilesize = 26
+            count = 5
+            owned_towers = self.game.world.player.owned_towers
+            for i in range(count):
+                pos = self.game.window.display.get_width() // 2 - count // 2 * tilesize + i * tilesize
+                surf.blit(self.game.assets.misc['builder_slot'], (pos, self.game.window.display.get_height() - tilesize))
+                if owned_towers[i]:
+                    pass
+        else:
+            tilesize = 18
+            skill_count = 9
+            skills = self.game.world.entities.player.skills
+            for i in range(skill_count):
+                pos = self.game.window.display.get_width() // 2 - skill_count // 2 * tilesize + i * tilesize
+                surf.blit(self.game.assets.misc['inventory_slot'], (pos, self.game.window.display.get_height() - tilesize))
+                if skills[i]:
+                    skills[i].render_skill(surf, (pos + 1, surf.get_height() + self.game.window.offset[1] - tilesize + 1))
+
+        # weapon
+        '''player = self.game.world.entities.player
+
+        player_items = player.inventory.get_custom_group('active_weapons')
+        weapon_masks = [pygame.mask.from_surface(self.game.assets.weapons[weapon.type]) for weapon in player_items]
+        offset = 0
+        base_pos = 46
+        for i, mask in enumerate(weapon_masks):
+            color = (139, 171, 191, 255)
+            if player_items[i] == player.weapon:
+                color = ui_color
+            weapon_img = mask.to_surface(setcolor=color, unsetcolor=(0, 0, 0, 0))
+            if player_items[i] == player.weapon:
+                pygame.draw.line(surf, ui_color, (22, base_pos + offset), (22, base_pos + offset + weapon_img.get_height()))
+            surf.blit(weapon_img, (25 - mask.get_bounding_rects()[0].left, base_pos + offset))
+            offset += weapon_img.get_height() + 2'''
 
         # display the player money
         self.game.assets.text.render(surf, '$' + str(self.game.world.entities.player.money), (300, 20))

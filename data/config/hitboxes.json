@@ -1,0 +1,10 @@
+{
+    "player": {
+        "power": 1,
+        "knockback": 0.3
+    },
+    "dagger": {
+        "power": 7,
+        "knockback": 0.7
+    }
+}

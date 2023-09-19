@@ -46,7 +46,7 @@ class Spawner:
 
                     for i in range(self.enemy_count):
                         if self.timer >= self.spawn_timer and self.total_enemy_count > 0:
-                            self.game.world.entities.entities.append(entity_map[self.enemy_type](self.game, (self.spawn_point[0] + random.randint(1, 8), self.spawn_point[1] + random.randint(1, 16)), (14, 14), self.enemy_type))
+                            self.game.world.entities.entities.append(entity_map[self.enemy_type](self.game, (self.spawn_point[0] + random.randint(1, 8), self.spawn_point[1] + random.randint(1, 16)), (14, 14), self.enemy_type, 'enemy'))
                             self.timer = 0
                             self.enemy_count -= 1
                             self.total_enemy_count -= 1

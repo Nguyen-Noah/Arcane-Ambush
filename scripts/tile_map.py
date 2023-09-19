@@ -67,6 +67,14 @@ class TileMap:
         f.write(json.dumps(json_dat))
         f.close()
 
+    # position is in pixels
+    def tile_collide(self, pos):
+        tile_pos = (int(pos[0] // self.tile_size[0]), int(pos[1] // self.tile_size[1]))
+        if tile_pos in self.tile_map:
+            return True
+        else:
+            return False
+
     def get_tile(self, pos, target_layer=None):
         pos = tuple(pos)
         if pos in self.tile_map:

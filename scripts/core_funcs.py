@@ -64,6 +64,12 @@ def points_between_2d(points):
             point_list.append([points[0][0] + x, points[0][1] + y])
     return point_list
 
+def to_cart(angle, dis):
+    return [math.cos(angle) * dis, math.sin(angle) * dis]
+
+def to_polar(vector):
+    return [math.atan2(*(vector[::-1])), get_dis([0, 0], vector)]
+
 def angle_to(points):
     return math.atan2(points[1][1] - points[0][1], points[1][0] - points[0][0])
 
