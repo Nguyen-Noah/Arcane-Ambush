@@ -35,7 +35,7 @@ class EntityManager:
 
         for entity in sorted_entities:
             if isinstance(entity, Entity):
-                if self.render_entities or entity.type == 'player':
+                if self.render_entities or entity.category in ['player', 'enemy']:
                     alive = entity.update(self.game.window.dt)
                     if not alive:
                         entities.remove(entity)
