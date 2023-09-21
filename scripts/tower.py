@@ -49,27 +49,22 @@ class Tower:
 
     def target_first(self):
         #TODO: create algorithm to find first, closest, farthest, and strongest enemy
-        entity_list = self.game.world.entities.entities
+        entity_list = self.in_radius()
 
         for entity in entity_list:
-            if entity.category == 'enemy':
-                dist = get_dis(self.center, (entity.center[0] - self.game.world.camera.true_pos[0], entity.center[1] - self.game.world.camera.true_pos[1]))
-                if dist <= self.radius:
-                    if not self.targeted_entity:
-                        self.targeted_entity = entity
-                    else:
-                        if entity.age > self.targeted_entity.age:
-                            self.targeted_entity = entity
-                    pygame.draw.line(self.game.window.display, 'red', self.center, (self.targeted_entity.center[0] - self.game.world.camera.true_pos[0], self.targeted_entity.center[1] - self.game.world.camera.true_pos[1]))
-                else:
-                    self.targeted_entity = None
+            if not self.targeted_entity or self.targeted_entity not in entity_list:
+                self.targeted_entity = entity
+            else:
+                if entity.age > self.targeted_entity.age:
+                    self.targeted_entity = entity
+            pygame.draw.line(self.game.window.display, 'red', self.center, (self.targeted_entity.center[0] - self.game.world.camera.true_pos[0], self.targeted_entity.center[1] - self.game.world.camera.true_pos[1]))
     
     def target_closest(self):
         entity_list = self.in_radius()
 
         for entity in entity_list:
             dist = get_dis(self.center, (entity.center[0] - self.game.world.camera.true_pos[0], entity.center[1] - self.game.world.camera.true_pos[1]))
-            if not self.targeted_entity:
+            if not self.targeted_entity or self.targeted_entity not in entity_list:
                 self.targeted_entity = entity
             else:
                 if dist < get_dis(self.center, (self.targeted_entity.center[0] - self.game.world.camera.true_pos[0], self.targeted_entity.center[1] - self.game.world.camera.true_pos[1])):
@@ -82,7 +77,7 @@ class Tower:
 
         for entity in entity_list:
             dist = get_dis(self.center, (entity.center[0] - self.game.world.camera.true_pos[0], entity.center[1] - self.game.world.camera.true_pos[1]))
-            if not self.targeted_entity:
+            if not self.targeted_entity or self.targeted_entity not in entity_list:
                 self.targeted_entity = entity
             else:
                 if dist > get_dis(self.center, (self.targeted_entity.center[0] - self.game.world.camera.true_pos[0], self.targeted_entity.center[1] - self.game.world.camera.true_pos[1])):
@@ -90,18 +85,22 @@ class Tower:
             pygame.draw.line(self.game.window.display, 'red', self.center, (self.targeted_entity.center[0] - self.game.world.camera.true_pos[0], self.targeted_entity.center[1] - self.game.world.camera.true_pos[1]))
 
     def target_strongest(self):
-        entity_list = self.game.world.entities.entities
+        entity_list = self.in_radius()
 
         for entity in entity_list:
-            if entity.category == 'enemy':
-                dist = get_dis(self.center, (entity.center[0] - self.game.world.camera.true_pos[0], entity.center[1] - self.game.world.camera.true_pos[1]))
+            if not self.targeted_entity or self.targeted_entity not in entity_list:
+                self.targeted_entity = entity
+            else:
+                if config['entities'][self.targeted_entity.type]['rank'] < config['entities'][entity.type]['rank']:
+                    self.targeted_entity = entity
+            pygame.draw.line(self.game.window.display, 'red', self.center, (self.targeted_entity.center[0] - self.game.world.camera.true_pos[0], self.targeted_entity.center[1] - self.game.world.camera.true_pos[1]))
 
     def target_weakest(self):
         entity_list = self.game.world.entities.entities
 
         for entity in entity_list:
-            if entity.category == 'enemy':
-                dist = get_dis(self.center, (entity.center[0] - self.game.world.camera.true_pos[0], entity.center[1] - self.game.world.camera.true_pos[1]))
+            pass
+
     def allow_shot(self):
         if self.shooting:
             self.shot_counter += self.game.window.dt
@@ -117,5 +116,5 @@ class Tower:
     def render(self, surf):
         self.show_radius(surf)
         surf.blit(self.img, (self.center[0] - (self.rect[2] // 2), self.center[1] - (self.rect[3] // 2)))
-        self.target_farthest()
+        self.target_strongest()
         #print(self.targeted_entity)

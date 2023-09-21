@@ -82,7 +82,7 @@ class World:
         offset = config['obst_hitboxes']['level_0'][tile[1][1]]
         coord = (tile[0][0] - 32, tile[0][1] - 32)
         hitbox = (coord[0] - (offset[0] // 2) + offset[2], coord[1] - offset[1], img.get_rect().width + offset[0], img.get_rect().height + offset[1])
-        pygame.draw.rect(self.game.window.display, 'red', (hitbox[0] - self.camera.true_pos[0], hitbox[1] - self.camera.true_pos[1], hitbox[2], hitbox[3]), 1)
+        #pygame.draw.rect(self.game.window.display, 'red', (hitbox[0] - self.camera.true_pos[0], hitbox[1] - self.camera.true_pos[1], hitbox[2], hitbox[3]), 1)
         return pygame.Rect(hitbox)
         
     def update(self):

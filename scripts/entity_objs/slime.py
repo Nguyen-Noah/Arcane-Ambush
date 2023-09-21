@@ -14,6 +14,16 @@ class Slime(Entity):
         self.direction = 'down'
         self.set_action('walk', self.direction)
 
+    def randomize_color(self):
+        random_color = (random.randint(197, 255), random.randint(233, 255), random.randint(225, 255))
+        
+        # (90, 197, 79) main color
+        # (153, 230, 96) secondary color
+        # (211 252 126) highlight color
+        # 1: -58, -63
+        # 2: -22, -33
+        # 3: -30, -17
+
     def follow_path(self):
         self.path = tuplify(config['level_data']['level_0']['path'])
 

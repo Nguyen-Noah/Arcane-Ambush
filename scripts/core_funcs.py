@@ -27,7 +27,7 @@ def write_f(path, dat):
     f.write(dat)
     f.close()
 
-def swap_color(img,old_c,new_c):
+def swap_color(img, old_c, new_c):
     global e_colorkey
     img.set_colorkey(old_c)
     surf = img.copy()
