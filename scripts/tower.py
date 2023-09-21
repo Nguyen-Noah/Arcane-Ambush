@@ -98,9 +98,6 @@ class Tower:
     def target_weakest(self):
         entity_list = self.game.world.entities.entities
 
-        for entity in entity_list:
-            pass
-
     def allow_shot(self):
         if self.shooting:
             self.shot_counter += self.game.window.dt
