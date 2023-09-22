@@ -5,25 +5,52 @@
         "rarity": ["common", "uncommon", "rare", "legendary", "mythical"],
         "damage": [10, 15, 20, 25, 50]
     },
-    "minigun": {
-
+    "archer": {
+        "cost": [10, 50, 100, 250, 500],
+        "radius": 250,
+        "rarity": ["common", "uncommon", "rare", "legendary", "mythical"],
+        "damage": [10, 15, 20, 25, 50]
     },
     "bomber": {
-
+        "cost": [10, 50, 100, 250, 500],
+        "radius": 50,
+        "rarity": ["common", "uncommon", "rare", "legendary", "mythical"],
+        "damage": [10, 15, 20, 25, 50]
     },
     "siren": {
-
+        "cost": [10, 50, 100, 250, 500],
+        "radius": 100,
+        "rarity": ["uncommon", "rare", "legendary", "mythical"],
+        "damage": [10, 15, 20, 25, 50]
     },
     "medusa": {
-
+        "cost": [10, 50, 100, 250, 500],
+        "radius": 50,
+        "rarity": ["legendary", "mythical"],
+        "damage": [10, 15, 20, 25, 50]
     },
     "phoenix": {
-
+        "cost": [10, 50, 100, 250, 500],
+        "radius": 200,
+        "rarity": ["rare", "legendary", "mythical"],
+        "damage": [10, 15, 20, 25, 50]
     },
     "dragon": {
-
+        "cost": [10, 50, 100, 250, 500],
+        "radius": 500,
+        "rarity": ["mythical"],
+        "damage": [10, 15, 20, 25, 50]
+    },
+    "cleric": {
+        "cost": [10, 50, 100, 250, 500],
+        "radius": 250,
+        "rarity": ["rare", "legendary", "mythical"],
+        "damage": [10, 15, 20, 25, 50]
     },
     "angel": {
-        
+        "cost": [10, 50, 100, 250, 500],
+        "radius": 500,
+        "rarity": ["mythical"],
+        "damage": [10, 15, 20, 25, 50]
     }
 }

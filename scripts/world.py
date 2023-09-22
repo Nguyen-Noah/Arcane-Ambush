@@ -17,6 +17,7 @@ class World:
         self.loaded = False
         self.collideables = []
         self.builder_mode = False
+        self.selected_tower = 'wizard_tower'
 
     def load(self, map_id):
         self.tile_map = TileMap((16, 16), self.game.window.base_resolution)
@@ -102,16 +103,19 @@ class World:
             self.camera.set_tracked_entity(None)
             self.builder_mode = True
             self.game.input.input_mode = 'builder'
+            self.towers.display_tower(self.game, self.player.get_mouse_pos(), self.selected_tower, 0)
+
         if self.game.input.states['close_build_mode']:
             self.entities.render_entities = True
             self.camera.set_tracked_entity(self.player)
             self.camera.mode = None
             self.builder_mode = False
             self.game.input.input_mode = 'core'
+            self.towers.displayed_tower = None
 
         if self.builder_mode:
             self.game.window.add_freeze(0.0001, 0.1)
             self.player.weapon.invisible = 0.2
 
             if self.game.input.mouse_state['left_click']:
-                self.towers.add(self.game, self.player.get_mouse_pos(), (18, 18), 'wizard_tower', 0)
+                self.towers.add(self.game, self.player.get_mouse_pos(), self.selected_tower, 0)

@@ -162,7 +162,7 @@ class Entity:
 
     def update(self, dt):
         if self.active_animation:
-            self.print_hitbox()
+            #self.print_hitbox()
             self.active_animation.play(dt)
 
         self.age += dt
