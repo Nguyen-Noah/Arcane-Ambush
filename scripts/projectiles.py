@@ -12,7 +12,7 @@ class Projectile:
         self.game = game
         self.owner = owner
         self.type = type
-        self.pos = pos
+        self.pos = list(pos)
         self.rotation = rot
         self.speed = speed
         self.config = config['projectiles'][self.type]
@@ -23,31 +23,12 @@ class Projectile:
         directions = {k : False for k in ['top', 'left', 'right', 'bottom']}
         cx = math.cos(self.rotation) * self.speed * dt
         self.pos[0] += cx
-        if self.game.world.tile_map.tile_collide(self.pos):
-            if cx > 0:
-                directions['right'] = True
-            else:
-                directions['left'] = True
-            return directions
-
         cy = math.sin(self.rotation) * self.speed * dt
         self.pos[1] += cy
-        if self.game.world.tile_map.tile_collide(self.pos):
-            if cy > 0:
-                directions['bottom'] = True
-            else:
-                directions['top'] = True
+
         return directions
 
     def update(self, dt):
-        if not self.game.world.entities.player.in_range(self, 600):
-            return False
-
-        if self.config['group'] == 'heavy_blob':
-            vec = to_cart(self.rotation, self.speed)
-            vec[1] = min(200, vec[1] + dt * 200)
-            self.rotation, self.speed = to_polar(vec)
-
         collisions = self.move(dt)
         if any(collisions.values()):
             if self.config['group'] == 'normal':
@@ -62,7 +43,7 @@ class Projectile:
                 for i in range(random.randint(2, 3)):
                     self.game.world.vfx.spawn_group('arrow_impact_sparks', self.pos.copy(), angle)
                 return False
-            elif self.config['group'] == 'heavy_blob':
+            elif self.config['group'] == 'blob':
                 vec = to_cart(self.rotation, self.speed)
                 if collisions['top']:
                     vec[1] *= -1
@@ -74,7 +55,7 @@ class Projectile:
                     vec[0] *= -1
                 self.rotation, self.speed = to_polar(vec)
                 for i in range(random.randint(2, 3)):
-                    self.game.world.vfx.spawn_group('arrow_impact_sparks', self.pos.copy(), self.rotation - 180)
+                    self.game.world.vfx.spawn_group('arrow_impact_sparks', (self.pos.copy()[0] - self.game.world.camera.true_pos[0], self.pos.copy()[1] - self.game.world.camera.true_pos[1]), self.rotation - 180)
                 advance(self.pos, self.rotation, 2)
 
         for entity in self.game.world.entities.entities:
@@ -89,7 +70,7 @@ class Projectile:
                         if self.owner.type == 'player':
                             self.owner.process_kill(entity)
                     for i in range(random.randint(10, 20)):
-                        self.game.world.vfx.spawn_group('arrow_impact_sparks', self.pos.copy(), self.rotation)
+                        self.game.world.vfx.spawn_group('arrow_impact_sparks', (self.pos.copy()[0] - self.game.world.camera.true_pos[0], self.pos.copy()[1] - self.game.world.camera.true_pos[1]), self.rotation)
                     for i in range(random.randint(8, 16)):
                         random_angle = self.rotation + (random.random() - 0.5) / 3.5
                         if random.randint(1, 4) == 1:

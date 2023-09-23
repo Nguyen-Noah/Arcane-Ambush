@@ -1,4 +1,5 @@
 from .tower import Tower
+from .core_funcs import round_nearest
 from .config import config
 
 class Towers:
@@ -22,7 +23,7 @@ class Towers:
             tower.update()
 
         if self.displayed_tower:
-            self.displayed_tower.pos = self.game.world.entities.player.get_mouse_pos()
+            self.displayed_tower.pos = (round_nearest(self.game.world.entities.player.get_mouse_pos()[0], 4), round_nearest(self.game.world.entities.player.get_mouse_pos()[1], 4))
 
     def render(self, surf):
         for tower in self.towers:

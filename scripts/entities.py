@@ -11,6 +11,7 @@ class EntityManager:
         self.entities = []
         self.spawner = Spawner(self.game)
         self.render_entities = True
+        self.projectiles = []
 
     def gen_player(self):
         self.entities.append(Player(self.game, (474, 138), (12, 12), 'player', 'player'))
@@ -29,6 +30,12 @@ class EntityManager:
         else:
             return entity[1][1] + entity[0].get_rect().height
 
+    def update(self):
+        for i, projectile in itr(self.projectiles):
+            alive = projectile.update(self.game.window.dt)
+            if not alive:
+                self.projectiles.pop(i)
+
     def render(self, surf):
         sorted_entities = sorted(self.entities + self.game.world.render_list, key=self.y_sort)
         entities = self.entities.copy()
@@ -43,5 +50,8 @@ class EntityManager:
             else:
                     surf.blit(entity[0], (math.floor(entity[1][0]), math.floor(entity[1][1])))
         self.entities = entities
+
+        for projectile in self.projectiles:
+            projectile.render(surf, self.game.world.camera.true_pos)
 
 #TODO: combine entity, tower, and obstacle sorting to accomodate for Y-sorting

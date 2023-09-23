@@ -1,6 +1,7 @@
-import pygame
+import pygame, math
 from .config import config
 from .core_funcs import get_dis
+from .projectiles import Projectile
 
 path = 'data/graphics/towers/'
 colorkey = (0, 0, 0, 0)
@@ -20,8 +21,7 @@ class Tower:
         self.rotation = 0
         self.targeting = 'closest'
         self.targeted_entity = None
-        self.shot_cooldown = 1
-        self.shot_counter = 0
+        self.attack_timer = 0
         self.shooting = True
         self.img = load_img(path + self.type + '/' + str(self.rank) + '.png', colorkey)
 
@@ -113,17 +113,26 @@ class Tower:
                 if config['entities'][self.targeted_entity.type]['rank'] > config['entities'][entity.type]['rank']:
                     self.targeted_entity = entity
 
-    def allow_shot(self):
-        if self.shooting:
-            self.shot_counter += self.game.window.dt
-            if self.shot_counter >= self.shot_cooldown:
-                self.shooting = False
-
     def show_radius(self, surf):
         pygame.draw.circle(surf, 'white', self.center, self.radius, width=1)
 
+        target_rect = pygame.Rect(self.center, (0, 0)).inflate((self.radius * 2, self.radius * 2))
+        shape_surf = pygame.Surface(target_rect.size, pygame.SRCALPHA)
+        shape_surf.set_alpha(64)
+        pygame.draw.circle(shape_surf, 'white', (self.radius, self.radius), self.radius)
+        surf.blit(shape_surf, target_rect)
+
     def update(self):
         self.target_weakest()
+        #pygame.draw.circle(self.game.window.display, 'red', (self.targeted_entity.center[0] - self.center[0] + self.game.world.camera.true_pos[0], self.targeted_entity.center[1] - self.center[1] + self.game.world.camera.true_pos[1]), 200)
+        if self.targeted_entity:
+            self.attack_timer -= self.game.window.dt
+
+            if self.attack_timer < 0:
+                angle = math.atan2(self.targeted_entity.center[0] - self.center[0] + self.game.world.camera.true_pos[0], self.targeted_entity.center[1] - self.center[1] + self.game.world.camera.true_pos[1])
+                print(angle)
+                self.game.world.entities.projectiles.append(Projectile(self.type + '_projectile', (self.center[0] + self.game.world.camera.true_pos[0], self.center[1] + self.game.world.camera.true_pos[1]), angle, 100, self.game, self))
+                self.attack_timer = 1
 
     def render(self, surf):
         self.show_radius(surf)

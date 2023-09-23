@@ -1,0 +1,9 @@
+{
+    "wizard_tower_projectile": {
+        "shape": null,
+        "power": 5,
+        "group": "wizard_tower",
+        "spawn_advance": 8,
+        "knockback": 0
+    }
+}

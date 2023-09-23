@@ -1,4 +1,5 @@
 import pygame, math
+from .core_funcs import round_nearest
 from .camera import Camera
 from .config import config
 from .entities import EntityManager
@@ -38,7 +39,7 @@ class World:
 
         # camera ----------------------------------------------------------------------- #
         self.camera = Camera(self.game)
-        self.camera.set_restriction(self.player.pos)
+        #self.camera.set_restriction(self.player.pos)
         self.camera.set_tracked_entity(self.player)
 
         # hitboxes --------------------------------------------------------------------- #
@@ -95,6 +96,7 @@ class World:
         self.entities.spawn_entities()
         self.hitboxes.update()
         self.towers.update()
+        self.entities.update()
 
         # builder mode handler -------------------------------------------------------- #
         if self.game.input.states['open_build_mode']:
@@ -103,7 +105,7 @@ class World:
             self.camera.set_tracked_entity(None)
             self.builder_mode = True
             self.game.input.input_mode = 'builder'
-            self.towers.display_tower(self.game, self.player.get_mouse_pos(), self.selected_tower, 0)
+            self.towers.display_tower(self.game, (round_nearest(self.player.get_mouse_pos()[0], 4), round_nearest(self.player.get_mouse_pos()[1], 4)), self.selected_tower, 0)
 
         if self.game.input.states['close_build_mode']:
             self.entities.render_entities = True
@@ -118,4 +120,4 @@ class World:
             self.player.weapon.invisible = 0.2
 
             if self.game.input.mouse_state['left_click']:
-                self.towers.add(self.game, self.player.get_mouse_pos(), self.selected_tower, 0)
+                self.towers.add(self.game, (round_nearest(self.player.get_mouse_pos()[0], 4), round_nearest(self.player.get_mouse_pos()[1], 4)), self.selected_tower, 0)
