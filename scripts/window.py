@@ -31,12 +31,15 @@ class Window:
 
         pygame.mouse.set_visible(False)
         self.cursor_id = 'normal'
+        self.cursor = None
 
     def add_freeze(self, rate, duration):
         self.freeze_frame[rate] = duration
 
     def render_frame(self):
-        self.display.blit(self.game.assets.cursor[self.cursor_id], (self.game.input.mouse_pos[0] - self.offset[0] - self.game.assets.cursor[self.cursor_id].get_width() // 2, self.game.input.mouse_pos[1] - self.offset[1] - self.game.assets.cursor[self.cursor_id].get_height() // 2))
+        if not self.cursor:
+            self.cursor = self.game.assets.cursor[self.cursor_id]
+        self.display.blit(self.cursor, (self.game.input.mouse_pos[0] - self.offset[0] - self.game.assets.cursor[self.cursor_id].get_width() // 2, self.game.input.mouse_pos[1] - self.offset[1] - self.game.assets.cursor[self.cursor_id].get_height() // 2))
         pygame.display.update()
 
         self.dt = time.time() - self.frame_start
