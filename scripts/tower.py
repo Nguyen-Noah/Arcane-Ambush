@@ -1,15 +1,11 @@
 import pygame, math
+from .core_funcs import load_img
 from .config import config
 from .core_funcs import get_dis
 from .projectiles import Projectile
 
 path = 'data/graphics/towers/'
 colorkey = (0, 0, 0, 0)
-
-def load_img(path, colorkey):
-    img = pygame.image.load(path).convert()
-    img.set_colorkey(colorkey)
-    return img
 
 class Tower:
     def __init__(self, game, pos, type, rank):
@@ -124,15 +120,13 @@ class Tower:
 
     def update(self):
         self.target_weakest()
-        #pygame.draw.circle(self.game.window.display, 'red', (self.targeted_entity.center[0] - self.center[0] + self.game.world.camera.true_pos[0], self.targeted_entity.center[1] - self.center[1] + self.game.world.camera.true_pos[1]), 200)
         if self.targeted_entity:
             self.attack_timer -= self.game.window.dt
 
             if self.attack_timer < 0:
-                angle = math.atan2(self.targeted_entity.center[0] - self.center[0] + self.game.world.camera.true_pos[0], self.targeted_entity.center[1] - self.center[1] + self.game.world.camera.true_pos[1])
-                print(angle)
-                self.game.world.entities.projectiles.append(Projectile(self.type + '_projectile', (self.center[0] + self.game.world.camera.true_pos[0], self.center[1] + self.game.world.camera.true_pos[1]), angle, 100, self.game, self))
-                self.attack_timer = 1
+                angle = math.atan2(self.targeted_entity.center[1] - (self.center[1] + self.game.world.camera.true_pos[1]), self.targeted_entity.center[0] - (self.center[0] + self.game.world.camera.true_pos[0]))
+                self.game.world.entities.projectiles.append(Projectile(self.type + '_projectile', (self.center[0] + self.game.world.camera.true_pos[0], self.center[1] + self.game.world.camera.true_pos[1]), angle, 50, self.game, self))
+                self.attack_timer = 1.5
 
     def render(self, surf):
         self.show_radius(surf)

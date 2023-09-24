@@ -1,8 +1,8 @@
-from .towers.wizard_tower import WizardTower
-from .towers.archer import Archer
-from .towers.bomber import Bomber
-from .towers.phoenix import Phoenix
-from .towers.cleric import Cleric
+from .tower_objs.wizard_tower import WizardTower
+from .tower_objs.archer import Archer
+from .tower_objs.bomber import Bomber
+from .tower_objs.phoenix import Phoenix
+from .tower_objs.cleric import Cleric
 
 tower_map = {
     'wizard_tower': WizardTower,

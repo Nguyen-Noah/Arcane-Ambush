@@ -27,6 +27,11 @@ def write_f(path, dat):
     f.write(dat)
     f.close()
 
+def load_img(path, colorkey):
+    img = pygame.image.load(path).convert()
+    img.set_colorkey(colorkey)
+    return img
+
 def swap_color(img, old_c, new_c):
     global e_colorkey
     img.set_colorkey(old_c)

@@ -1,6 +1,7 @@
 from .tower import Tower
 from .core_funcs import round_nearest
 from .config import config
+from .tower_map import tower_map
 
 class Towers:
     def __init__(self, game):
@@ -9,13 +10,13 @@ class Towers:
         self.displayed_tower = None
  
     def display_tower(self, game, pos, type, rank):
-        self.displayed_tower = Tower(game, pos, type, rank)
+        self.displayed_tower = tower_map[type](game, pos, type, rank)
         self.displayed_tower.set_opacity(128)
 
     def add(self, game, pos, type, rank):
         cost = config['towers'][type]['cost'][rank]
         if cost <= self.game.world.player.money:
-            self.towers.append(Tower(game, pos, type, rank))
+            self.towers.append(tower_map[type](game, pos, type, rank))
             self.game.world.player.money -= cost
 
     def update(self):
