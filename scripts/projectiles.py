@@ -61,8 +61,9 @@ class Projectile:
         for entity in self.game.world.entities.entities:
             if (entity != self.owner) and ((entity.type == 'player') or (entity.type != self.owner.type)) and (entity.type != 'item'):
                 if entity.rect.collidepoint(self.pos):
-                    self.game.window.add_freeze(0.2, 0.2)
-                    self.game.world.vfx.spawn_vfx('slice', self.pos.copy(), random.random() * math.pi / 4 - math.pi / 8 + self.rotation, 20 * random.random() + 50, 2, 3, 0.4)
+                    if entity.category == 'player':
+                        self.game.window.add_freeze(0.2, 0.2)
+                    self.game.world.vfx.spawn_vfx('slice', (self.pos.copy()[0] - self.game.world.camera.true_pos[0], self.pos.copy()[1] - self.game.world.camera.true_pos[1]), random.random() * math.pi / 4 - math.pi / 8 + self.rotation, 20 * random.random() + 50, 2, 3, 0.4)
                     entity.velocity[0] += math.cos(self.rotation) * 300 * self.config['knockback']
                     entity.velocity[1] += math.sin(self.rotation) * 300 * self.config['knockback']
                     killed = entity.damage(self.config['power'])
@@ -78,7 +79,7 @@ class Projectile:
 
                         random_speed = random.randint(20, 200)
                         vel = [math.cos(random_angle) * random_speed, math.sin(random_angle) * random_speed]
-                        self.game.world.vfx.spawn_vfx('spark', self.pos.copy(), vel, 1 + random.random() * 3, (15, 15, 8), drag=50)
+                        self.game.world.vfx.spawn_vfx('spark', (self.pos.copy()[0] - self.game.world.camera.true_pos[0], self.pos.copy()[1] - self.game.world.camera.true_pos[1]), vel, 1 + random.random() * 3, (15, 15, 8), drag=50)
                     return False
 
         return True

@@ -33,3 +33,8 @@ class Game:
 if __name__ == '__main__':
     game = Game()
     game.run()
+
+# TODO:
+    # add death animation
+    # fix tower target changing before entity dies
+    # create new towers

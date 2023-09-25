@@ -153,5 +153,5 @@ class Tower:
     def render(self, surf):
         self.outline(surf, (self.center[0] - (self.rect[2] // 2), self.center[1] - (self.rect[3] // 2)))
         surf.blit(self.img, (self.center[0] - (self.rect[2] // 2), self.center[1] - (self.rect[3] // 2)))
-        if self.targeted_entity:
-            pygame.draw.line(self.game.window.display, 'red', self.center, (self.targeted_entity.center[0] - self.game.world.camera.true_pos[0], self.targeted_entity.center[1] - self.game.world.camera.true_pos[1]))
+        #if self.targeted_entity:
+            #pygame.draw.line(self.game.window.display, 'red', self.center, (self.targeted_entity.center[0] - self.game.world.camera.true_pos[0], self.targeted_entity.center[1] - self.game.world.camera.true_pos[1]))
