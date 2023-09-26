@@ -69,6 +69,7 @@ class Slime(Entity):
         if not r:
             return r
 
-        self.jump()
+        if self.targetable:
+            self.jump()
 
         return self.alive

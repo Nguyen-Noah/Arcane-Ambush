@@ -66,7 +66,7 @@ class Projectile:
                     self.game.world.vfx.spawn_vfx('slice', (self.pos.copy()[0] - self.game.world.camera.true_pos[0], self.pos.copy()[1] - self.game.world.camera.true_pos[1]), random.random() * math.pi / 4 - math.pi / 8 + self.rotation, 20 * random.random() + 50, 2, 3, 0.4)
                     entity.velocity[0] += math.cos(self.rotation) * 300 * self.config['knockback']
                     entity.velocity[1] += math.sin(self.rotation) * 300 * self.config['knockback']
-                    killed = entity.damage(self.config['power'])
+                    killed = entity.damage(self.config['power'], entity.direction)
                     if killed:
                         if self.owner.type == 'player':
                             self.owner.process_kill(entity)

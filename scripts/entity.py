@@ -24,6 +24,7 @@ class Entity:
         self.opacity = 255
         self.height = 0
         self.alive = True
+        self.targetable = True
         self.hurt = 0
         self.age = 0
         if self.type in config['entities']:
@@ -113,27 +114,16 @@ class Entity:
     def print_hitbox(self):
         pygame.draw.rect(self.game.window.display, 'blue', (self.rect[0] - self.game.world.camera.true_pos[0], self.rect[1] - self.game.world.camera.true_pos[1], self.rect[2], self.rect[3]), 1)
 
-    def die(self):
-        SIZE = 7
-        entity_img = self.img.copy()
+    def die(self, direction):
+        self.active_animation = self.game.assets.animations.new(self.type + '_die_' + direction)
+        self.death_frames = sum(self.active_animation.data.config['frames'])
+        self.targetable = False
 
-        # create death particles
-        for y in range(entity_img.get_height() // SIZE + 1):
-            for x in range(entity_img.get_width() // SIZE + 1):
-                img = clip(entity_img, x * SIZE, y * SIZE, SIZE, SIZE)
-                if not (img.get_width() * img.get_height()):
-                    continue
-                angle = math.atan2(y * SIZE + SIZE / 2 - entity_img.get_height() / 2, x * SIZE + SIZE / 2 - entity_img.get_width() / 2)
-                dis = math.sqrt((y * SIZE + SIZE / 2 - entity_img.get_height() / 2) ** 2 + (x * SIZE + SIZE / 2 - entity_img.get_width() / 2) ** 2)
-                dis *= 4
-                self.game.world.destruction_particles.add_particle(img, [self.pos[0] + x * SIZE + SIZE // 2, self.pos[1] + y * SIZE + SIZE // 2], [math.cos(angle) * math.sqrt(dis) + random.randint(0, 30) - 15, math.sin(angle) * math.sqrt(dis) - 50 + random.randint(0, 30) - 15, random.randint(0, 1800) - 900], duration=20 + random.random() * 3)
-        self.alive = False
-
-    def damage(self, amount):
+    def damage(self, amount, direction):
         self.hurt = 1
         self.health -= amount
         if self.health <= 0:
-            self.die()
+            self.die(direction)
             return True
         return False
 
@@ -166,5 +156,10 @@ class Entity:
             self.active_animation.play(dt)
 
         self.age += dt
+
+        if not self.targetable:
+            self.death_frames -= dt * self.active_animation.data.config['speed']
+            if self.death_frames <= 0:
+                self.alive = False
         
         return self.alive

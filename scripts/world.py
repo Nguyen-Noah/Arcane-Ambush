@@ -69,7 +69,6 @@ class World:
                 img = spritesheet_loader.get_img(self.game.assets.spritesheets, tile[1])
                 if tile[1][0] == 'obstacles':
                     self.collideables.append(self.obs_rect(tile, img))
-                    pygame.draw.rect(surf, 'blue', (tile[0][0] + offset[0], tile[0][1] + offset[1], img.get_rect().x, img.get_rect().y), 1)
                     self.render_list.append([img, (tile[0][0] - self.camera.true_pos[0] + offset[0], tile[0][1] - self.camera.true_pos[1] + offset[1])])
                 else:
                     surf.blit(img, (math.floor(tile[0][0] - self.camera.true_pos[0] + offset[0]), math.floor(tile[0][1] - self.camera.true_pos[1] + offset[1])))
