@@ -1,4 +1,5 @@
 import pygame, random
+from .config import config
 from .particles import ParticleManager
 import cProfile
 
@@ -43,9 +44,14 @@ class Renderer:
 
         #self.update_overlay_particles(surf)
 
-        ui_color = (255, 255, 255, 255)
+        ui_color = (17, 17, 17, 255)
 
         # ui
+        pygame.draw.rect(surf, ui_color, (10, 10, 100, 10))
+        ratio = self.game.world.player.health / config['entities']['player']['health']
+        # multiply by 98 instead of 100 to compensate for padding
+        current_health = 98 * ratio
+        pygame.draw.rect(surf, 'red', (11, 11, current_health, 8))
 
         # inventory
         if self.game.world.builder_mode:

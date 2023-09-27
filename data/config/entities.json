@@ -1,6 +1,6 @@
 {
     "player": {
-        "health": 1,
+        "health": 100,
         "speed": 100,
         "rank": -1
     },

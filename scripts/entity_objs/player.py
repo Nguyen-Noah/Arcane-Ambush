@@ -52,6 +52,12 @@ class Player(Entity):
             if item.is_consumable:
                 self.skills[3] = item
 
+    def get_mouse_pos(self):
+        val = get_dis((self.rect[0] - self.game.world.camera.true_pos[0] + (self.size[0] // 2), self.rect[1] - self.game.world.camera.true_pos[1] + (self.size[1] // 2)), self.game.input.mouse_pos)
+        x_offset = (self.rect[0] + (self.size[0] // 2)) + (val * math.cos(self.aim_angle))
+        y_offset = (self.rect[1] + (self.size[1] // 2)) + (val * math.sin(self.aim_angle))
+        return (x_offset, y_offset)
+
     def attempt_move(self, axis, direction):
         if self.allow_movement:
             if axis == 0:
@@ -100,15 +106,16 @@ class Player(Entity):
             self.counter[1] = False
 
         # animations code
-        if not self.attacking:
-            if self.counter[0] or self.counter[1]:
-                self.set_action('walk', self.direction)
-            else:
-                self.set_action('idle', self.direction)
-                self.moving = False
+        if self.targetable:
+            if not self.attacking:
+                if self.counter[0] or self.counter[1]:
+                    self.set_action('walk', self.direction)
+                else:
+                    self.set_action('idle', self.direction)
+                    self.moving = False
 
         # weapon
-        if (self.game.input.mouse_state['left_click'] or self.attacking) and not self.game.world.builder_mode:
+        if (self.game.input.mouse_state['left_click'] or self.attacking) and not self.game.world.builder_mode and self.targetable:
             self.atk_counter += self.game.window.dt
             self.weapon.attempt_attack()
             if self.atk_counter > self.weapon.attack_rate:
@@ -141,13 +148,12 @@ class Player(Entity):
 
         pygame.draw.line(self.game.window.display, 'blue', (self.rect[0] - self.game.world.camera.true_pos[0] + (self.size[0] // 2), self.rect[1] - self.game.world.camera.true_pos[1] + (self.size[1] // 2)), self.game.input.mouse_pos)
 
+        if not self.targetable:
+            self.allow_movement = False
+            self.weapon_hide = 0
+        print(self.health)
+
         return self.alive
-    
-    def get_mouse_pos(self):
-        val = get_dis((self.rect[0] - self.game.world.camera.true_pos[0] + (self.size[0] // 2), self.rect[1] - self.game.world.camera.true_pos[1] + (self.size[1] // 2)), self.game.input.mouse_pos)
-        x_offset = (self.rect[0] + (self.size[0] // 2)) + (val * math.cos(self.aim_angle))
-        y_offset = (self.rect[1] + (self.size[1] // 2)) + (val * math.sin(self.aim_angle))
-        return (x_offset, y_offset)
 
     def render(self, surf, offset=(0, 0)):
         super().render(surf, offset)

@@ -26,7 +26,6 @@ class Entity:
         self.alive = True
         self.targetable = True
         self.hurt = 0
-        self.age = 0
         if self.type in config['entities']:
             self.max_health = config['entities'][self.type]['health']
             self.speed = config['entities'][self.type]['speed']
@@ -154,8 +153,6 @@ class Entity:
         if self.active_animation:
             #self.print_hitbox()
             self.active_animation.play(dt)
-
-        self.age += dt
 
         if not self.targetable:
             self.death_frames -= dt * self.active_animation.data.config['speed']

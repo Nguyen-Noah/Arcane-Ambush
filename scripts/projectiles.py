@@ -59,7 +59,7 @@ class Projectile:
                 advance(self.pos, self.rotation, 2)
 
         for entity in self.game.world.entities.entities:
-            if (entity != self.owner) and ((entity.type == 'player') or (entity.type != self.owner.type)) and (entity.type != 'item'):
+            if (entity != self.owner) and ((entity.type == 'player') or (entity.type != self.owner.type)) and (entity.type != 'item') and (entity.health > 0):
                 if entity.rect.collidepoint(self.pos):
                     if entity.category == 'player':
                         self.game.window.add_freeze(0.2, 0.2)
