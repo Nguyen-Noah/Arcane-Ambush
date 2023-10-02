@@ -33,6 +33,13 @@ class Window:
         self.cursor_id = 'normal'
         self.cursor = None
 
+        self.show_fps = True
+
+    def fps(self):
+        avg_dt = sum(self.frame_history) / len(self.frame_history)
+        avg_fps = 1 / avg_dt
+        return avg_fps
+
     def add_freeze(self, rate, duration):
         self.freeze_frame[rate] = duration
 

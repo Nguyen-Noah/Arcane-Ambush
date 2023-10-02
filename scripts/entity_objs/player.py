@@ -151,7 +151,6 @@ class Player(Entity):
         if not self.targetable:
             self.allow_movement = False
             self.weapon_hide = 0
-        print(self.health)
 
         return self.alive
 

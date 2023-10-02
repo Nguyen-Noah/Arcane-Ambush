@@ -46,6 +46,10 @@ class Renderer:
 
         ui_color = (17, 17, 17, 255)
 
+        # fps
+        if self.game.window.show_fps:
+            self.game.assets.text.render(surf, str(int(self.game.window.fps())) + 'FPS', (self.game.window.display.get_width() - 114, 22))
+
         # ui
         pygame.draw.rect(surf, ui_color, (10, 10, 100, 10))
         ratio = self.game.world.player.health / config['entities']['player']['health']

@@ -35,6 +35,4 @@ if __name__ == '__main__':
     game.run()
 
 # TODO:
-    # add death animation
-    # fix tower target changing before entity dies
     # create new towers

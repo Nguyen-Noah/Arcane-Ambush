@@ -10,6 +10,7 @@ from .hitboxes import Hitboxes
 from .standalone_animations import StandaloneAnimations
 from .particles import ParticleManager
 from .destruction_particles import DestructionParticles
+from .builder_menu import Builder
 from .vfx import VFX
 
 class World:
@@ -44,6 +45,9 @@ class World:
 
         # hitboxes --------------------------------------------------------------------- #
         self.hitboxes = Hitboxes(self.game)
+
+        # building --------------------------------------------------------------------- #
+        self.builder_menu = Builder(self.game)
 
         self.master_clock = 0
 
@@ -120,3 +124,6 @@ class World:
 
             if self.game.input.mouse_state['left_click']:
                 self.towers.add(self.game, (round_nearest(self.player.get_mouse_pos()[0], 4), round_nearest(self.player.get_mouse_pos()[1], 4)), self.selected_tower, 0)
+
+            if self.game.input.mouse_state['right_click']:
+                self.builder_menu.render(self.game.window.display)
