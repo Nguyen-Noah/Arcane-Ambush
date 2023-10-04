@@ -46,18 +46,14 @@ class Renderer:
 
         ui_color = (17, 17, 17, 255)
 
-        # fps
-        if self.game.window.show_fps:
-            self.game.assets.text.render(surf, str(int(self.game.window.fps())) + 'FPS', (self.game.window.display.get_width() - 114, 22))
-
-        # ui
+        # ui  ----------------------------------------------------------------------------------------------------- #
         pygame.draw.rect(surf, ui_color, (10, 10, 100, 10))
         ratio = self.game.world.player.health / config['entities']['player']['health']
         # multiply by 98 instead of 100 to compensate for padding
         current_health = 98 * ratio
         pygame.draw.rect(surf, 'red', (11, 11, current_health, 8))
 
-        # inventory
+        # inventory ----------------------------------------------------------------------------------------------- #
         if self.game.world.builder_mode:
             tilesize = 26
             count = 5
@@ -77,7 +73,7 @@ class Renderer:
                 if skills[i]:
                     skills[i].render_skill(surf, (pos + 1, surf.get_height() + self.game.window.offset[1] - tilesize + 1))
 
-        # weapon
+        # weapon ------------------------------------------------------------------------------------------------- #
         '''player = self.game.world.entities.player
 
         player_items = player.inventory.get_custom_group('active_weapons')
@@ -94,5 +90,13 @@ class Renderer:
             surf.blit(weapon_img, (25 - mask.get_bounding_rects()[0].left, base_pos + offset))
             offset += weapon_img.get_height() + 2'''
 
-        # display the player money
+        # builder menu ------------------------------------------------------------------------------------------- #
+        if self.game.world.show_builder_menu and self.game.world.builder_mode:
+            self.game.world.builder_menu.render(surf)
+
+        # display the player money ------------------------------------------------------------------------------- #
         self.game.assets.text.render(surf, '$' + str(self.game.world.entities.player.money), (300, 20))
+
+        # fps ----------------------------------------------------------------------------------------------------- #
+        if self.game.window.show_fps:
+            self.game.assets.text.render(surf, str(int(self.game.window.fps())) + 'FPS', (self.game.window.display.get_width() - 114, 22))

@@ -54,7 +54,7 @@
         "button": ["keyboard", [27]],
         "mode": ["all"]
     },
-      "log_fps": {
+    "log_fps": {
         "toggle": "press",
         "button": ["keyboard", [112]],
         "mode": ["all"]

@@ -19,6 +19,7 @@ class World:
         self.loaded = False
         self.collideables = []
         self.builder_mode = False
+        self.show_builder_menu = False
         self.selected_tower = 'wizard_tower'
 
     def load(self, map_id):
@@ -108,6 +109,7 @@ class World:
             self.camera.set_tracked_entity(None)
             self.builder_mode = True
             self.game.input.input_mode = 'builder'
+            self.show_builder_menu = False
             self.towers.display_tower(self.game, (round_nearest(self.player.get_mouse_pos()[0], 4), round_nearest(self.player.get_mouse_pos()[1], 4)), self.selected_tower, 0)
 
         if self.game.input.states['close_build_mode']:
@@ -126,4 +128,4 @@ class World:
                 self.towers.add(self.game, (round_nearest(self.player.get_mouse_pos()[0], 4), round_nearest(self.player.get_mouse_pos()[1], 4)), self.selected_tower, 0)
 
             if self.game.input.mouse_state['right_click']:
-                self.builder_menu.render(self.game.window.display)
+                self.show_builder_menu = not self.show_builder_menu
