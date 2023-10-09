@@ -16,7 +16,10 @@ class Spawner:
         self.spawn_timer = self.level_waves[self.wave]['timer']
         self.enemy_count = 0
         self.level_clear = False
-        self.wave_clear = False
+        self.wave_clear = True
+
+        self.wave_data = []
+        self.difficulty_rank = 1
 
         self.total_enemy_count = self.get_total_count()
 
@@ -34,12 +37,28 @@ class Spawner:
             self.spawner_index += 1
         return enemy_count
 
+    def get_enemies_by_rank(self, rank):
+        entities = []
+        entity_list = config['entities']
+        for entity in entity_list:
+            if entity_list[entity]['rank'] == rank:
+                entities.append(entity)
+        return entities
+
     def generate_wave(self):
-        self.wave_data = []
+        entities = self.get_enemies_by_rank(self.difficulty_rank)
+        num_enemies = random.randint(5, 5 * self.difficulty_rank * (self.wave + 1))
+        for i in range(num_enemies):
+            self.wave_data.append()
 
     def update(self, dt):
         if self.game.world.loaded:
-            self.timer += dt
+            if self.wave_clear:
+                self.generate_wave()
+                self.wave_clear = False
+            
+
+            '''self.timer += dt
 
             if self.total_enemy_count == 0:
                 self.wave_clear = True
@@ -65,4 +84,4 @@ class Spawner:
                     if not self.level_clear:
                         self.total_enemy_count = self.get_total_count()
                     self.wave_clear = False
-                    #print('new wave')
+                    #print('new wave')'''

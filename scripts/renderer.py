@@ -100,7 +100,7 @@ class Renderer:
 
         # round -------------------------------------------------------------------------------------------------- #
         self.game.assets.large_text.render(surf, 'ROUND', (self.game.window.display.get_size()[0] // 2, 10))
-        self.game.assets.large_text.render(surf, str(self.game.world.entities.spawner.wave_number) + '/' + str(self.game.world.entities.spawner.max_waves), ((self.game.window.display.get_size()[0] // 2) + 4, 25))
+        self.game.assets.large_text.render(surf, str(self.game.world.entities.spawner.wave + 1) + '/' + str(self.game.world.entities.spawner.max_waves), ((self.game.window.display.get_size()[0] // 2) + 4, 25))
  
         # fps ---------------------------------------------------------------------------------------------------- #
         if self.game.window.show_fps:
