@@ -57,18 +57,19 @@ class Renderer:
         if self.game.world.builder_mode:
             tilesize = 26
             count = 5
-            owned_towers = self.game.world.player.owned_towers
+            owned_towers = self.game.world.towers.inventory_towers
             for i in range(count):
-                pos = self.game.window.display.get_width() // 2 - count // 2 * tilesize + i * tilesize
+                pos = (((self.game.window.display.get_width() + (tilesize // 2)) // 2) - ((count * tilesize) // 2)) + (i * tilesize)
                 surf.blit(self.game.assets.misc['builder_slot'], (pos, self.game.window.display.get_height() - tilesize))
                 if owned_towers[i]:
-                    pass
+                    owned_towers[i].pos = (pos + self.game.world.camera.true_pos[0] + (owned_towers[i].img.get_size()[0] // 2) + 1, self.game.window.display.get_height() - tilesize + self.game.world.camera.true_pos[1] + (owned_towers[i].img.get_size()[1] // 2))
+                    owned_towers[i].render(surf)
         else:
             tilesize = 18
             skill_count = 9
             skills = self.game.world.entities.player.skills
             for i in range(skill_count):
-                pos = self.game.window.display.get_width() // 2 - skill_count // 2 * tilesize + i * tilesize
+                pos = (((self.game.window.display.get_width() + (tilesize // 2)) // 2) - ((skill_count * tilesize) // 2)) + (i * tilesize)
                 surf.blit(self.game.assets.misc['inventory_slot'], (pos, self.game.window.display.get_height() - tilesize))
                 if skills[i]:
                     skills[i].render_skill(surf, (pos + 1, surf.get_height() + self.game.window.offset[1] - tilesize + 1))
@@ -95,8 +96,14 @@ class Renderer:
             self.game.world.builder_menu.render(surf)
 
         # display the player money ------------------------------------------------------------------------------- #
-        self.game.assets.text.render(surf, '$' + str(self.game.world.entities.player.money), (300, 20))
+        self.game.assets.large_text.render(surf, '$' + str(self.game.world.entities.player.money), (10, 25))
 
-        # fps ----------------------------------------------------------------------------------------------------- #
+        # round -------------------------------------------------------------------------------------------------- #
+        self.game.assets.large_text.render(surf, 'ROUND', (self.game.window.display.get_size()[0] // 2, 10))
+        self.game.assets.large_text.render(surf, str(self.game.world.entities.spawner.wave_number) + '/' + str(self.game.world.entities.spawner.max_waves), ((self.game.window.display.get_size()[0] // 2) + 4, 25))
+ 
+        # fps ---------------------------------------------------------------------------------------------------- #
         if self.game.window.show_fps:
-            self.game.assets.text.render(surf, str(int(self.game.window.fps())) + 'FPS', (self.game.window.display.get_width() - 114, 22))
+            self.game.assets.small_text.render(surf, str(int(self.game.window.fps())) + 'FPS', (self.game.window.display.get_width() - 50, 10))
+
+        #pygame.draw.line(surf, 'black', (self.game.window.display.get_size()[0] // 2, 0), (self.game.window.display.get_size()[0] // 2, self.game.window.display.get_size()[1]))

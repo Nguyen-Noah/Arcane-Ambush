@@ -10,6 +10,8 @@ class Spawner:
         self.wave = 0
         self.spawn_point = (41, -48)
         self.spawner_index = 0
+        self.wave_number = 1
+        self.max_waves = config['level_data']['level_0']['levels']
         self.level_waves = config['level_data']['level_0']['waves']
         self.spawn_timer = self.level_waves[self.wave]['timer']
         self.enemy_count = 0
@@ -31,6 +33,9 @@ class Spawner:
         if self.spawner_index < (len(self.level_waves[self.wave]['spawners']) - 1):
             self.spawner_index += 1
         return enemy_count
+
+    def generate_wave(self):
+        self.wave_data = []
 
     def update(self, dt):
         if self.game.world.loaded:
