@@ -18,8 +18,7 @@ class Assets:
         self.projectiles = self.load_dir('data/graphics/projectiles')
         self.skills = self.load_dir('data/graphics/skills')
         self.misc = self.load_dir('data/graphics/misc')
-        self.large_text = Text('data/fonts/large.png')
-        self.small_text = Text('data/fonts/small.png')
+        self.text = Text('data/fonts/large.png')
 
     def load_dirs(self, path):
         dirs = {}
