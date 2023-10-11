@@ -36,3 +36,4 @@ if __name__ == '__main__':
 
 # TODO:
     # create new towers
+    # fix enemy path following

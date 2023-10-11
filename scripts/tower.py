@@ -8,11 +8,12 @@ path = 'data/graphics/towers/'
 colorkey = (0, 0, 0, 0)
 
 class Tower:
-    def __init__(self, game, type, rank, pos = (0, 0)):
+    def __init__(self, game, type, rank, pos=(0, 0), hoverable=True):
         self.game = game
         self.pos = list(pos).copy()
         self.type = type
         self.rank = rank
+        self.hoverable = hoverable
         self.radius = config['towers'][self.type]['radius']
         self.rotation = 0
         self.targeting = 'closest'
@@ -161,7 +162,8 @@ class Tower:
                 self.attack_timer = 1.5
 
     def render(self, surf):
-        self.outline(surf, (self.center[0] - (self.rect[2] // 2), self.center[1] - (self.rect[3] // 2)))
+        if self.hoverable:
+            self.outline(surf, (self.center[0] - (self.rect[2] // 2), self.center[1] - (self.rect[3] // 2)))
         surf.blit(self.img, (self.center[0] - (self.rect[2] // 2), self.center[1] - (self.rect[3] // 2)))
         if self.targeted_entity:
             pygame.draw.line(self.game.window.display, 'red', self.center, (self.targeted_entity.center[0] - self.game.world.camera.true_pos[0], self.targeted_entity.center[1] - self.game.world.camera.true_pos[1]))

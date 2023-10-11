@@ -10,7 +10,7 @@ class Towers:
         self.displayed_tower = None
 
         for tower in tower_map:
-            self.inventory_towers.append(tower_map[tower](self.game, tower, 0))
+            self.inventory_towers.append(tower_map[tower](self.game, tower, 0, hoverable=False))
  
     def display_tower(self, type, rank, pos):
         self.displayed_tower = tower_map[type](self.game, type, rank, pos)

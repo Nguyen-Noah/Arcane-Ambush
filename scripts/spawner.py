@@ -33,9 +33,9 @@ class Spawner:
         entities = self.get_enemies_by_rank(self.difficulty_rank)
 
         # set number of enemies per wave
-        num_enemies = random.randint((self.wave + 10) * self.difficulty_rank, (self.wave + 10) * self.difficulty_rank * 2)
+        num_enemies = random.randint((self.wave) * self.difficulty_rank, (self.wave) * self.difficulty_rank * 2)
         while num_enemies > 0:
-            choose_enemies = random.randint(0, num_enemies)
+            choose_enemies = random.randint(1, num_enemies)
             self.wave_data.append([entities[random.randint(0, len(entities) - 1)], choose_enemies])
             num_enemies -= choose_enemies
         print(self.wave_data)
@@ -49,6 +49,7 @@ class Spawner:
                 self.spawner_index = 0
 
             if self.wave_clear:
+                self.wave += 1
                 self.generate_wave()
                 self.wave_clear = False
 
@@ -57,7 +58,7 @@ class Spawner:
                 self.enemy_index = 0
                 self.spawner_index += 1
 
-            if self.timer >= 0.75:
+            if self.timer >= 1:
                 self.game.world.entities.entities.append(entity_map[self.wave_data[self.spawner_index][0]](self.game, (self.spawn_point[0] + random.randint(1, 8), self.spawn_point[1] + random.randint(1, 16)), (14, 14), self.wave_data[self.spawner_index][0], 'enemy'))
                 self.enemy_index += 1
                 self.timer = 0
