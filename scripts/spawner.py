@@ -7,14 +7,15 @@ class Spawner:
         self.game = game
         self.spawn_point = None
         self.timer = 0
-        self.wave = 70
+        self.wave = 0
         self.spawn_point = (41, -48)
-        self.max_waves = config['level_data']['level_0']['levels']
+        self.max_waves = config['level_data']['level_0']['waves']
         self.level_clear = False
         self.wave_clear = True
 
         self.wave_data = []
         self.difficulty_rank = 1
+        self.spawner_index = 0
         self.enemy_index = 0
 
     def get_enemies_by_rank(self, rank):
@@ -26,6 +27,9 @@ class Spawner:
         return entities
 
     def generate_wave(self):
+        if self.wave_data:
+            self.wave_data = []
+        
         entities = self.get_enemies_by_rank(self.difficulty_rank)
 
         # set number of enemies per wave
@@ -40,16 +44,23 @@ class Spawner:
         if self.game.world.loaded:
             self.timer += dt * self.difficulty_rank
 
+            if self.spawner_index == len(self.wave_data):
+                self.wave_clear = True
+                self.spawner_index = 0
+
             if self.wave_clear:
                 self.generate_wave()
                 self.wave_clear = False
-            
-            for enemy_data in self.wave_data:
-                if self.enemy_index == enemy_data[1]:
-                    
-                if self.timer >= 1:
-                    self.enemy_index += 1
-                    self.spawn_timer = 0
+
+            # if the number of enemies spawned is equal to the random number, change enemies
+            if self.enemy_index == self.wave_data[self.spawner_index][1]:
+                self.enemy_index = 0
+                self.spawner_index += 1
+
+            if self.timer >= 0.75:
+                self.game.world.entities.entities.append(entity_map[self.wave_data[self.spawner_index][0]](self.game, (self.spawn_point[0] + random.randint(1, 8), self.spawn_point[1] + random.randint(1, 16)), (14, 14), self.wave_data[self.spawner_index][0], 'enemy'))
+                self.enemy_index += 1
+                self.timer = 0
 
             '''self.timer += dt
 
