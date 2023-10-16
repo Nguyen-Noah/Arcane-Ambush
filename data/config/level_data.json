@@ -26,8 +26,12 @@
             [143, 0]
         ],
 <<<<<<< HEAD
+<<<<<<< HEAD
         "waves": 80
 =======
+=======
+        "levels": 80,
+>>>>>>> parent of dd66f4a (rollback to previous spawning system)
         "waves": [
             {
                 "spawners": [
