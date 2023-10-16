@@ -7,7 +7,7 @@ class Renderer:
     def __init__(self, game):
         self.game = game
         self.particles = ParticleManager(self.game)
-        self.overlay_particles()
+        #self.overlay_particles()
         self.profiler = cProfile.Profile()
 
     def overlay_particles(self):
@@ -42,7 +42,7 @@ class Renderer:
         self.game.world.render(surf)
         self.game.world.entities.render(surf)
 
-        self.update_overlay_particles(surf)
+        #self.update_overlay_particles(surf)
 
         ui_color = (17, 17, 17, 255)
 
@@ -97,14 +97,10 @@ class Renderer:
         # display the player money ------------------------------------------------------------------------------- #
         self.game.assets.text.render(surf, '$' + str(self.game.world.entities.player.money), (300, 20))
 
-<<<<<<< HEAD
         # round -------------------------------------------------------------------------------------------------- #
         self.game.assets.large_text.render(surf, 'ROUND', (self.game.window.display.get_size()[0] // 2, 10))
         self.game.assets.large_text.render(surf, str(self.game.world.entities.spawner.wave ) + '/' + str(self.game.world.entities.spawner.max_waves), ((self.game.window.display.get_size()[0] // 2) + 4, 25))
  
         # fps ---------------------------------------------------------------------------------------------------- #
-=======
-        # fps ----------------------------------------------------------------------------------------------------- #
->>>>>>> dd66f4a1204550f902eef134d5e08600cb6aa5c0
         if self.game.window.show_fps:
             self.game.assets.text.render(surf, str(int(self.game.window.fps())) + 'FPS', (self.game.window.display.get_width() - 114, 22))
