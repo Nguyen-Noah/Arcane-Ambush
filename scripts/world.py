@@ -9,7 +9,6 @@ from . import spritesheet_loader
 from .hitboxes import Hitboxes
 from .standalone_animations import StandaloneAnimations
 from .particles import ParticleManager
-from .destruction_particles import DestructionParticles
 from .builder_menu import Builder
 from .vfx import VFX
 
@@ -27,7 +26,6 @@ class World:
         self.tile_map.load_map(map_id)
 
         # polish ----------------------------------------------------------------------- #
-        self.destruction_particles = DestructionParticles(self.game)
         self.world_animations = StandaloneAnimations(self.game)
         self.particles = ParticleManager(self.game)
         self.vfx = VFX(self.game)
@@ -80,7 +78,6 @@ class World:
 
         self.vfx.render_back(surf)
         self.towers.render(surf)
-        self.destruction_particles.render(surf, self.camera.true_pos)
         self.vfx.render_front(surf)
 
     def obs_rect(self, tile, img):
@@ -94,10 +91,8 @@ class World:
     def update(self):
         self.camera.update()
         self.world_animations.update()
-        self.destruction_particles.update()
         self.vfx.update()
         self.towers.update()
-        self.entities.spawn_entities()
         self.hitboxes.update()
         self.towers.update()
         self.entities.update()

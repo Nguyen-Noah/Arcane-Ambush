@@ -71,6 +71,7 @@ class Spawner:
             if self.timer >= 1:
                 self.game.world.entities.entities.append(entity_map[self.wave_data[self.spawner_index][0]](self.game, (self.spawn_point[0] + random.randint(1, 8), self.spawn_point[1] + random.randint(1, 16)), (14, 14), self.wave_data[self.spawner_index][0], 'enemy'))
                 self.enemy_index += 1
+<<<<<<< HEAD
                 self.timer = 0
 
             '''self.timer += dt
@@ -113,3 +114,6 @@ class Spawner:
                         self.total_enemy_count = self.get_total_count()
                     self.wave_clear = False
                     #print('new wave')
+=======
+                self.timer = 0
+>>>>>>> spawner

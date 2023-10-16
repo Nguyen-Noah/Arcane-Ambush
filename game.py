@@ -37,3 +37,5 @@ if __name__ == '__main__':
 # TODO:
     # create new towers
     # fix enemy path following
+    # create new map rendering using single png
+    # fix enemy death when player attacks death animation
