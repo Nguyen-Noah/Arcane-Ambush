@@ -21,9 +21,6 @@ class EntityManager:
         self.player.load_actives()
         return self.entities[-1]
 
-    def spawn_entities(self):
-        self.spawner.update(self.game.window.dt)
-
     def y_sort(self, entity):
         if isinstance(entity, Entity):
             return entity.pos[1] + entity.size[1] - self.game.world.camera.true_pos[1]
@@ -31,6 +28,8 @@ class EntityManager:
             return entity[1][1] + entity[0].get_rect().height
 
     def update(self):
+        self.spawner.update(self.game.window.dt)
+
         for i, projectile in itr(self.projectiles):
             alive = projectile.update(self.game.window.dt)
             if not alive:
