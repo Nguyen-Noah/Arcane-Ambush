@@ -1,4 +1,4 @@
-import math
+import math, pygame
 from .entity_objs.player import Player
 from .spawner import Spawner
 from .entity import Entity

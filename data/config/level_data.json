@@ -25,6 +25,31 @@
             [0, 94], 
             [143, 0]
         ],
+<<<<<<< HEAD
         "waves": 80
+=======
+        "waves": [
+            {
+                "spawners": [
+                    {"enemy": "slime", "count": 5},
+                    {"enemy": "mega_slime", "count": 1}
+                ],
+                "timer": 1
+            },
+            {
+                "spawners": [
+                    {"enemy": "slime", "count": 5},
+                    {"enemy": "mega_slime", "count": 5}
+                ],
+                "timer": 1
+            },
+            {
+                "spawners": [
+                    {"enemy": "slime", "count": 15}
+                ],
+                "timer": 0.5
+            }
+        ]
+>>>>>>> dd66f4a1204550f902eef134d5e08600cb6aa5c0
     }
 }

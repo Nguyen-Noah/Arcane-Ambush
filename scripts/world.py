@@ -41,7 +41,7 @@ class World:
 
         # camera ----------------------------------------------------------------------- #
         self.camera = Camera(self.game)
-       # self.camera.set_restriction(self.player.pos)
+        #self.camera.set_restriction(self.player.pos)
         self.camera.set_tracked_entity(self.player)
 
         # hitboxes --------------------------------------------------------------------- #
@@ -110,7 +110,7 @@ class World:
             self.builder_mode = True
             self.game.input.input_mode = 'builder'
             self.show_builder_menu = False
-            self.towers.display_tower(self.selected_tower, 0, (round_nearest(self.player.get_mouse_pos()[0], 4), round_nearest(self.player.get_mouse_pos()[1], 4)))
+            self.towers.display_tower(self.game, (round_nearest(self.player.get_mouse_pos()[0], 4), round_nearest(self.player.get_mouse_pos()[1], 4)), self.selected_tower, 0)
 
         if self.game.input.states['close_build_mode']:
             self.entities.render_entities = True
@@ -125,7 +125,7 @@ class World:
             self.player.weapon.invisible = 0.2
 
             if self.game.input.mouse_state['left_click']:
-                self.towers.add(self.game, self.selected_tower, 0, (round_nearest(self.player.get_mouse_pos()[0], 4), round_nearest(self.player.get_mouse_pos()[1], 4)))
+                self.towers.add(self.game, (round_nearest(self.player.get_mouse_pos()[0], 4), round_nearest(self.player.get_mouse_pos()[1], 4)), self.selected_tower, 0)
 
             if self.game.input.mouse_state['right_click']:
                 self.show_builder_menu = not self.show_builder_menu

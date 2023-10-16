@@ -8,7 +8,11 @@ path = 'data/graphics/towers/'
 colorkey = (0, 0, 0, 0)
 
 class Tower:
+<<<<<<< HEAD
     def __init__(self, game, type, rank, pos=(0, 0), hoverable=True):
+=======
+    def __init__(self, game, pos, type, rank):
+>>>>>>> dd66f4a1204550f902eef134d5e08600cb6aa5c0
         self.game = game
         self.pos = list(pos).copy()
         self.type = type
@@ -127,12 +131,6 @@ class Tower:
         shape_surf.set_alpha(64)
         pygame.draw.circle(shape_surf, 'white', (self.radius, self.radius), self.radius)
         surf.blit(shape_surf, target_rect)
-
-    def tower_hover(self):
-        cursor_mask = pygame.mask.from_surface(self.game.window.cursor)
-        cursor_offset = self.game.world.entities.player.get_mouse_pos()
-        if self.mask.overlap(cursor_mask, (cursor_offset[0] - (self.pos[0] - (self.rect[2] // 2)), cursor_offset[1] - (self.pos[1] - (self.rect[3] // 2)))):
-            return self
 
     def outline(self, surf, loc):
         cursor_mask = pygame.mask.from_surface(self.game.window.cursor)

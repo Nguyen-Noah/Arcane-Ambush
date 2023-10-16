@@ -9,23 +9,33 @@ class Spawner:
         self.timer = 0
         self.wave = 0
         self.spawn_point = (41, -48)
+<<<<<<< HEAD
         self.max_waves = config['level_data']['level_0']['waves']
+=======
+        self.spawner_index = 0
+        self.level_waves = config['level_data']['level_0']['waves']
+        self.spawn_timer = self.level_waves[self.wave]['timer']
+        self.enemy_count = 0
+>>>>>>> dd66f4a1204550f902eef134d5e08600cb6aa5c0
         self.level_clear = False
-        self.wave_clear = True
+        self.wave_clear = False
 
+<<<<<<< HEAD
         self.wave_data = []
         self.difficulty_rank = 1
         self.spawner_index = 0
         self.enemy_index = 0
+=======
+        self.total_enemy_count = self.get_total_count()
+>>>>>>> dd66f4a1204550f902eef134d5e08600cb6aa5c0
 
-    def get_enemies_by_rank(self, rank):
-        entities = []
-        entity_list = config['entities']
-        for entity in entity_list:
-            if entity_list[entity]['rank'] == rank:
-                entities.append(entity)
-        return entities
+    def get_total_count(self):
+        count = 0
+        for spawner in self.level_waves[self.wave]['spawners']:
+            count += spawner['count']
+        return count
 
+<<<<<<< HEAD
     def generate_wave(self):
         if self.wave_data:
             self.wave_data = []
@@ -64,6 +74,19 @@ class Spawner:
                 self.timer = 0
 
             '''self.timer += dt
+=======
+    def get_enemy_type(self):
+        self.enemy_type = self.level_waves[self.wave]['spawners'][self.spawner_index]['enemy']
+        enemy_count = self.level_waves[self.wave]['spawners'][self.spawner_index]['count']
+        print(self.enemy_type, enemy_count)
+        if self.spawner_index < (len(self.level_waves[self.wave]['spawners']) - 1):
+            self.spawner_index += 1
+        return enemy_count
+
+    def update(self, dt):
+        if self.game.world.loaded:
+            self.timer += dt
+>>>>>>> dd66f4a1204550f902eef134d5e08600cb6aa5c0
 
             if self.total_enemy_count == 0:
                 self.wave_clear = True
@@ -89,4 +112,4 @@ class Spawner:
                     if not self.level_clear:
                         self.total_enemy_count = self.get_total_count()
                     self.wave_clear = False
-                    #print('new wave')'''
+                    #print('new wave')
