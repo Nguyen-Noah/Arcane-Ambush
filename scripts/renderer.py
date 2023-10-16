@@ -7,7 +7,7 @@ class Renderer:
     def __init__(self, game):
         self.game = game
         self.particles = ParticleManager(self.game)
-        self.overlay_particles()
+        #self.overlay_particles()
         self.profiler = cProfile.Profile()
 
     def overlay_particles(self):
