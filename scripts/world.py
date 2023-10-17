@@ -4,7 +4,7 @@ from .camera import Camera
 from .config import config
 from .entities import EntityManager
 from .towers import Towers
-from .tile_map import TileMap
+#from .tile_map import TileMap
 from . import spritesheet_loader
 from .hitboxes import Hitboxes
 from .standalone_animations import StandaloneAnimations
@@ -22,8 +22,10 @@ class World:
         self.selected_tower = 'wizard_tower'
 
     def load(self, map_id):
-        self.tile_map = TileMap((16, 16), self.game.window.base_resolution)
-        self.tile_map.load_map(map_id)
+        print(self.game.assets.maps)
+        self.map = self.game.assets.maps[map_id]
+        #self.tile_map = TileMap((16, 16), self.game.window.base_resolution)
+        #self.tile_map.load_map(map_id)
 
         # polish ----------------------------------------------------------------------- #
         self.world_animations = StandaloneAnimations(self.game)
@@ -39,7 +41,7 @@ class World:
 
         # camera ----------------------------------------------------------------------- #
         self.camera = Camera(self.game)
-       # self.camera.set_restriction(self.player.pos)
+        self.camera.set_restriction(self.player.pos)
         self.camera.set_tracked_entity(self.player)
 
         # hitboxes --------------------------------------------------------------------- #
@@ -54,27 +56,12 @@ class World:
         if not self.loaded:
             self.loaded = True
 
-        render_list = self.tile_map.get_visible(self.camera.true_pos)
         self.collideables = []
         self.render_list = []
 
-        for layer in render_list:
-            self.world_animations.render(surf, self.camera.pos)
-            for tile in layer:
+        surf.blit(self.map, (0 - self.camera.true_pos[0], 0 - self.camera.true_pos[1]))
 
-                offset = [-32, -32]
-                if tile[1][0] in self.game.assets.spritesheet_data:
-                    tile_id = str(tile[1][1]) + ';' + str(tile[1][2])
-                    if tile_id in self.game.assets.spritesheet_data[tile[1][0]]:
-                        if 'tile_offset' in self.game.assets.spritesheet_data[tile[1][0]][tile_id]:
-                            offset = self.game.assets.spritesheet_data[tile[1][0]][tile_id]['tile_offset']
-
-                img = spritesheet_loader.get_img(self.game.assets.spritesheets, tile[1])
-                if tile[1][0] == 'obstacles':
-                    self.collideables.append(self.obs_rect(tile, img))
-                    self.render_list.append([img, (tile[0][0] - self.camera.true_pos[0] + offset[0], tile[0][1] - self.camera.true_pos[1] + offset[1])])
-                else:
-                    surf.blit(img, (math.floor(tile[0][0] - self.camera.true_pos[0] + offset[0]), math.floor(tile[0][1] - self.camera.true_pos[1] + offset[1])))
+        self.world_animations.render(surf, self.camera.pos)
 
         self.vfx.render_back(surf)
         self.towers.render(surf)

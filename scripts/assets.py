@@ -4,13 +4,13 @@ from .config import config
 from .animation_handler import AnimationManager
 from .text import Text
 
-
 class Assets:
     def __init__(self, game):
         self.game = game
-
+        
         self.animations = AnimationManager()
         self.spritesheets, self.spritesheet_data = spritesheet_loader.load_spritesheets('data/graphics/tilesets')
+        self.maps = self.load_dir('data/maps/test/maps')
         self.particles = self.load_dirs('data/graphics/particles')
         self.weapons = self.load_dir('data/graphics/weapons')
         self.cursor = self.load_dir('data/graphics/cursor')

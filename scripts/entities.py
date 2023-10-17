@@ -14,7 +14,7 @@ class EntityManager:
         self.projectiles = []
 
     def gen_player(self):
-        self.entities.append(Player(self.game, (474, 138), (12, 12), 'player', 'player'))
+        self.entities.append(Player(self.game, (208, 160), (12, 12), 'player', 'player'))
         self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'dagger'), 'active')
 
         self.player = self.entities[-1]

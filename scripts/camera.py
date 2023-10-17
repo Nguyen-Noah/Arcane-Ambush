@@ -3,12 +3,12 @@ import math
 class Camera:
     def __init__(self, game):
         self.game = game
-        self.true_pos = [320, 50]
+        self.true_pos = [36, 48]
         self.target_pos = [0, 0]
         self.rate = 0.25
         self.track_entity = None
         self.restriction_point = None
-        self.lock_distance = 225
+        self.lock_distance = 28
         self.mode = None
 
     def focus(self):
