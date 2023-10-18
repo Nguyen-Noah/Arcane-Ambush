@@ -9,7 +9,7 @@ class Slime(Entity):
         self.category = 'enemy'
         self.velocity = [0, 0]
         self.size = (14, 14)
-        self.spawn_point = [0, 0]
+        self.movement_counter = [0, 0]
         self.current_index = 0
         self.direction = 'down'
         self.set_action('walk', self.direction)
@@ -28,25 +28,25 @@ class Slime(Entity):
         self.path = tuplify(config['level_data']['tutorial']['path'])
 
         if self.current_index < len(self.path):
-            target = (self.path[self.current_index][0], self.path[self.current_index][1])
+            target = self.path[self.current_index]
             if target[0] < 0 or target[1] < 0:
                 sign = -1
             else:
                 sign = 1
-            if math.floor(self.spawn_point[0]) != math.floor(target[0]):
-                self.spawn_point[0] += sign * self.speed * self.game.window.dt
+            if math.floor(self.movement_counter[0]) != math.floor(target[0]):
+                self.movement_counter[0] += sign * self.speed * self.game.window.dt
                 self.pos[0] += sign * self.speed * self.game.window.dt
                 self.flip[0] = sign < 0
                 self.direction = 'side'
-            elif math.floor(self.spawn_point[1]) != math.floor(target[1]):
-                self.spawn_point[1] += sign * self.speed * self.game.window.dt
+            elif math.floor(self.movement_counter[1]) != math.floor(target[1]):
+                self.movement_counter[1] += sign * self.speed * self.game.window.dt
                 self.pos[1] += sign * self.speed * self.game.window.dt
                 if target[1] > 0:
                     self.direction = 'down'
                 else:
                     self.direction = 'up'
             else:
-                self.spawn_point = [0, 0]
+                self.movement_counter = [0, 0]
                 self.current_index += 1
             self.set_action('walk', self.direction)
         

@@ -12,7 +12,7 @@ class WizardTower(Tower):
         self.frame = 0
 
     def render_orb(self, surf):
-        surf.blit(self.orb_img, (self.center[0] - (self.orb_img.get_size()[0] // 2), self.center[1] - (self.orb_img.get_size()[1] // 2) + math.sin(self.frame * 0.03) - 5))
+        surf.blit(self.orb_img, (self.center[0] - (self.orb_img.get_size()[0] // 2), self.center[1] - (self.orb_img.get_size()[1] // 2) + math.sin(self.frame * 0.005) - 5))
 
     def update(self):
         super().update()

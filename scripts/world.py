@@ -66,7 +66,6 @@ class World:
                     self.collideables.append(self.obs_rect((x + offset[0], y + offset[1] - img.get_size()[1]), img, int(col)))
                     self.render_list.append([img, (x + offset[0] - self.camera.true_pos[0], y - self.camera.true_pos[1] - img.get_size()[1])])
 
-
         self.world_animations.render(surf, self.camera.pos)
 
         self.vfx.render_back(surf)
