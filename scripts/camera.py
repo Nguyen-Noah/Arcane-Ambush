@@ -1,9 +1,10 @@
 import math
+from .config import config
 
 class Camera:
     def __init__(self, game):
         self.game = game
-        self.true_pos = [36, 48]
+        self.true_pos = config['level_data'][self.game.state]['camera_starting_pos']
         self.target_pos = [0, 0]
         self.rate = 0.25
         self.track_entity = None

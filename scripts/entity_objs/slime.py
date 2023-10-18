@@ -25,7 +25,7 @@ class Slime(Entity):
         # 3: -30, -17
 
     def follow_path(self):
-        self.path = tuplify(config['level_data']['level_0']['path'])
+        self.path = tuplify(config['level_data']['tutorial']['path'])
 
         if self.current_index < len(self.path):
             target = (self.path[self.current_index][0], self.path[self.current_index][1])

@@ -27,7 +27,7 @@ class Towers:
             tower.update()
 
         if self.displayed_tower:
-            self.displayed_tower.pos = (round_nearest(self.game.world.entities.player.get_mouse_pos()[0], 4), round_nearest(self.game.world.entities.player.get_mouse_pos()[1], 4))
+            self.displayed_tower.pos = (round_nearest(self.game.world.entities.player.get_mouse_pos()[0], 16), round_nearest(self.game.world.entities.player.get_mouse_pos()[1], 16))
 
     def render(self, surf):
         for tower in self.towers:

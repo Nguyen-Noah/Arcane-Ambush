@@ -13,6 +13,7 @@ class Game:
         self.world = World(self)
 
         self.game_state = None
+        self.state = 'tutorial'
 
     def load_map(self, map_id):
         self.world.load(map_id)
@@ -26,7 +27,7 @@ class Game:
     def run(self):
         while True:
             if not self.game_state:
-                self.load_map('tutorial')
+                self.load_map(self.state)
                 self.game_state = True
             self.update()
 

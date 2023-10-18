@@ -1,4 +1,6 @@
 import math
+from .core_funcs import tuplify
+from .config import config
 from .entity_objs.player import Player
 from .spawner import Spawner
 from .entity import Entity
@@ -14,7 +16,7 @@ class EntityManager:
         self.projectiles = []
 
     def gen_player(self):
-        self.entities.append(Player(self.game, (208, 160), (12, 12), 'player', 'player'))
+        self.entities.append(Player(self.game, config['level_data'][self.game.state]['player_spawn_point'], (12, 12), 'player', 'player'))
         self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'dagger'), 'active')
 
         self.player = self.entities[-1]

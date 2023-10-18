@@ -10,7 +10,8 @@ class Assets:
         
         self.animations = AnimationManager()
         self.spritesheets, self.spritesheet_data = spritesheet_loader.load_spritesheets('data/graphics/tilesets')
-        self.maps = self.load_dir('data/maps/test/maps')
+        self.maps = self.load_dir('data/maps/maps')
+        self.collideables = self.load_dir('data/graphics/tilesets')
         self.particles = self.load_dirs('data/graphics/particles')
         self.weapons = self.load_dir('data/graphics/weapons')
         self.cursor = self.load_dir('data/graphics/cursor')
