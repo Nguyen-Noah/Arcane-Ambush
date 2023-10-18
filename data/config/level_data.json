@@ -9,8 +9,8 @@
             [412, 139]
         ],
         "waves": 80,
-        "tile_offset": [-32, 32],
+        "tile_offset": [-32, 0],
         "camera_starting_pos": [36, 48],
-        "player_spawn_point": [208, 180]
+        "player_spawn_point": [208, 148]
     }
 }
