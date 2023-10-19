@@ -8,7 +8,7 @@ class Spawner:
         self.spawn_point = None
         self.timer = 0
         self.wave = 0
-        self.spawn_point = config['level_data'][self.game.state]['spawn_point']
+        self.spawn_point = config['level_data'][self.game.state]['path'][0]
         self.max_waves = config['level_data'][self.game.state]['waves']
         self.level_clear = False
         self.wave_clear = True

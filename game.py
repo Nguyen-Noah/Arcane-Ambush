@@ -39,4 +39,3 @@ if __name__ == '__main__':
     # potential lag spike during wave generation
     # create new towers
     # fix enemy path following
-    # fix enemy death when player attacks death animation

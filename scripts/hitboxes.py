@@ -36,7 +36,7 @@ class Hitbox:
                             self.game.world.vfx.spawn_vfx('slice', collision_point.copy(), random.random() * math.pi / 4 - math.pi / 8 + self.angle, 20 * random.random() + 60, 2, 1, 0.8)
                             entity.velocity[0] += math.cos(self.angle) * 300 * self.config['knockback']
                             entity.velocity[1] += math.sin(self.angle) * 300 * self.config['knockback']
-                            killed = entity.damage(self.config['power'], entity.direction)
+                            killed = entity.damage(self.config['power'], self.angle)
                             #if killed:
                                 #if self.owner.type == 'player':
                                     #self.owner.process_kill(entity)

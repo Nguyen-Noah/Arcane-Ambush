@@ -1,6 +1,6 @@
 import pygame, math, random
 from .config import config
-from .core_funcs import clip
+from .core_funcs import clip, tuplify
 
 def collision_list(obj, obj_list):
     hit_list = []
@@ -34,6 +34,9 @@ class Entity:
 
         if self.type + '_walk_side' in self.game.assets.animations.animations:
             self.set_action('walk', 'side')
+
+        self.current_index = 0
+        self.movement_counter = [0, 0]
 
         self.gen_mask()
 
@@ -110,19 +113,54 @@ class Entity:
                 self.pos[1] += self.size[1] // 2
         return directions
 
+    def follow_path(self):
+        self.path = tuplify(config['level_data']['tutorial']['path'])
+
+        if self.current_index < len(self.path):
+            target = self.path[self.current_index]
+            if target[0] < 0 or target[1] < 0:
+                sign = -1
+            else:
+                sign = 1
+            if math.floor(self.movement_counter[0]) != math.floor(target[0]):
+                self.movement_counter[0] += sign * self.speed * self.game.window.dt
+                self.pos[0] += sign * self.speed * self.game.window.dt
+                self.flip[0] = sign < 0
+                self.direction = 'side'
+            elif math.floor(self.movement_counter[1]) != math.floor(target[1]):
+                self.movement_counter[1] += sign * self.speed * self.game.window.dt
+                self.pos[1] += sign * self.speed * self.game.window.dt
+                if target[1] > 0:
+                    self.direction = 'down'
+                else:
+                    self.direction = 'up'
+            else:
+                self.movement_counter = [0, 0]
+                self.current_index += 1
+            self.set_action('walk', self.direction)
+
+        pygame.draw.lines(self.game.window.display, 'white', False, self.path, 1)
+
     def print_hitbox(self):
         pygame.draw.rect(self.game.window.display, 'blue', (self.rect[0] - self.game.world.camera.true_pos[0], self.rect[1] - self.game.world.camera.true_pos[1], self.rect[2], self.rect[3]), 1)
 
-    def die(self, direction):
-        self.active_animation = self.game.assets.animations.new(self.type + '_die_' + direction)
-        self.death_frames = sum(self.active_animation.data.config['frames'])
-        self.targetable = False
+    def die(self, angle):
+        if self.type != 'player':
+            self.game.world.world_animations.spawn('death_sparks', self.center, flip=self.flip)
+            for i in range(random.randint(14, 20)):
+                random_angle = angle + (random.random() - 0.5) / 3.5
+                if random.randint(1, 4) == 1:
+                    random_angle = angle + (random.random() - 0.5) / 7 + math.pi
+                random_speed = random.randint(20, 200)
+                vel = [math.cos(random_angle) * random_speed, math.sin(random_angle) * random_speed]
+                self.game.world.vfx.spawn_vfx('spark', (self.center[0] - self.game.world.camera.true_pos[0], self.center[1] - self.game.world.camera.true_pos[1]), vel, 1 + random.random() * 3, (15, 15, 8), drag=50)
+        self.alive = False
 
-    def damage(self, amount, direction):
+    def damage(self, amount, angle=0):
         self.hurt = 1
         self.health -= amount
         if self.health <= 0:
-            self.die(direction)
+            self.die(angle)
             return True
         return False
 
@@ -153,10 +191,5 @@ class Entity:
         if self.active_animation:
             #self.print_hitbox()
             self.active_animation.play(dt)
-
-        if not self.targetable:
-            self.death_frames -= dt * self.active_animation.data.config['speed']
-            if self.death_frames <= 0:
-                self.alive = False
         
         return self.alive
