@@ -39,20 +39,16 @@ class EntityManager:
 
     def render(self, surf):
         sorted_entities = sorted(self.entities + self.game.world.render_list, key=self.y_sort)
-        entities = self.entities.copy()
 
         for entity in sorted_entities:
             if isinstance(entity, Entity):
                 if self.render_entities or entity.category in ['player', 'enemy']:
                     alive = entity.update(self.game.window.dt)
                     if not alive:
-                        entities.remove(entity)
+                        self.entities.remove(entity)
                     entity.render(surf, self.game.world.camera.true_pos)
             else:
                     surf.blit(entity[0], (math.floor(entity[1][0]), math.floor(entity[1][1])))
-        self.entities = entities
 
         for projectile in self.projectiles:
             projectile.render(surf, self.game.world.camera.true_pos)
-
-#TODO: combine entity, tower, and obstacle sorting to accomodate for Y-sorting

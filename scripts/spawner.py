@@ -42,7 +42,9 @@ class Spawner:
 
     def update(self, dt):
         if self.game.world.loaded:
-            self.timer += dt * self.difficulty_rank
+            if self.game.input.mouse_state['left_click']:
+                self.game.world.entities.entities.append(entity_map['slime'](self.game, (self.spawn_point[0] + random.randint(1, 8), self.spawn_point[1] + random.randint(1, 16)), (14, 14), 'slime', 'enemy'))
+            '''self.timer += dt * self.difficulty_rank
 
             if self.spawner_index == len(self.wave_data):
                 self.wave_clear = True
@@ -61,4 +63,4 @@ class Spawner:
             if self.timer >= 1:
                 self.game.world.entities.entities.append(entity_map[self.wave_data[self.spawner_index][0]](self.game, (self.spawn_point[0] + random.randint(1, 8), self.spawn_point[1] + random.randint(1, 16)), (14, 14), self.wave_data[self.spawner_index][0], 'enemy'))
                 self.enemy_index += 1
-                self.timer = 0
+                self.timer = 0'''

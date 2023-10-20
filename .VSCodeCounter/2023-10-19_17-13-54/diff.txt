@@ -1,0 +1,110 @@
+Date : 2023-10-19 17:13:54
+Directory : c:\Users\nohan\Desktop\Projects\Original\Tower Defense
+Total : 59 files,  775 codes, 27 comments, 73 blanks, all 875 lines
+
+Languages
++----------------+------------+------------+------------+------------+------------+
+| language       | files      | code       | comment    | blank      | total      |
++----------------+------------+------------+------------+------------+------------+
+| XML            |          1 |        313 |          0 |          1 |        314 |
+| Python         |         33 |        278 |         27 |         71 |        376 |
+| JSON           |         18 |         72 |          0 |         -6 |         66 |
+| CSV            |          4 |         67 |          0 |          4 |         71 |
+| TypeScript JSX |          3 |         45 |          0 |          3 |         48 |
++----------------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                            | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                               |         59 |        775 |         27 |         73 |        875 |
+| . (Files)                                                                                                       |          1 |          1 |          4 |          1 |          6 |
+| data                                                                                                            |         26 |        497 |          0 |          2 |        499 |
+| data\config                                                                                                     |          7 |         61 |          0 |         -6 |         55 |
+| data\graphics                                                                                                   |         11 |         11 |          0 |          0 |         11 |
+| data\graphics\animations                                                                                        |         11 |         11 |          0 |          0 |         11 |
+| data\graphics\animations\death_sparks                                                                           |          1 |          1 |          0 |          0 |          1 |
+| data\graphics\animations\knight_walk_down                                                                       |          1 |          1 |          0 |          0 |          1 |
+| data\graphics\animations\knight_walk_side                                                                       |          1 |          1 |          0 |          0 |          1 |
+| data\graphics\animations\knight_walk_up                                                                         |          1 |          1 |          0 |          0 |          1 |
+| data\graphics\animations\mega_slime_die_down                                                                    |          1 |          1 |          0 |          0 |          1 |
+| data\graphics\animations\mega_slime_die_side                                                                    |          1 |          1 |          0 |          0 |          1 |
+| data\graphics\animations\mega_slime_die_up                                                                      |          1 |          1 |          0 |          0 |          1 |
+| data\graphics\animations\player_die_side                                                                        |          1 |          1 |          0 |          0 |          1 |
+| data\graphics\animations\slime_die_down                                                                         |          1 |          1 |          0 |          0 |          1 |
+| data\graphics\animations\slime_die_side                                                                         |          1 |          1 |          0 |          0 |          1 |
+| data\graphics\animations\slime_die_up                                                                           |          1 |          1 |          0 |          0 |          1 |
+| data\maps                                                                                                       |          8 |        425 |          0 |          8 |        433 |
+| data\maps\Tiled Files                                                                                           |          1 |        313 |          0 |          1 |        314 |
+| data\maps\tutorial                                                                                              |          7 |        112 |          0 |          7 |        119 |
+| scripts                                                                                                         |         32 |        277 |         23 |         70 |        370 |
+| scripts (Files)                                                                                                 |         22 |        226 |         20 |         54 |        300 |
+| scripts\entity_objs                                                                                             |          5 |          9 |          3 |          3 |         15 |
+| scripts\tower_objs                                                                                              |          5 |         42 |          0 |         13 |         55 |
++-----------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| filename                                                                                                        | language       | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\config\entities.json                                | JSON           |          5 |          0 |          0 |          5 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\config\hitboxes.json                                | JSON           |          4 |          0 |          0 |          4 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\config\input.json                                   | JSON           |         40 |          0 |          0 |         40 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\config\level_data.json                              | JSON           |        -35 |          0 |          0 |        -35 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\config\obst_hitboxes.json                           | JSON           |          1 |          0 |          0 |          1 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\config\projectiles.json                             | JSON           |          9 |          0 |          0 |          9 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\config\towers.json                                  | JSON           |         37 |          0 |         -6 |         31 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\graphics\animations\death_sparks\config.json        | JSON           |          1 |          0 |          0 |          1 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\graphics\animations\knight_walk_down\config.json    | JSON           |          1 |          0 |          0 |          1 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\graphics\animations\knight_walk_side\config.json    | JSON           |          1 |          0 |          0 |          1 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\graphics\animations\knight_walk_up\config.json      | JSON           |          1 |          0 |          0 |          1 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\graphics\animations\mega_slime_die_down\config.json | JSON           |          1 |          0 |          0 |          1 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\graphics\animations\mega_slime_die_side\config.json | JSON           |          1 |          0 |          0 |          1 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\graphics\animations\mega_slime_die_up\config.json   | JSON           |          1 |          0 |          0 |          1 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\graphics\animations\player_die_side\config.json     | JSON           |          1 |          0 |          0 |          1 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\graphics\animations\slime_die_down\config.json      | JSON           |          1 |          0 |          0 |          1 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\graphics\animations\slime_die_side\config.json      | JSON           |          1 |          0 |          0 |          1 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\graphics\animations\slime_die_up\config.json        | JSON           |          1 |          0 |          0 |          1 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\maps\Tiled Files\tutorial.tmx                       | XML            |        313 |          0 |          1 |        314 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\maps\tutorial\collideables.tsx                      | TypeScript JSX |         37 |          0 |          1 |         38 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\maps\tutorial\decorations.tsx                       | TypeScript JSX |          4 |          0 |          1 |          5 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\maps\tutorial\ground.tsx                            | TypeScript JSX |          4 |          0 |          1 |          5 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\maps\tutorial\tutorial_Collideables.csv             | CSV            |         23 |          0 |          1 |         24 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\maps\tutorial\tutorial_Decorations.csv              | CSV            |         20 |          0 |          1 |         21 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\maps\tutorial\tutorial_Ground.csv                   | CSV            |         19 |          0 |          1 |         20 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\data\maps\tutorial\tutorial_Path.csv                     | CSV            |          5 |          0 |          1 |          6 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\game.py                                                  | Python         |          1 |          4 |          1 |          6 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\assets.py                                        | Python         |          6 |          0 |         -1 |          5 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\builder.py                                       | Python         |        -15 |          0 |         -4 |        -19 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\builder_menu.py                                  | Python         |         15 |          0 |          3 |         18 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\camera.py                                        | Python         |         20 |          0 |          2 |         22 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\core_funcs.py                                    | Python         |         14 |          0 |          3 |         17 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\destruction_particles.py                         | Python         |        -50 |          0 |        -10 |        -60 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\entities.py                                      | Python         |         11 |          0 |          2 |         13 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\entity.py                                        | Python         |         54 |          8 |         10 |         72 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\entity_map.py                                    | Python         |          2 |          0 |          0 |          2 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\entity_objs\kingslime.py                         | Python         |          3 |          0 |          2 |          5 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\entity_objs\knight.py                            | Python         |         18 |          0 |          4 |         22 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\entity_objs\megaslime.py                         | Python         |          3 |          0 |          2 |          5 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\entity_objs\player.py                            | Python         |          8 |         -3 |         -4 |          1 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\entity_objs\slime.py                             | Python         |        -23 |          6 |         -1 |        -18 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\hitboxes.py                                      | Python         |         -1 |          0 |          0 |         -1 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\input.py                                         | Python         |          9 |          0 |          2 |         11 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\projectiles.py                                   | Python         |        -16 |          0 |         -2 |        -18 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\renderer.py                                      | Python         |         22 |          6 |          4 |         32 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\skills.py                                        | Python         |        -15 |         -1 |         -2 |        -18 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\spawner.py                                       | Python         |         -2 |          0 |          3 |          1 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\tower.py                                         | Python         |        126 |          0 |         29 |        155 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\tower_map.py                                     | Python         |         12 |          0 |          1 |         13 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\tower_objs\archer.py                             | Python         |          6 |          0 |          2 |          8 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\tower_objs\bomber.py                             | Python         |          6 |          0 |          2 |          8 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\tower_objs\cleric.py                             | Python         |          6 |          0 |          2 |          8 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\tower_objs\phoenix.py                            | Python         |          6 |          0 |          2 |          8 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\tower_objs\wizard_tower.py                       | Python         |         18 |          0 |          5 |         23 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\towers.py                                        | Python         |         29 |          0 |          8 |         37 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\weapon.py                                        | Python         |         -1 |          0 |          0 |         -1 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\weapon_anim.py                                   | Python         |        -25 |          0 |         -5 |        -30 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\window.py                                        | Python         |         11 |          0 |          3 |         14 |
+| c:\Users\nohan\Desktop\Projects\Original\Tower Defense\scripts\world.py                                         | Python         |         20 |          7 |          8 |         35 |
+| Total                                                                                                           |                |        775 |         27 |         73 |        875 |
++-----------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+

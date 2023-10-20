@@ -27,6 +27,7 @@ class Inventory:
     def __init__(self, owner=None):
         self.groups = {}
         self.owner = owner
+        self.max_slots = 9
 
     @property
     def all_items(self):

@@ -27,7 +27,7 @@ class Camera:
 
     def update(self):
         if self.game.world.builder_mode:
-            self.rate = .0001
+            self.rate = .0005
         else:
             self.rate = 0.25
 

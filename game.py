@@ -38,4 +38,4 @@ if __name__ == '__main__':
 # TODO:
     # potential lag spike during wave generation
     # create new towers
-    # fix enemy path following
+    # fix enemy animation

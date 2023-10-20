@@ -16,10 +16,9 @@ class Player(Entity):
         self.vy = 0
         self.last_move_attempt = 0
         self.money = 1000
-        self.skills = [None, None, None, None, None, None, None, None, None]
-        #self.owned_towers = ['wizard_tower', None, None, None, None]
+        self.skills = [SKILLS['dagger'](self.game, self), None, None, None, None, None, None, None, None]
         self.inventory = Inventory(self)
-        self.selected_slot = 0
+        self.selected_inventory_slot = 0
         self.weapon_hide = 0
         self.attacking = False
         self.atk_counter = 0
@@ -28,8 +27,8 @@ class Player(Entity):
 
     @property
     def weapon(self):
-        if self.selected_slot < len(self.inventory.get_custom_group('active_weapons')):
-            return self.inventory.get_custom_group('active_weapons')[self.selected_slot]
+        if self.selected_inventory_slot < len(self.inventory.get_custom_group('active_weapons')):
+            return self.inventory.get_custom_group('active_weapons')[self.selected_inventory_slot]
         else:
             return None
 
@@ -114,7 +113,7 @@ class Player(Entity):
                     self.moving = False
 
         # weapon
-        if (self.game.input.mouse_state['left_click'] or self.attacking) and not self.game.world.builder_mode and self.targetable:
+        if (self.game.input.mouse_state['left_click'] or self.attacking) and not self.game.world.builder_mode and self.targetable and self.weapon:
             self.atk_counter += self.game.window.dt
             self.weapon.attempt_attack()
             if self.atk_counter > self.weapon.attack_rate:
@@ -129,14 +128,14 @@ class Player(Entity):
         # inventory -------------------------------------------------------------------- #
         if self.game.input.mouse_state['scroll_up']:
             self.weapon_hide = 3
-            self.selected_slot -= 1
-            if self.selected_slot < 0:
-                self.selected_slot = len(self.inventory.get_custom_group('active_weapons')) - 1
+            self.selected_inventory_slot += 1
+            if self.selected_inventory_slot >= self.inventory.max_slots:
+                self.selected_inventory_slot = 0
         if self.game.input.mouse_state['scroll_down']:
                 self.weapon_hide = 3
-                self.selected_slot += 1
-                if self.selected_slot >= len(self.inventory.get_custom_group('active_weapons')):
-                    self.selected_slot = 0
+                self.selected_inventory_slot -= 1
+                if self.selected_inventory_slot < 0:
+                    self.selected_inventory_slot = self.inventory.max_slots - 1
 
         # weapon stuff ----------------------------------------------------------------- #
         angle = math.atan2(self.game.input.mouse_pos[1] - self.center[1] + self.game.world.camera.render_offset[1], self.game.input.mouse_pos[0] - self.center[0] + self.game.world.camera.render_offset[0])

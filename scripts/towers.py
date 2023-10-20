@@ -23,11 +23,14 @@ class Towers:
             self.game.world.player.money -= cost
 
     def update(self):
-        for tower in self.towers:
+        for index, tower in enumerate(self.towers):
+            if tower.tower_hover() and self.game.input.mouse_state['right_click']:
+                selected_tower = tower
+                print(selected_tower)
             tower.update()
 
         if self.displayed_tower:
-            self.displayed_tower.pos = (round_nearest(self.game.world.entities.player.get_mouse_pos()[0], 16), round_nearest(self.game.world.entities.player.get_mouse_pos()[1], 16))
+            self.displayed_tower.pos = (round_nearest(self.game.world.entities.player.get_mouse_pos()[0], 8), round_nearest(self.game.world.entities.player.get_mouse_pos()[1], 8))
 
     def render(self, surf):
         for tower in self.towers:

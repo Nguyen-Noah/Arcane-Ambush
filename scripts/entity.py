@@ -1,6 +1,6 @@
 import pygame, math, random
 from .config import config
-from .core_funcs import clip, tuplify
+from .core_funcs import tuplify, round_nearest
 
 def collision_list(obj, obj_list):
     hit_list = []
@@ -19,6 +19,7 @@ class Entity:
         self.centered = False
         self.active_animation = None
         self.flip = [False, False]
+        self.direction = 'side'
         self.scale = [1, 1]
         self.rotation = 0
         self.opacity = 255
@@ -35,7 +36,7 @@ class Entity:
         if self.type + '_walk_side' in self.game.assets.animations.animations:
             self.set_action('walk', 'side')
 
-        self.current_index = 0
+        self.target_index = 1
         self.movement_counter = [0, 0]
 
         self.gen_mask()
@@ -116,35 +117,48 @@ class Entity:
     def follow_path(self):
         self.path = tuplify(config['level_data']['tutorial']['path'])
 
-        if self.current_index < len(self.path):
-            target = self.path[self.current_index]
-            if target[0] < 0 or target[1] < 0:
-                sign = -1
-            else:
-                sign = 1
-            if math.floor(self.movement_counter[0]) != math.floor(target[0]):
-                self.movement_counter[0] += sign * self.speed * self.game.window.dt
-                self.pos[0] += sign * self.speed * self.game.window.dt
-                self.flip[0] = sign < 0
-                self.direction = 'side'
-            elif math.floor(self.movement_counter[1]) != math.floor(target[1]):
-                self.movement_counter[1] += sign * self.speed * self.game.window.dt
-                self.pos[1] += sign * self.speed * self.game.window.dt
-                if target[1] > 0:
-                    self.direction = 'down'
-                else:
-                    self.direction = 'up'
-            else:
-                self.movement_counter = [0, 0]
-                self.current_index += 1
-            self.set_action('walk', self.direction)
+        if self.target_index < len(self.path):
+            self.target_position = pygame.math.Vector2(self.path[self.target_index])
+            self.movement = self.target_position - self.pos
+        else:
+            self.die()
 
-        pygame.draw.lines(self.game.window.display, 'white', False, self.path, 1)
+        dist = self.movement.length()
+
+        # animation handling -------------------------------------------------------------------------------- #
+        if math.floor(abs(self.movement[0])) > math.floor(abs(self.movement[1])):
+            #entity is moving left/right
+            self.direction = 'side'
+            if math.floor(self.movement[0]) > 0:
+                #entity is moving right
+                self.flip[0] = False
+            else:
+                self.flip[0] = True
+        else:
+            print(self.movement)
+            #entity is moving up/down
+            if math.floor(self.movement[1]) > 0:
+                #entity is moving down
+                self.direction = 'down'
+            else:
+                self.direciton = 'up'
+        
+
+        # movement handling --------------------------------------------------------------------------------- #
+        # 0.5 is used for how strict the enemies will follow the path; the lower, the more strict
+        if dist >= 0.5:
+            self.pos += self.movement.normalize() * self.speed * self.game.window.dt
+        else:
+            if dist != 0:
+                self.pos += self.movement.normalize() * self.speed * self.game.window.dt
+            self.target_index += 1
+
+        self.set_action('walk', self.direction)
 
     def print_hitbox(self):
         pygame.draw.rect(self.game.window.display, 'blue', (self.rect[0] - self.game.world.camera.true_pos[0], self.rect[1] - self.game.world.camera.true_pos[1], self.rect[2], self.rect[3]), 1)
 
-    def die(self, angle):
+    def die(self, angle=0):
         if self.type != 'player':
             self.game.world.world_animations.spawn('death_sparks', self.center, flip=self.flip)
             for i in range(random.randint(14, 20)):
