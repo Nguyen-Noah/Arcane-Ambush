@@ -120,6 +120,8 @@ class Entity:
         if self.target_index < len(self.path):
             self.target_position = pygame.math.Vector2(self.path[self.target_index])
             self.movement = self.target_position - self.pos
+            offset = min(self.movement)
+            print(offset)
         else:
             self.die()
 
@@ -135,22 +137,21 @@ class Entity:
             else:
                 self.flip[0] = True
         else:
-            print(self.movement)
             #entity is moving up/down
             if math.floor(self.movement[1]) > 0:
                 #entity is moving down
                 self.direction = 'down'
             else:
                 self.direciton = 'up'
-        
+        #print(self.movement)
 
         # movement handling --------------------------------------------------------------------------------- #
         # 0.5 is used for how strict the enemies will follow the path; the lower, the more strict
-        if dist >= 0.5:
+        if dist >= random.uniform(-10, 10):
             self.pos += self.movement.normalize() * self.speed * self.game.window.dt
         else:
-            if dist != 0:
-                self.pos += self.movement.normalize() * self.speed * self.game.window.dt
+            #if dist != 0:
+                #self.pos += self.movement.normalize() * self.speed * self.game.window.dt
             self.target_index += 1
 
         self.set_action('walk', self.direction)

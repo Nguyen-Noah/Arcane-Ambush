@@ -1,6 +1,7 @@
 import pygame, random
 from .config import config
 from .particles import ParticleManager
+from .tooltips import Tooltips
 import cProfile
 
 class Renderer:
@@ -8,6 +9,7 @@ class Renderer:
         self.game = game
         self.particles = ParticleManager(self.game)
         #self.overlay_particles()
+        self.tooltips = Tooltips(self.game)
         self.profiler = cProfile.Profile()
 
     def overlay_particles(self):
@@ -92,6 +94,9 @@ class Renderer:
                 pygame.draw.line(surf, ui_color, (22, base_pos + offset), (22, base_pos + offset + weapon_img.get_height()))
             surf.blit(weapon_img, (25 - mask.get_bounding_rects()[0].left, base_pos + offset))
             offset += weapon_img.get_height() + 2'''
+        
+        # tooltips ----------------------------------------------------------------------------------------------- #
+        self.tooltips.render(surf, self.game.window.dt)
 
         # builder menu ------------------------------------------------------------------------------------------- #
         if self.game.world.show_builder_menu and self.game.world.builder_mode:

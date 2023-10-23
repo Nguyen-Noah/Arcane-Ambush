@@ -21,6 +21,7 @@ class Assets:
         self.misc = self.load_dir('data/graphics/misc')
         self.large_text = Text('data/fonts/large.png')
         self.small_text = Text('data/fonts/small.png')
+        self.tooltips = self.load_dir('data/graphics/tooltips')
 
     def load_dirs(self, path):
         dirs = {}
