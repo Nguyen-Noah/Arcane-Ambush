@@ -36,6 +36,6 @@ class Assets:
         return image_dir
     
     def load_img(self, path, colorkey):
-        img = pygame.image.load(path).convert()
+        img = pygame.image.load(path).convert_alpha()
         img.set_colorkey(colorkey)
         return img

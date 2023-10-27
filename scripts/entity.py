@@ -37,7 +37,8 @@ class Entity:
             self.set_action('walk', 'side')
 
         self.target_index = 1
-        self.movement_counter = [0, 0]
+        self.offset = [0, 0]
+        self.path_complete = True
 
         self.gen_mask()
 
@@ -117,41 +118,55 @@ class Entity:
     def follow_path(self):
         self.path = tuplify(config['level_data']['tutorial']['path'])
 
+        # getting path -------------------------------------------------------------------------------------- #
         if self.target_index < len(self.path):
             self.target_position = pygame.math.Vector2(self.path[self.target_index])
-            self.movement = self.target_position - self.pos
-            offset = min(self.movement)
-            print(offset)
+            self.movement = self.target_position - self.pos - self.offset
+            if self.path_complete:
+                self.offset = [0, 0]
+                if self.target_index != 1:
+                    random_offset = random.randint(-8, 8)
+                else:
+                    random_offset = 0
+                if abs(self.movement[0]) > abs(self.movement[1]):
+                    self.offset[1] += self.movement[1] + random_offset
+                else:
+                    self.offset[0] += self.movement[0] + random_offset
         else:
             self.die()
 
         dist = self.movement.length()
 
         # animation handling -------------------------------------------------------------------------------- #
-        if math.floor(abs(self.movement[0])) > math.floor(abs(self.movement[1])):
-            #entity is moving left/right
-            self.direction = 'side'
-            if math.floor(self.movement[0]) > 0:
-                #entity is moving right
-                self.flip[0] = False
+        if self.path_complete:
+            if abs(self.movement[0]) < abs(self.movement[1]):
+                #entity is moving up/down
+                if self.movement[0] > 0:
+                    #entity is moving down
+                    self.direction = 'down'
+                else:
+                    #entity is moving up
+                    self.direction = 'up'
             else:
-                self.flip[0] = True
-        else:
-            #entity is moving up/down
-            if math.floor(self.movement[1]) > 0:
-                #entity is moving down
-                self.direction = 'down'
-            else:
-                self.direciton = 'up'
-        #print(self.movement)
+                #entity is moving left/right
+                self.direction = 'side'
+                if self.movement[1] > 0:
+                    #entity is moving right
+                    self.flip[0] = True
+                else:
+                    #entity is moving left
+                    self.flip[0] = False
+                    
+            self.path_complete = False
 
         # movement handling --------------------------------------------------------------------------------- #
         # 0.5 is used for how strict the enemies will follow the path; the lower, the more strict
-        if dist >= random.uniform(-10, 10):
+        if dist >= 0.5:
             self.pos += self.movement.normalize() * self.speed * self.game.window.dt
         else:
             #if dist != 0:
                 #self.pos += self.movement.normalize() * self.speed * self.game.window.dt
+            self.path_complete = True
             self.target_index += 1
 
         self.set_action('walk', self.direction)
