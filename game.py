@@ -36,6 +36,6 @@ if __name__ == '__main__':
     game.run()
 
 # TODO:
-    # potential lag spike during wave generation
+    # potential lag spike during death particles
     # create new towers
     # fix enemy animation

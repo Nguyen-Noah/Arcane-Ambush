@@ -12,7 +12,7 @@
     "knight": {
         "health": 25,
         "speed": 20,
-        "rank": 1
+        "rank": 2
     },
     "mega_slime": {
         "health": 25,

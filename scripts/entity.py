@@ -140,22 +140,16 @@ class Entity:
         # animation handling -------------------------------------------------------------------------------- #
         if self.path_complete:
             if abs(self.movement[0]) < abs(self.movement[1]):
-                #entity is moving up/down
-                if self.movement[0] > 0:
-                    #entity is moving down
+                if self.movement[1] > 0:
                     self.direction = 'down'
                 else:
-                    #entity is moving up
                     self.direction = 'up'
             else:
-                #entity is moving left/right
                 self.direction = 'side'
-                if self.movement[1] > 0:
-                    #entity is moving right
-                    self.flip[0] = True
-                else:
-                    #entity is moving left
+                if self.movement[0] > 0:
                     self.flip[0] = False
+                else:
+                    self.flip[0] = True
                     
             self.path_complete = False
 
