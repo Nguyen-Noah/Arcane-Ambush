@@ -177,7 +177,7 @@ class Entity:
                     random_angle = angle + (random.random() - 0.5) / 7 + math.pi
                 random_speed = random.randint(20, 200)
                 vel = [math.cos(random_angle) * random_speed, math.sin(random_angle) * random_speed]
-                self.game.world.vfx.spawn_vfx('spark', (self.center[0] - self.game.world.camera.true_pos[0], self.center[1] - self.game.world.camera.true_pos[1]), vel, 1 + random.random() * 3, (15, 15, 8), drag=50)
+                self.game.world.vfx.spawn_vfx('spark', (self.center[0] - self.game.world.camera.true_pos[0], self.center[1] - self.game.world.camera.true_pos[1]), vel, 1 + random.random(), (15, 15, 8), drag=50)
         self.alive = False
 
     def damage(self, amount, angle=0):

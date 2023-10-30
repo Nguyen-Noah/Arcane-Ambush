@@ -1,6 +1,8 @@
-from .core_funcs import round_nearest
+from .core_funcs import round_nearest, tuplify
 from .config import config
 from .tower_map import tower_map
+from .skills import SKILLS
+import pygame
 
 class Towers:
     def __init__(self, game):
@@ -18,15 +20,20 @@ class Towers:
 
     def add(self, game, type, rank, pos):
         cost = config['towers'][type]['cost'][rank]
+
+        skills = self.game.world.player.skills
+        if config['towers'][type]['player_skill'] not in skills:
+            index = skills.index(None)
+            skills[index] = SKILLS[config['towers'][type]['player_skill']](self.game, self.game.world.player)
+
         if cost <= self.game.world.player.money:
             self.towers.append(tower_map[type](game, type, rank, pos))
             self.game.world.player.money -= cost
 
     def update(self):
-        for index, tower in enumerate(self.towers):
+        for i, tower in enumerate(self.towers):
             if tower.tower_hover() and self.game.input.mouse_state['right_click']:
-                selected_tower = tower
-                print(selected_tower)
+                self.towers.pop(i)
             tower.update()
 
         if self.displayed_tower:

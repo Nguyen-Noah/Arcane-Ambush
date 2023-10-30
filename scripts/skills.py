@@ -1,4 +1,4 @@
-import pygame, math
+import pygame, math, random
 from .core_funcs import swap_color
 
 class Skill:
@@ -44,6 +44,20 @@ class Dagger(Skill):
     def use(self):
         self.owner.atk_cd = self.game.window.dt * self.owner.active_animation.data.config['speed']
 
+class Dash(Skill):
+    def __init__(self, game, owner):
+        super().__init__(game, owner, 'dash')
+        self.charge_rate = 1
+
+    def use(self):
+        if super().use():
+            self.owner.velocity[0] = math.cos(self.owner.aim_angle) * 700
+            self.owner.velocity[1] = math.sin(self.owner.aim_angle) * 700
+            self.dash_timer = 0.2
+            for i in range(random.randint(30, 50)):
+                self.game.world.vfx.spawn_group('arrow_impact_sparks', self.owner.center.copy(), self.owner.aim_angle)
+
 SKILLS = {
-    'dagger': Dagger
+    'dagger': Dagger,
+    'dash': Dash
 }

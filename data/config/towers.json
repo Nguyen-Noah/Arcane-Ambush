@@ -3,19 +3,22 @@
         "cost": [10, 50, 100, 250, 500],
         "radius": 50,
         "rarity": ["common", "uncommon", "rare", "legendary", "mythical"],
-        "damage": [10, 15, 20, 25, 50]
+        "damage": [10, 15, 20, 25, 50],
+        "player_skill": "dash"
     },
     "archer": {
         "cost": [10, 50, 100, 250, 500],
         "radius": 250,
         "rarity": ["common", "uncommon", "rare", "legendary", "mythical"],
-        "damage": [10, 15, 20, 25, 50]
+        "damage": [10, 15, 20, 25, 50],
+        "player_skill": "gun"
     },
     "bomber": {
         "cost": [10, 50, 100, 250, 500],
         "radius": 50,
         "rarity": ["common", "uncommon", "rare", "legendary", "mythical"],
-        "damage": [10, 15, 20, 25, 50]
+        "damage": [10, 15, 20, 25, 50],
+        "player_skill": "bomb"
     },
     "siren": {
         "cost": [10, 50, 100, 250, 500],
@@ -33,7 +36,8 @@
         "cost": [10, 50, 100, 250, 500],
         "radius": 200,
         "rarity": ["rare", "legendary", "mythical"],
-        "damage": [10, 15, 20, 25, 50]
+        "damage": [10, 15, 20, 25, 50],
+        "player_skill": "fireball"
     },
     "dragon": {
         "cost": [10, 50, 100, 250, 500],
@@ -45,7 +49,8 @@
         "cost": [10, 50, 100, 250, 500],
         "radius": 250,
         "rarity": ["rare", "legendary", "mythical"],
-        "damage": [10, 15, 20, 25, 50]
+        "damage": [10, 15, 20, 25, 50],
+        "player_skill": "heal"
     },
     "angel": {
         "cost": [10, 50, 100, 250, 500],

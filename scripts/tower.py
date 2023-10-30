@@ -15,6 +15,7 @@ class Tower:
         self.rank = rank
         self.hoverable = hoverable
         self.radius = config['towers'][self.type]['radius']
+        self.player_skill = config['towers'][self.type]['player_skill']
         self.rotation = 0
         self.targeting = 'closest'
         self.targeted_entity = None
@@ -27,7 +28,7 @@ class Tower:
     @property
     def rect(self):
         width, height = self.img.get_size()
-        return pygame.Rect(self.pos[0] // 1, self.pos[1] // 1, width, height)
+        return pygame.Rect((self.pos[0] - width // 2) - self.game.world.camera.true_pos[0] // 1, (self.pos[1] - height // 2) - self.game.world.camera.true_pos[1] // 1, width, height)
 
     @property
     def center(self):
@@ -50,6 +51,9 @@ class Tower:
                     entities.append(entity)
             
         return entities
+
+    def print_hitbox(self):
+        pygame.draw.rect(self.game.window.display, 'blue', self.rect, 1)
 
     def target_first(self):
         entity_list = self.in_radius()

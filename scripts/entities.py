@@ -1,9 +1,10 @@
-import math
+import math, pygame
 from .core_funcs import tuplify
 from .config import config
 from .entity_objs.player import Player
 from .spawner import Spawner
 from .entity import Entity
+from .tower import Tower
 from .core_funcs import itr
 from .weapons import create_weapon
 
@@ -26,6 +27,8 @@ class EntityManager:
     def y_sort(self, entity):
         if isinstance(entity, Entity):
             return entity.pos[1] + entity.size[1] - self.game.world.camera.true_pos[1]
+        elif isinstance(entity, Tower):
+            return entity.rect[1] + (entity.img.get_size()[1] // 1.25)
         else:
             return entity[1][1] + entity[0].get_rect().height
 
@@ -38,7 +41,7 @@ class EntityManager:
                 self.projectiles.pop(i)
 
     def render(self, surf):
-        sorted_entities = sorted(self.entities + self.game.world.render_list, key=self.y_sort)
+        sorted_entities = sorted(self.entities + self.game.world.render_list + self.game.world.towers.towers, key=self.y_sort)
 
         for entity in sorted_entities:
             if isinstance(entity, Entity):
@@ -47,8 +50,10 @@ class EntityManager:
                     if not alive:
                         self.entities.remove(entity)
                     entity.render(surf, self.game.world.camera.true_pos)
+            elif isinstance(entity, Tower):
+                entity.render(surf)
             else:
-                    surf.blit(entity[0], (math.floor(entity[1][0]), math.floor(entity[1][1])))
+                surf.blit(entity[0], (math.floor(entity[1][0]), math.floor(entity[1][1])))
 
         for projectile in self.projectiles:
             projectile.render(surf, self.game.world.camera.true_pos)

@@ -74,6 +74,7 @@ class Renderer:
                 pos = (((self.game.window.display.get_width() + (tilesize // 2)) // 2) - ((skill_count * tilesize) // 2)) + (i * tilesize)
                 surf.blit(self.game.assets.misc['inventory_slot'], (pos, self.game.window.display.get_height() - tilesize))
                 if skills[i]:
+                    #print(i)
                     skills[i].render_skill(surf, (pos + 1, surf.get_height() + self.game.window.offset[1] - tilesize + 1))
                 if i == self.game.world.entities.player.selected_inventory_slot:
                     surf.blit(self.game.assets.misc['selected_inventory_slot'], (pos, self.game.window.display.get_height() - tilesize))
