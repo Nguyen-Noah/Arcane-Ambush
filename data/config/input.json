@@ -19,6 +19,11 @@
         "button": ["keyboard", [115]],
         "mode": ["core"]
     },
+    "dash": {
+        "toggle": "press",
+        "button": ["keyboard", [32]],
+        "mode": ["core"]
+    },
     "open_build_mode": {
         "toggle": "press",
         "button": ["keyboard", [103]],

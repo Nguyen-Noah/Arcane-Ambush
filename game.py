@@ -12,7 +12,7 @@ class Game:
         self.renderer = Renderer(self)
         self.world = World(self)
 
-        self.game_state = None
+        self.game_state = False
         self.state = 'tutorial'
 
     def load_map(self, map_id):
@@ -36,6 +36,5 @@ if __name__ == '__main__':
     game.run()
 
 # TODO:
-    # potential lag spike during death particles
     # create new towers
     # fix enemy animation

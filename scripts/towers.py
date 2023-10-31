@@ -22,7 +22,8 @@ class Towers:
         cost = config['towers'][type]['cost'][rank]
 
         skills = self.game.world.player.skills
-        if config['towers'][type]['player_skill'] not in skills:
+
+        if not any(skill.skill_type == config['towers'][type]['player_skill'] for skill in skills if skill is not None):
             index = skills.index(None)
             skills[index] = SKILLS[config['towers'][type]['player_skill']](self.game, self.game.world.player)
 

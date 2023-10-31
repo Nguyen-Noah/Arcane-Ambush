@@ -8,7 +8,7 @@ class Renderer:
     def __init__(self, game):
         self.game = game
         self.particles = ParticleManager(self.game)
-        #self.overlay_particles()
+        self.overlay_particles()
         self.tooltips = Tooltips(self.game)
         self.profiler = cProfile.Profile()
 
@@ -44,7 +44,7 @@ class Renderer:
         self.game.world.render(surf)
         self.game.world.entities.render(surf)
 
-        #self.update_overlay_particles(surf)
+        self.update_overlay_particles(surf)
 
         ui_color = (17, 17, 17, 255)
 
@@ -74,7 +74,6 @@ class Renderer:
                 pos = (((self.game.window.display.get_width() + (tilesize // 2)) // 2) - ((skill_count * tilesize) // 2)) + (i * tilesize)
                 surf.blit(self.game.assets.misc['inventory_slot'], (pos, self.game.window.display.get_height() - tilesize))
                 if skills[i]:
-                    #print(i)
                     skills[i].render_skill(surf, (pos + 1, surf.get_height() + self.game.window.offset[1] - tilesize + 1))
                 if i == self.game.world.entities.player.selected_inventory_slot:
                     surf.blit(self.game.assets.misc['selected_inventory_slot'], (pos, self.game.window.display.get_height() - tilesize))

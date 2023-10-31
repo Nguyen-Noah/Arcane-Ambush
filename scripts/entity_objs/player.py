@@ -47,8 +47,6 @@ class Player(Entity):
         for item in active_items:
             if item.is_skill and not item.is_unowned_skill:
                 self.skills[0] = SKILLS[item.type](self.game, self)
-            if item.is_consumable:
-                self.skills[3] = item
 
     def get_mouse_pos(self):
         val = get_dis((self.rect[0] - self.game.world.camera.true_pos[0] + (self.size[0] // 2), self.rect[1] - self.game.world.camera.true_pos[1] + (self.size[1] // 2)), self.game.input.mouse_pos)
@@ -83,6 +81,10 @@ class Player(Entity):
         if not r:
             return r
         
+        for skill in self.skills:
+            if skill:
+                skill.update()
+
         # movement
         if self.game.input.states['left']:
             self.attempt_move(0, -1)
@@ -121,9 +123,10 @@ class Player(Entity):
                 self.allow_movement = True
                 self.atk_counter = 0
 
+        print(self.targetable)
+
         # collisions and move ---------------------------------------------------------- #
         self.collisions = self.move(self.frame_motion, self.game.world.collideables)
-        #pygame.draw.circle(self.game.window.display, 'red', (self.center[0] - self.game.world.camera.true_pos[0], self.center[1] - self.game.world.camera.true_pos[1]), 6)
 
         # inventory -------------------------------------------------------------------- #
         if self.game.input.mouse_state['scroll_up']:
@@ -140,9 +143,14 @@ class Player(Entity):
         # weapon stuff ----------------------------------------------------------------- #
         angle = math.atan2(self.game.input.mouse_pos[1] - self.center[1] + self.game.world.camera.render_offset[1], self.game.input.mouse_pos[0] - self.center[0] + self.game.world.camera.render_offset[0])
         self.aim_angle = angle
-        #print(self.aim_angle)
         if self.weapon:
             self.weapon.rotation = math.degrees(angle)
+
+        # skills ----------------------------------------------------------------------- #\
+        if self.game.input.states['dash']:
+            if self.game.input.input_mode == 'core':
+                if self.skills[1]:
+                    self.skills[1].use()
 
         pygame.draw.line(self.game.window.display, 'blue', (self.rect[0] - self.game.world.camera.true_pos[0] + (self.size[0] // 2), self.rect[1] - self.game.world.camera.true_pos[1] + (self.size[1] // 2)), self.game.input.mouse_pos)
 

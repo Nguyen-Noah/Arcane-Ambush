@@ -6,9 +6,10 @@ from .entities import EntityManager
 from .towers import Towers
 from .hitboxes import Hitboxes
 from .standalone_animations import StandaloneAnimations
+from .destruction_particles import DestructionParticles
 from .particles import ParticleManager
 from .builder_menu import Builder
-from .vfx import VFX
+from .vfx import VFX, set_glow_surf
 
 class World:
     def __init__(self, game):
@@ -24,9 +25,12 @@ class World:
         self.map_data = import_csv_layout('data/maps/' + map_id + '/' + map_id + '_Collideables.csv')
 
         # polish ----------------------------------------------------------------------- #
+        self.destruction_particles = DestructionParticles(self.game)
         self.world_animations = StandaloneAnimations(self.game)
         self.particles = ParticleManager(self.game)
         self.vfx = VFX(self.game)
+
+        set_glow_surf(self.game.assets.misc['light'])
 
         # entities --------------------------------------------------------------------- #
         self.towers = Towers(self.game)
@@ -52,6 +56,8 @@ class World:
         if not self.loaded:
             self.loaded = True
 
+        self.vfx.render_back(surf, self.camera.true_pos)
+
         self.collideables = []
         self.render_list = []
 
@@ -69,9 +75,9 @@ class World:
 
         self.world_animations.render(surf, self.camera.pos)
 
-        self.vfx.render_back(surf)
         self.towers.render(surf)
-        self.vfx.render_front(surf)
+        self.destruction_particles.render(surf, self.camera.true_pos)
+        self.vfx.render_front(surf, self.camera.true_pos)
 
     def obs_rect(self, tile, img, idx):
         # 0 -> big tree, 1 -> short tree, 2 -> alive bush, 3 -> stump, 4 -> fence, 5 -> log, 6 -> right-facing lamp, 7 -> down-facing lamp, 8 -> left-facing lamp, 9 -> broken lamp
@@ -89,6 +95,7 @@ class World:
         self.hitboxes.update()
         self.towers.update()
         self.entities.update()
+        self.destruction_particles.update()
 
         # builder mode handler -------------------------------------------------------- #
         if self.game.input.states['open_build_mode']:

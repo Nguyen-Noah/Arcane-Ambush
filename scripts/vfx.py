@@ -1,6 +1,8 @@
 import math
 import random
 
+import pygame
+
 from .core_funcs import *
 
 def rdm(scale, offset):
@@ -21,6 +23,24 @@ def point_surf(point_list):
 # glow renders are stored for post-processing rendering
 GLOW_SURFS = []
 GLOW_CACHE = {}
+GLOW_BASE_CACHE = {}
+GLOW_MASK_SURF = None
+
+def set_glow_surf(surf):
+    global GLOW_MASK_SURF
+    GLOW_MASK_SURF = surf
+
+def glow_mask(radius, color):
+    mask_id = (min(128, int(radius)), (int(color[0]), int(color[1]), int(color[2])))
+    if mask_id in GLOW_BASE_CACHE:
+        return GLOW_BASE_CACHE[mask_id]
+
+    resized_glow = pygame.transform.scale(GLOW_MASK_SURF, (mask_id[0] * 2, mask_id[0] * 2))
+    color_surf = pygame.Surface((mask_id[0] * 2, mask_id[0] * 2))
+    color_surf.fill(mask_id[1])
+    color_surf.blit(resized_glow, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+    GLOW_BASE_CACHE[mask_id] = color_surf
+    return GLOW_BASE_CACHE[mask_id]
 
 def glow(location, radius, angle, width=0, color=(20, 20, 20), padding=0, surf=None):
     global GLOW_SURFS
@@ -33,14 +53,15 @@ def glow(location, radius, angle, width=0, color=(20, 20, 20), padding=0, surf=N
             GLOW_SURFS.append([GLOW_CACHE[glow_id], (location[0] - radius, location[1] - radius)])
             return None
 
-        render_surf = pygame.Surface((radius * 2, radius * 2))
-        pygame.draw.circle(render_surf, color, (radius, radius), radius)
+        render_surf = glow_mask(radius, color)
         if not surf:
             GLOW_SURFS.append([render_surf, (location[0] - radius, location[1] - radius)])
         else:
             surf.blit(render_surf, (location[0] - radius, location[1] - radius), special_flags=pygame.BLEND_RGBA_ADD)
         GLOW_CACHE[glow_id] = render_surf
     else:
+        return
+        '''
         render_surf = pygame.Surface((radius * 2 + width + abs(padding * (width + 2 * radius)), radius * 2))
         offset_x = 0
         if padding < 0:
@@ -63,6 +84,7 @@ def glow(location, radius, angle, width=0, color=(20, 20, 20), padding=0, surf=N
             GLOW_SURFS.append([rotated_surf, (location[0] - rotated_surf.get_width() // 2, location[1] - rotated_surf.get_height() // 2)])
         else:
             surf.blit(rotated_surf, (location[0] - rotated_surf.get_width() // 2, location[1] - rotated_surf.get_height() // 2), special_flags=pygame.BLEND_RGBA_ADD)
+        '''
 
 def draw_glows(surf):
     global GLOW_SURFS
@@ -71,7 +93,8 @@ def draw_glows(surf):
     GLOW_SURFS = []
 
 class PlainLine:
-    def __init__(self, pos1, pos2, decay_rate, width=1, color=(255, 255, 255, 255)):
+    def __init__(self, game, pos1, pos2, decay_rate, width=1, color=(255, 255, 255, 255)):
+        self.game = game
         self.pos1 = pos1
         self.pos2 = pos2
         self.decay_rate = decay_rate
@@ -90,7 +113,8 @@ class PlainLine:
         surf.blit(new_surf, base_offset)
 
 class CurvedSpark:
-    def __init__(self, pos, angle, curve, speed, scale, decay_rate, fatness=1, color=(255, 255, 255), glow=True):
+    def __init__(self, game, pos, angle, curve, speed, scale, decay_rate, fatness=1, color=(255, 255, 255), glow=True):
+        self.game = game
         self.pos = list(pos)
         self.angle = angle
         self.curve = curve
@@ -140,13 +164,13 @@ class CurvedSpark:
             if len(self.color) == 4:
                 new_surf.set_alpha(self.color[3])
             surf.blit(new_surf, base_offset)
-
-            if self.glow:
-                glow([position[0] - offset[0], position[1] - offset[1]], self.fatness + 2, -math.degrees(self.angle), width=self.scale * self.speed + 2, color=(8, 8, 8), padding=0)
-                glow([position[0] - offset[0], position[1] - offset[1]], self.fatness + 4, -math.degrees(self.angle), width=self.scale * self.speed + 8, color=(6, 6, 6), padding=0)
+            #if self.glow:
+            #    glow([position[0] - offset[0], position[1] - offset[1]], self.fatness + 2, -math.degrees(self.angle), width=self.scale * self.speed + 2, color=(8, 8, 8), padding=0)
+            #    glow([position[0] - offset[0], position[1] - offset[1]], self.fatness + 4, -math.degrees(self.angle), width=self.scale * self.speed + 8, color=(6, 6, 6), padding=0)
 
 class Arc:
-    def __init__(self, pos, radius, spacing, start_angle, speed, curve_rate, scale, start=0, end=1, duration=30, color=(255, 255, 255), fade=0.3, arc_stretch=0, width_decay=50, motion=0, decay=['up', 60], angle_width=0.2):
+    def __init__(self, game, pos, radius, spacing, start_angle, speed, curve_rate, scale, start=0, end=1, duration=30, color=(255, 255, 255), fade=0.3, arc_stretch=0, width_decay=50, motion=0, decay=['up', 60], angle_width=0.2):
+        self.game = game
         self.start_angle = start_angle
         self.speed = speed
         self.curve_rate = curve_rate
@@ -224,7 +248,8 @@ class Arc:
 SPARK_CACHE = {}
 
 class Spark:
-    def __init__(self, pos, velocity, duration, glow_color, color=(255, 255, 255), drag=0, gravity=100):
+    def __init__(self, game, pos, velocity, duration, glow_color, color=(255, 255, 255), drag=0, gravity=5):
+        self.game = game
         self.pos = list(pos)
         self.velocity = list(velocity)
         self.orig_duration = duration
@@ -245,13 +270,14 @@ class Spark:
         return True
 
     def render(self, surf, offset=(0, 0)):
-        radius = int(self.duration / self.orig_duration * 6) + 1
+        radius = int(self.duration / self.orig_duration * 20) + 1
         center = (int(self.pos[0] - offset[0]), int(self.pos[1] - offset[1]))
-        glow(center, radius, 0, color=self.glow_color)
+        #glow(center, radius, 0, color=self.glow_color)
         surf.set_at(center, self.color)
 
 class Slice:
-    def __init__(self, pos, angle, length, width, decay_rate, speed=0, glow=True):
+    def __init__(self, game, pos, angle, length, width, decay_rate, speed=0, glow=True):
+        self.game = game
         self.angle = angle
         self.length = length
         self.orig_length = length
@@ -271,6 +297,7 @@ class Slice:
             return True
 
     def render(self, surf, offset=(0, 0)):
+        color = (255, 255, 255)
         if self.length > 1.5:
             pos = [self.pos[0] - offset[0], self.pos[1] - offset[1]]
             advance(pos, self.angle, (self.orig_length - self.length) * self.speed)
@@ -280,12 +307,11 @@ class Slice:
                 advance(pos.copy(), self.angle + math.pi, self.length),
                 advance(pos.copy(), self.angle + math.pi * 3 / 2, self.width * (self.length / self.orig_length)),
             ]
-            pygame.draw.polygon(surf, (255, 255, 255), points)
-
-            if self.glow:
-                glow(pos, self.width // 2 + 1, -math.degrees(self.angle), width=self.length * 2 + 2, color=(24, 24, 24), padding=0)
-                glow(pos, self.width // 2 + 2, -math.degrees(self.angle), width=self.length * 2 + 30, color=(14, 14, 14), padding=0)
-                glow(pos, 1, -math.degrees(self.angle), width=self.length * 2 + 800, color=(14, 14, 14), padding=0)
+            pygame.draw.polygon(surf, color, points)
+            #if self.glow:
+            #    glow(pos, self.width // 2 + 1, -math.degrees(self.angle), width=self.length * 2 + 2, color=(24, 24, 24), padding=0)
+            #    glow(pos, self.width // 2 + 2, -math.degrees(self.angle), width=self.length * 2 + 30, color=(14, 14, 14), padding=0)
+            #    glow(pos, 1, -math.degrees(self.angle), width=self.length * 2 + 800, color=(14, 14, 14), padding=0)
 
 VFX_TYPES = {
     'curved_spark': CurvedSpark,
@@ -355,9 +381,9 @@ class VFX:
 
     def spawn_vfx(self, effect_type, *args, layer='front', **kwargs):
         if layer == 'front':
-            self.effects_front.append(VFX_TYPES[effect_type](*args, **kwargs))
+            self.effects_front.append(VFX_TYPES[effect_type](self.game, *args, **kwargs))
         if layer == 'back':
-            self.effects_back.append(VFX_TYPES[effect_type](*args, **kwargs))
+            self.effects_back.append(VFX_TYPES[effect_type](self.game, *args, **kwargs))
 
     def get_last(self, layer='front'):
         if layer == 'front':
@@ -377,6 +403,6 @@ class VFX:
             for j in range(len(random_data) - 1):
                 particle_data[j + 1] += rdm(*random_data[j + 1])
             if layer == 'front':
-                self.effects_front.append(VFX_TYPES[effect_type](*particle_data, color))
+                self.effects_front.append(VFX_TYPES[effect_type](self.game, *particle_data, color))
             if layer == 'back':
-                self.effects_back.append(VFX_TYPES[effect_type](*particle_data, color))
+                self.effects_back.append(VFX_TYPES[effect_type](self.game, *particle_data, color))

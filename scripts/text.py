@@ -9,13 +9,17 @@ class Text:
         font_img.set_colorkey((255, 255, 255))
         current_char_width = 0
         self.characters = {}
+        self.letter_spacing = []
         character_count = 0
 
+        last_x = 0
         for x in range(font_img.get_width()):
             c = font_img.get_at((x, 0))
             if c[0] == 100:
                 char_img = clip(font_img, x - current_char_width, 0, current_char_width, font_img.get_height())
                 self.characters[self.character_order[character_count]] = char_img
+                self.letter_spacing.append(x - last_x)
+                last_x = x - 1
                 character_count += 1
                 current_char_width = 0
             else:
@@ -23,6 +27,15 @@ class Text:
 
         self.space_width = self.characters['A'].get_width()
     
+    def width(self, text):
+        text_width = 0
+        for char in text:
+            if char == ' ':
+                text_width += self.space_width + self.spacing
+            else:
+                text_width += self.letter_spacing[self.character_order.index(char)] + self.spacing
+        return text_width
+
     def render(self, surf, text, loc):
         x_offset = 0
         for char in text:
