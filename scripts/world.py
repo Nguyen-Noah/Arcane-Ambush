@@ -18,7 +18,6 @@ class World:
         self.collideables = []
         self.builder_mode = False
         self.show_builder_menu = False
-        self.selected_tower = 'wizard_tower'
 
     def load(self, map_id):
         self.floor = self.game.assets.maps[map_id]
@@ -30,18 +29,17 @@ class World:
         self.particles = ParticleManager(self.game)
         self.vfx = VFX(self.game)
 
+        self.camera = Camera(self.game)
+
         set_glow_surf(self.game.assets.misc['light'])
 
         # entities --------------------------------------------------------------------- #
-        self.towers = Towers(self.game)
         self.entities = EntityManager(self.game)
-
-        # player ----------------------------------------------------------------------- #
         self.player = self.entities.gen_player()
-
+        self.towers = Towers(self.game)
+ 
         # camera ----------------------------------------------------------------------- #
-        self.camera = Camera(self.game)
-        self.camera.set_restriction(self.player.pos)
+        #self.camera.set_restriction(self.player.pos)
         self.camera.set_tracked_entity(self.player)
 
         # hitboxes --------------------------------------------------------------------- #
@@ -105,7 +103,6 @@ class World:
             self.builder_mode = True
             self.game.input.input_mode = 'builder'
             self.show_builder_menu = False
-            self.towers.display_tower(self.selected_tower, 0, (round_nearest(self.player.get_mouse_pos()[0], 8), round_nearest(self.player.get_mouse_pos()[1], 8)))
 
         if self.game.input.states['close_build_mode']:
             self.entities.render_entities = True
@@ -118,9 +115,6 @@ class World:
         if self.builder_mode:
             self.game.window.add_freeze(0.0001, 0.1)
             self.player.weapon.invisible = 0.2
-
-            if self.game.input.mouse_state['left_click']:
-                self.towers.add(self.game, self.selected_tower, 0, (round_nearest(self.player.get_mouse_pos()[0], 8), round_nearest(self.player.get_mouse_pos()[1], 8)))
 
             if self.game.input.mouse_state['right_click']:
                 self.show_builder_menu = not self.show_builder_menu

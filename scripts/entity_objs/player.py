@@ -1,4 +1,4 @@
-import pygame, math
+import pygame, math, random
 from ..core_funcs import get_dis
 from ..entity import Entity
 from ..skills import SKILLS
@@ -123,7 +123,12 @@ class Player(Entity):
                 self.allow_movement = True
                 self.atk_counter = 0
 
-        print(self.targetable)
+        #print(self.targetable)
+
+        #random_angle = random.uniform(0, 2 * math.pi)
+
+        #pygame.draw.circle(self.game.window.display, 'white', self.pos, 80)
+        #pygame.draw.rect(self.game.window.display, 'purple', (0, 0, self.game.window.display.get_size()[0], self.game.window.display.get_size()[1]), 1)
 
         # collisions and move ---------------------------------------------------------- #
         self.collisions = self.move(self.frame_motion, self.game.world.collideables)

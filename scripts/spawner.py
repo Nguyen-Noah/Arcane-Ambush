@@ -1,4 +1,4 @@
-import random
+import random, pygame
 from .config import config
 from .entity_map import entity_map
 
@@ -31,7 +31,9 @@ class Spawner:
     def update(self, dt):
         if self.game.world.loaded:
             
-            if self.wave // 20 == 0 and self.wave != 0:
+            pygame.draw.circle(self.game.window.display, 'blue', self.game.world.player.pos, 80)
+
+            '''if self.wave // 20 == 0 and self.wave != 0:
                 self.difficulty_rank = min(1 + self.wave // 20, 3)
 
             if not self.wave_clear:
@@ -53,4 +55,4 @@ class Spawner:
                     self.wave += 1
                     self.new_wave()
                     self.wave_clear = False
-                    self.wave_timer = 3
+                    self.wave_timer = 3'''

@@ -9,12 +9,13 @@ class Towers:
         self.game = game
         self.towers = []
         self.inventory_towers = []
+        self.selected_tower = 'wizard_tower'
         self.displayed_tower = None
 
         for tower in tower_map:
             self.inventory_towers.append(tower_map[tower](self.game, tower, 0, hoverable=False))
  
-    def display_tower(self, type, rank, pos):
+    def set_display_tower(self, type, rank, pos):
         self.displayed_tower = tower_map[type](self.game, type, rank, pos)
         self.displayed_tower.set_opacity(128)
 
@@ -36,6 +37,9 @@ class Towers:
             if tower.tower_hover() and self.game.input.mouse_state['right_click']:
                 self.towers.pop(i)
             tower.update()
+
+        if self.game.input.mouse_state['left_click']:
+            self.add(self.game, self.selected_tower, 0, (round_nearest(self.game.world.player.get_mouse_pos()[0], 8), round_nearest(self.game.world.player.get_mouse_pos()[1], 8)))
 
         if self.displayed_tower:
             self.displayed_tower.pos = (round_nearest(self.game.world.entities.player.get_mouse_pos()[0], 8), round_nearest(self.game.world.entities.player.get_mouse_pos()[1], 8))

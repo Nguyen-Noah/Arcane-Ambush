@@ -36,5 +36,5 @@ if __name__ == '__main__':
     game.run()
 
 # TODO:
+    # fix player movement
     # create new towers
-    # fix enemy animation

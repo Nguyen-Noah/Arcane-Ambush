@@ -78,6 +78,11 @@ class Dash(Skill):
 
     def use(self):
         if super().use():
+            if (math.degrees(self.owner.aim_angle) % 360 < 270) and (math.degrees(self.owner.aim_angle) % 360 > 90):
+                self.owner.flip[0] = True
+            else:
+                self.owner.flip[0] = False
+
             self.owner.targetable = False
             self.owner.velocity[0] = math.cos(self.owner.aim_angle) * 5
             self.owner.velocity[1] = math.sin(self.owner.aim_angle) * 5
