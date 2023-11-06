@@ -1,6 +1,7 @@
-import pygame, sys
+import pygame, sys, math
 from pygame.locals import *
 from .config import config
+from .core_funcs import get_dis
 
 class Input:
     def __init__(self, game):
@@ -40,6 +41,14 @@ class Input:
 
         for binding in self.mouse_state:
             self.mouse_state[binding] = False
+
+    def get_mouse_pos(self):
+        world = self.game.world
+        player = world.player
+        val = get_dis((player.rect[0] - world.camera.true_pos[0] + (player.size[0] // 2), player.rect[1] - world.camera.true_pos[1] + (player.size[1] // 2)), self.mouse_pos)
+        x_offset = (player.rect[0] + (player.size[0] // 2)) + (val * math.cos(player.aim_angle))
+        y_offset = (player.rect[1] + (player.size[1] // 2)) + (val * math.sin(player.aim_angle))
+        return (x_offset, y_offset)
 
     def update(self):
         x, y = pygame.mouse.get_pos()

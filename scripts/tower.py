@@ -27,8 +27,9 @@ class Tower:
 
     @property
     def rect(self):
-        width, height = self.img.get_size()
-        return pygame.Rect((self.pos[0] - width // 2) - self.game.world.camera.true_pos[0] // 1, (self.pos[1] - height // 2) - self.game.world.camera.true_pos[1] // 1, width, height)
+        if self.hoverable:
+            width, height = self.img.get_size()
+            return pygame.Rect((self.pos[0] - width // 2) - self.game.world.camera.true_pos[0] // 1, (self.pos[1] - height // 2) - self.game.world.camera.true_pos[1] // 1, width, height)
 
     @property
     def center(self):
@@ -134,13 +135,13 @@ class Tower:
 
     def tower_hover(self):
         cursor_mask = pygame.mask.from_surface(self.game.window.cursor)
-        cursor_offset = self.game.world.entities.player.get_mouse_pos()
+        cursor_offset = self.game.input.get_mouse_pos()
         if self.mask.overlap(cursor_mask, (cursor_offset[0] - (self.pos[0] - (self.rect[2] // 2)), cursor_offset[1] - (self.pos[1] - (self.rect[3] // 2)))):
             return self
 
     def outline(self, surf, loc):
         cursor_mask = pygame.mask.from_surface(self.game.window.cursor)
-        cursor_offset = self.game.world.entities.player.get_mouse_pos()
+        cursor_offset = self.game.input.get_mouse_pos()
         if self.mask.overlap(cursor_mask, (cursor_offset[0] - (self.pos[0] - (self.rect[2] // 2)), cursor_offset[1] - (self.pos[1] - (self.rect[3] // 2)))):
             self.show_radius(surf)
             if not self.game.world.builder_mode:

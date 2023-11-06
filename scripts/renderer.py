@@ -8,7 +8,7 @@ class Renderer:
     def __init__(self, game):
         self.game = game
         self.particles = ParticleManager(self.game)
-        self.overlay_particles()
+        #self.overlay_particles()
         self.tooltips = Tooltips(self.game)
         self.profiler = cProfile.Profile()
 
@@ -44,7 +44,7 @@ class Renderer:
         self.game.world.render(surf)
         self.game.world.entities.render(surf)
 
-        self.update_overlay_particles(surf)
+        #self.update_overlay_particles(surf)
 
         ui_color = (17, 17, 17, 255)
 

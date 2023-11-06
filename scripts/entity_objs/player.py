@@ -47,13 +47,7 @@ class Player(Entity):
         for item in active_items:
             if item.is_skill and not item.is_unowned_skill:
                 self.skills[0] = SKILLS[item.type](self.game, self)
-
-    def get_mouse_pos(self):
-        val = get_dis((self.rect[0] - self.game.world.camera.true_pos[0] + (self.size[0] // 2), self.rect[1] - self.game.world.camera.true_pos[1] + (self.size[1] // 2)), self.game.input.mouse_pos)
-        x_offset = (self.rect[0] + (self.size[0] // 2)) + (val * math.cos(self.aim_angle))
-        y_offset = (self.rect[1] + (self.size[1] // 2)) + (val * math.sin(self.aim_angle))
-        return (x_offset, y_offset)
-
+                
     def attempt_move(self, axis, direction):
         if self.allow_movement:
             if axis == 0:

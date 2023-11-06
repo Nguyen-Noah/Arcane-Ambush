@@ -103,6 +103,7 @@ class World:
             self.builder_mode = True
             self.game.input.input_mode = 'builder'
             self.show_builder_menu = False
+            self.towers.set_display_tower(self.towers.selected_tower, 0, self.game.input.get_mouse_pos())
 
         if self.game.input.states['close_build_mode']:
             self.entities.render_entities = True

@@ -36,5 +36,7 @@ if __name__ == '__main__':
     game.run()
 
 # TODO:
+    # fix dash skill by incorporating dt
+    # fix wizard tower orb by incorporating dt
     # fix player movement
     # create new towers
