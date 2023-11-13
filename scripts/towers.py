@@ -38,14 +38,17 @@ class Towers:
         tower_index = []
         for i in range(count):
             pos = (((self.game.window.display.get_width() + (tilesize // 2)) // 2) - ((count * tilesize) // 2)) + (i * tilesize)
-            surf.blit(self.game.assets.misc['builder_slot'], (pos, self.game.window.display.get_height() - tilesize))
+            #surf.blit(self.game.assets.misc['builder_slot'], (pos, self.game.window.display.get_height() - tilesize))
             tower_index.append(pygame.Rect(pos, self.game.window.display.get_height() - tilesize, tilesize, tilesize))
-            pygame.draw.rect(surf, 'red', (pos, self.game.window.display.get_height() - tilesize, tilesize, tilesize), 1)
+            #pygame.draw.rect(surf, 'red', (pos, self.game.window.display.get_height() - tilesize, tilesize, tilesize), 1)
 
     def update(self):
         for i, tower in enumerate(self.towers):
             if tower.tower_hover() and self.game.input.mouse_state['right_click']:
                 self.towers.pop(i)
+            tower.update()
+
+        for i, tower in enumerate(self.inventory_towers):
             tower.update()
 
         if self.displayed_tower:

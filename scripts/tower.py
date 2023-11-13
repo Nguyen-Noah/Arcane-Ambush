@@ -29,6 +29,10 @@ class Tower:
     def rect(self):
         if self.hoverable:
             width, height = self.img.get_size()
+            # add 8 to the rect value to allow y-overlapping
+            return pygame.Rect((self.pos[0] - width // 2) - self.game.world.camera.true_pos[0] // 1, (self.pos[1] - height // 2) - self.game.world.camera.true_pos[1] + 8 // 1, width, height - 8)
+        else:
+            width, height = self.img.get_size()
             return pygame.Rect((self.pos[0] - width // 2) - self.game.world.camera.true_pos[0] // 1, (self.pos[1] - height // 2) - self.game.world.camera.true_pos[1] // 1, width, height)
 
     @property
@@ -39,7 +43,11 @@ class Tower:
         self.img.set_alpha(opacity)
 
     def gen_mask(self):
-        self.mask = pygame.mask.from_surface(self.img)
+        if self.hoverable:
+            self.mask = pygame.mask.from_surface(self.img)
+        else:
+            self.mask = pygame.mask.Mask((self.rect[2], self.rect[3]))
+            self.mask.fill()
 
     def in_radius(self):
         entity_list = self.game.world.entities.entities
@@ -165,10 +173,13 @@ class Tower:
                 angle = math.atan2(self.targeted_entity.center[1] - (self.center[1] + self.game.world.camera.true_pos[1]), self.targeted_entity.center[0] - (self.center[0] + self.game.world.camera.true_pos[0]))
                 self.game.world.entities.projectiles.append(Projectile(self.type + '_projectile', (self.center[0] + self.game.world.camera.true_pos[0], self.center[1] + self.game.world.camera.true_pos[1]), angle, 50, self.game, self))
                 self.attack_timer = 1.5
+        self.print_hitbox()
 
     def render(self, surf):
         if self.hoverable:
             self.outline(surf, (self.center[0] - (self.rect[2] // 2), self.center[1] - (self.rect[3] // 2)))
+
         surf.blit(self.img, (self.center[0] - (self.rect[2] // 2), self.center[1] - (self.rect[3] // 2)))
+        
         if self.targeted_entity:
             pygame.draw.line(self.game.window.display, 'red', self.center, (self.targeted_entity.center[0] - self.game.world.camera.true_pos[0], self.targeted_entity.center[1] - self.game.world.camera.true_pos[1]))
