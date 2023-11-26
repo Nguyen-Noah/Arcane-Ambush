@@ -117,11 +117,7 @@ class Player(Entity):
                 self.allow_movement = True
                 self.atk_counter = 0
 
-        #print(self.targetable)
-
-        #random_angle = random.uniform(0, 2 * math.pi)
-
-        #pygame.draw.circle(self.game.window.display, 'white', self.pos, 80)
+        #pygame.draw.circle(self.game.window.display, 'white', (self.rect[0] - self.game.world.camera.true_pos[0] + (self.size[0] // 2), self.rect[1] - self.game.world.camera.true_pos[1] + (self.size[1] // 2)), 100)
         #pygame.draw.rect(self.game.window.display, 'purple', (0, 0, self.game.window.display.get_size()[0], self.game.window.display.get_size()[1]), 1)
 
         # collisions and move ---------------------------------------------------------- #

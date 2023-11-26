@@ -9,7 +9,7 @@ class Camera:
         self.rate = 0.25
         self.track_entity = None
         self.restriction_point = None
-        self.lock_distance = 28
+        self.lock_distance = config['level_data'][self.game.state]['lock_distance']
         self.mode = None
 
     def focus(self):
@@ -53,14 +53,14 @@ class Camera:
             self.true_pos[1] += math.floor(self.target_pos[1] - self.true_pos[1]) / (self.rate / self.game.window.dt)
 
         if self.restriction_point:
-            if self.true_pos[0] + self.game.window.display.get_width() // 2 - self.restriction_point[0] > self.lock_distance:
-                self.true_pos[0] = self.restriction_point[0] - self.game.window.display.get_width() // 2 + self.lock_distance
-            if self.true_pos[0] + self.game.window.display.get_width() // 2 - self.restriction_point[0] < -self.lock_distance:
-                self.true_pos[0] = self.restriction_point[0] - self.game.window.display.get_width() // 2 - self.lock_distance
-            if self.true_pos[1] + self.game.window.display.get_height() // 2 - self.restriction_point[1] > self.lock_distance:
-                self.true_pos[1] = self.restriction_point[1] - self.game.window.display.get_height() // 2 + self.lock_distance
-            if self.true_pos[1] + self.game.window.display.get_height() // 2 - self.restriction_point[1] < -self.lock_distance:
-                self.true_pos[1] = self.restriction_point[1] - self.game.window.display.get_height() // 2 - self.lock_distance
+            if self.true_pos[0] + self.game.window.display.get_width() // 2 - self.restriction_point[0] > self.lock_distance[0]:
+                self.true_pos[0] = self.restriction_point[0] - self.game.window.display.get_width() // 2 + self.lock_distance[0]
+            if self.true_pos[0] + self.game.window.display.get_width() // 2 - self.restriction_point[0] < -self.lock_distance[0]:
+                self.true_pos[0] = self.restriction_point[0] - self.game.window.display.get_width() // 2 - self.lock_distance[0]
+            if self.true_pos[1] + self.game.window.display.get_height() // 2 - self.restriction_point[1] > self.lock_distance[1]:
+                self.true_pos[1] = self.restriction_point[1] - self.game.window.display.get_height() // 2 + self.lock_distance[1]
+            if self.true_pos[1] + self.game.window.display.get_height() // 2 - self.restriction_point[1] < -self.lock_distance[1]:
+                self.true_pos[1] = self.restriction_point[1] - self.game.window.display.get_height() // 2 - self.lock_distance[1]
 
     @property
     def render_offset(self):

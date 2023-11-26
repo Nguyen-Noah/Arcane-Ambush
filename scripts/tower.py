@@ -165,15 +165,16 @@ class Tower:
                 surf.blit(mask_surf, (loc[0], loc[1] + 1))
 
     def update(self):
-        self.target_closest()
-        if self.targeted_entity:
-            self.attack_timer -= self.game.window.dt
+        if self.hoverable:
+            self.target_closest()
+            if self.targeted_entity:
+                self.attack_timer -= self.game.window.dt
 
-            if self.attack_timer < 0:
-                angle = math.atan2(self.targeted_entity.center[1] - (self.center[1] + self.game.world.camera.true_pos[1]), self.targeted_entity.center[0] - (self.center[0] + self.game.world.camera.true_pos[0]))
-                self.game.world.entities.projectiles.append(Projectile(self.type + '_projectile', (self.center[0] + self.game.world.camera.true_pos[0], self.center[1] + self.game.world.camera.true_pos[1]), angle, 50, self.game, self))
-                self.attack_timer = 1.5
-        self.print_hitbox()
+                if self.attack_timer < 0:
+                    angle = math.atan2(self.targeted_entity.center[1] - (self.center[1] + self.game.world.camera.true_pos[1]), self.targeted_entity.center[0] - (self.center[0] + self.game.world.camera.true_pos[0]))
+                    self.game.world.entities.projectiles.append(Projectile(self.type + '_projectile', (self.center[0] + self.game.world.camera.true_pos[0], self.center[1] + self.game.world.camera.true_pos[1]), angle, 50, self.game, self))
+                    self.attack_timer = 1.5
+            self.print_hitbox()
 
     def render(self, surf):
         if self.hoverable:

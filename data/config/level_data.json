@@ -12,5 +12,12 @@
         "tile_offset": [-32, 0],
         "camera_starting_pos": [36, 48],
         "player_spawn_point": [208, 148]
+    },
+    "new_format": {
+        "waves": 80,
+        "tile_offset": [0, 16],
+        "camera_starting_pos": [203, 264],
+        "lock_distance": [188, 248],
+        "player_spawn_point": [384, 384]
     }
 }

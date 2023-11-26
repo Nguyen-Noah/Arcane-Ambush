@@ -1,0 +1,39 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_format/collideables.tsx": {
+            "dynamicWrapping": true
+        },
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_format/ground.tsx": {
+            "dynamicWrapping": false
+        },
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_format/path.tsx": {
+            "dynamicWrapping": false
+        }
+    },
+    "last.exportedFilePath": "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_format",
+    "last.imagePath": "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/graphics/test",
+    "map.height": 48,
+    "map.lastUsedExportFilter": "CSV files (*.csv)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 48,
+    "openFiles": [
+    ],
+    "project": "new_format.tiled-project",
+    "recentFiles": [
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 32,
+        "width": 32
+    },
+    "tileset.type": 0
+}

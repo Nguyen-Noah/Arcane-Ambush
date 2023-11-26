@@ -5,5 +5,33 @@
         "group": "wizard_tower",
         "spawn_advance": 8,
         "knockback": 0
+    },
+    "archer_projectile": {
+        "shape": null,
+        "power": 5,
+        "group": "archer",
+        "spawn_advance": 8,
+        "knockback": 0
+    },
+    "bomber_projectile": {
+        "shape": null,
+        "power": 5,
+        "group": "bomber",
+        "spawn_advance": 8,
+        "knockback": 0
+    },
+    "phoenix_projectile": {
+        "shape": null,
+        "power": 5,
+        "group": "phoenix",
+        "spawn_advance": 8,
+        "knockback": 0
+    },
+    "cleric_projectile": {
+        "shape": null,
+        "power": 5,
+        "group": "cleric",
+        "spawn_advance": 8,
+        "knockback": 0
     }
 }

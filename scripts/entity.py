@@ -171,11 +171,11 @@ class Entity:
     def die(self, angle=0):
         if self.type != 'player':
             self.game.world.world_animations.spawn('death_sparks', self.center, flip=self.flip)
-            for i in range(random.randint(14, 20)):
+            for i in range(random.randint(7, 20)):
                 random_angle = angle + (random.random() - 0.5) / 3.5
                 if random.randint(1, 4) == 1:
                     random_angle = angle + (random.random() - 0.5) / 7 + math.pi
-                random_speed = random.randint(20, 200)
+                random_speed = random.randint(20, 100)
                 vel = [math.cos(random_angle) * random_speed, math.sin(random_angle) * random_speed]
                 self.game.world.vfx.spawn_vfx('spark', self.center.copy(), vel, 1 + random.random(), (15, 15, 8), drag=50)
 

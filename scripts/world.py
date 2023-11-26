@@ -39,7 +39,7 @@ class World:
         self.towers = Towers(self.game)
  
         # camera ----------------------------------------------------------------------- #
-        #self.camera.set_restriction(self.player.pos)
+        self.camera.set_restriction(self.player.pos)
         self.camera.set_tracked_entity(self.player)
 
         # hitboxes --------------------------------------------------------------------- #
@@ -67,9 +67,9 @@ class World:
                     x = col_index * 16
                     y = row_index * 16
                     img = self.game.assets.collideables[col]
-                    #self.collideables.append(self.obs_rect((x + offset[0], y + offset[1] - img.get_size()[1]), img, int(col)))
+                    self.collideables.append(self.obs_rect((x + offset[0], y + offset[1] - img.get_size()[1]), img, int(col)))
                     if col != '10':
-                        self.render_list.append([img, (x + offset[0] - self.camera.true_pos[0], y - self.camera.true_pos[1] - img.get_size()[1])])
+                        self.render_list.append([img, (x + offset[0] - self.camera.true_pos[0], y + offset[1] - self.camera.true_pos[1] - img.get_size()[1])])
 
         self.world_animations.render(surf, self.camera.pos)
 
