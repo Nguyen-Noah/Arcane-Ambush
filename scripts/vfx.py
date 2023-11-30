@@ -313,12 +313,34 @@ class Slice:
             #    glow(pos, self.width // 2 + 2, -math.degrees(self.angle), width=self.length * 2 + 30, color=(14, 14, 14), padding=0)
             #    glow(pos, 1, -math.degrees(self.angle), width=self.length * 2 + 800, color=(14, 14, 14), padding=0)
 
+class Circle:
+    def __init__(self, game, pos, radius, width, decay_rate, speed, glow=True):
+        self.game = game
+        self.pos = pos
+        self.radius = radius
+        self.width = width
+        self.decay_rate = decay_rate
+        self.speed = speed
+        self.glow = glow
+
+    def update(self, dt):
+        self.radius += self.speed * dt
+        self.width -= self.decay_rate * dt
+        if self.width <= 0:
+            return False
+        return True
+    
+    def render(self, surf, offset=(0, 0)):
+        color = (255, 255, 255)
+        pygame.draw.circle(surf, color, [self.pos[0] - offset[0], self.pos[1] - offset[1]], int(self.radius), max(1, int(self.width)))
+
 VFX_TYPES = {
     'curved_spark': CurvedSpark,
     'plain_line': PlainLine,
     'arc': Arc,
     'slice': Slice,
     'spark': Spark,
+    'circle': Circle
 }
 
 # random is scaling for 0-1 and offset

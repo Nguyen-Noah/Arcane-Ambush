@@ -7,6 +7,7 @@ from .entity import Entity
 from .tower import Tower
 from .core_funcs import itr
 from .weapons import create_weapon
+from .quadtree import QuadTreeNode
 
 class EntityManager:
     def __init__(self, game):
@@ -15,6 +16,7 @@ class EntityManager:
         self.spawner = Spawner(self.game)
         self.render_entities = True
         self.projectiles = []
+        self.quadtree = QuadTreeNode(0, 0, self.game.world.floor.get_size()[0], self.game.world.floor.get_size()[1])
 
     def gen_player(self):
         self.entities.append(Player(self.game, config['level_data'][self.game.state]['player_spawn_point'], (12, 12), 'player', 'player'))

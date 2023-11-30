@@ -117,9 +117,6 @@ class Player(Entity):
                 self.allow_movement = True
                 self.atk_counter = 0
 
-        #pygame.draw.circle(self.game.window.display, 'white', (self.rect[0] - self.game.world.camera.true_pos[0] + (self.size[0] // 2), self.rect[1] - self.game.world.camera.true_pos[1] + (self.size[1] // 2)), 100)
-        #pygame.draw.rect(self.game.window.display, 'purple', (0, 0, self.game.window.display.get_size()[0], self.game.window.display.get_size()[1]), 1)
-
         # collisions and move ---------------------------------------------------------- #
         self.collisions = self.move(self.frame_motion, self.game.world.collideables)
 
@@ -147,7 +144,7 @@ class Player(Entity):
                 if self.skills[1]:
                     self.skills[1].use()
 
-        pygame.draw.line(self.game.window.display, 'blue', (self.rect[0] - self.game.world.camera.true_pos[0] + (self.size[0] // 2), self.rect[1] - self.game.world.camera.true_pos[1] + (self.size[1] // 2)), self.game.input.mouse_pos)
+        # pygame.draw.line(self.game.window.display, 'blue', (self.rect[0] - self.game.world.camera.true_pos[0] + (self.size[0] // 2), self.rect[1] - self.game.world.camera.true_pos[1] + (self.size[1] // 2)), self.game.input.mouse_pos)
 
         if not self.targetable:
             self.allow_movement = False

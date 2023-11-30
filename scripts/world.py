@@ -116,6 +116,3 @@ class World:
         if self.builder_mode:
             self.game.window.add_freeze(0.0001, 0.1)
             self.player.weapon.invisible = 0.2
-
-            if self.game.input.mouse_state['right_click']:
-                self.show_builder_menu = not self.show_builder_menu

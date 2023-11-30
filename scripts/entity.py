@@ -1,6 +1,6 @@
 import pygame, math, random
 from .config import config
-from .core_funcs import tuplify, round_nearest
+from .core_funcs import tuplify, normalize_vector
 
 def collision_list(obj, obj_list):
     hit_list = []
@@ -83,6 +83,19 @@ class Entity:
         self.current_image = surf.copy()
         self.image_base_dimensions = list(surf.get_size())
 
+    def get_target_distance(self, target):
+        dist = [target.center[0] - self.center[0], target.center[1] - self.center[1]]
+
+        magnitude = math.sqrt(dist[0] ** 2 + dist[1] ** 2)
+        if magnitude == 0:
+            return [0, 0]
+        normalized_dist = [dist[0] / magnitude, dist[1] / magnitude]
+
+        normalized_dist[0] *= self.speed * self.game.window.dt
+        normalized_dist[1] *= self.speed * self.game.window.dt
+
+        return normalized_dist
+
     def move(self, motion, tiles):
         self.pos[0] += motion[0]
         hit_list = collision_list(self.rect, tiles)
@@ -115,62 +128,14 @@ class Entity:
                 self.pos[1] += self.size[1] // 2
         return directions
 
-    def follow_path(self):
-        self.path = tuplify(config['level_data']['tutorial']['path'])
-
-        # getting path -------------------------------------------------------------------------------------- #
-        if self.target_index < len(self.path):
-            self.target_position = pygame.math.Vector2(self.path[self.target_index])
-            self.movement = self.target_position - self.pos - self.offset
-            if self.path_complete:
-                self.offset = [0, 0]
-                if self.target_index != 1:
-                    random_offset = random.randint(-8, 8)
-                else:
-                    random_offset = 0
-                if abs(self.movement[0]) > abs(self.movement[1]):
-                    self.offset[1] += self.movement[1] + random_offset
-                else:
-                    self.offset[0] += self.movement[0] + random_offset
-        else:
-            self.die()
-
-        dist = self.movement.length()
-
-        # animation handling -------------------------------------------------------------------------------- #
-        if self.path_complete:
-            if abs(self.movement[0]) < abs(self.movement[1]):
-                if self.movement[1] > 0:
-                    self.direction = 'down'
-                else:
-                    self.direction = 'up'
-            else:
-                self.direction = 'side'
-                if self.movement[0] > 0:
-                    self.flip[0] = False
-                else:
-                    self.flip[0] = True
-                    
-            self.path_complete = False
-
-        # movement handling --------------------------------------------------------------------------------- #
-        # 0.5 is used for how strict the enemies will follow the path; the lower, the more strict
-        if dist >= 0.5:
-            self.pos += self.movement.normalize() * self.speed * self.game.window.dt
-        else:
-            #if dist != 0:
-                #self.pos += self.movement.normalize() * self.speed * self.game.window.dt
-            self.path_complete = True
-            self.target_index += 1
-
-        self.set_action('walk', self.direction)
-
     def print_hitbox(self):
         pygame.draw.rect(self.game.window.display, 'blue', (self.rect[0] - self.game.world.camera.true_pos[0], self.rect[1] - self.game.world.camera.true_pos[1], self.rect[2], self.rect[3]), 1)
 
     def die(self, angle=0):
         if self.type != 'player':
-            self.game.world.world_animations.spawn('death_sparks', self.center, flip=self.flip)
+            #self.game.world.world_animations.spawn('death_sparks', self.center, flip=self.flip)
+            self.game.world.vfx.spawn_vfx('circle', self.center.copy(), 4, 6, 25, 25)
+            self.game.world.vfx.spawn_vfx('circle', self.center.copy(), 4, 8, 25, 100)
             for i in range(random.randint(7, 20)):
                 random_angle = angle + (random.random() - 0.5) / 3.5
                 if random.randint(1, 4) == 1:
@@ -185,7 +150,7 @@ class Entity:
             self.death_frames = sum(self.active_animation.data.config['frames'])
 
             self.targetable = False
-            print(self.targetable)
+            print(self.active_animation.data.id)
 
     def damage(self, amount, angle=0):
         self.hurt = 1

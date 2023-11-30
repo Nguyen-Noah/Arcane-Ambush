@@ -17,6 +17,7 @@ class Knight(Entity):
         if not r:
             return r
         else:
-            self.follow_path()
+            self.movement = self.get_target_distance(self.game.world.player)
+            self.move(self.movement, self.game.world.collideables)
 
         return self.alive

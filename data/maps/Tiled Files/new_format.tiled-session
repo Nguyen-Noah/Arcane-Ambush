@@ -3,18 +3,32 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "new_format.tmx",
     "expandedProjectPaths": [
     ],
     "fileStates": {
         "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_format/collideables.tsx": {
-            "dynamicWrapping": true
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 3
         },
         "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_format/ground.tsx": {
-            "dynamicWrapping": false
+            "dynamicWrapping": false,
+            "scaleInDock": 3,
+            "scaleInEditor": 1
         },
         "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_format/path.tsx": {
-            "dynamicWrapping": false
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "new_format.tmx": {
+            "scale": 1.11328125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 380.8561403508772,
+                "y": 380.85614035087724
+            }
         }
     },
     "last.exportedFilePath": "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_format",
@@ -26,9 +40,17 @@
     "map.tileWidth": 16,
     "map.width": 48,
     "openFiles": [
+        "new_format.tmx",
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_format/ground.tsx",
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_format/collideables.tsx",
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_format/path.tsx"
     ],
     "project": "new_format.tiled-project",
     "recentFiles": [
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_format/path.tsx",
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_format/collideables.tsx",
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_format/ground.tsx",
+        "new_format.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
