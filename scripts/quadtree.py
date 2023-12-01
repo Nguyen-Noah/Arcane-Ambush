@@ -76,22 +76,72 @@ class QuadTree:
             
         return False
     
-    def query_range(self, range):
-        entities_in_range = []
+    def query_closest(self, range, pos):
+        target_entity = None
+        closest_distance_squared = float('inf')
 
         if not range.intersects(self.boundary):
-            return entities_in_range
+            return target_entity
         
         for entity in self.entities:
             if range.contains_entity(entity):
-                entities_in_range.append(entity)
-            
+                distance_squared = (entity.pos[0] - pos[0])**2 + (entity.pos[1] - pos[1])**2
+                if distance_squared < closest_distance_squared:
+                    target_entity = entity
+                    closest_distance_squared = distance_squared
+
         if self.nw:
-            entities_in_range += self.nw.query_range(range)
-            entities_in_range += self.ne.query_range(range)
-            entities_in_range += self.sw.query_range(range)
-            entities_in_range += self.se.query_range(range)
-            
+            for child in [self.nw, self.ne, self.sw, self.se]:
+                child_closest_entity = child.query_closest(range, pos)
+                if child_closest_entity:
+                    distance_squared = (entity.pos[0] - pos[0])**2 + (entity.pos[1] - pos[1])**2
+                    if distance_squared < closest_distance_squared:
+                        target_entity = entity
+                        closest_distance_squared = distance_squared
+
+        return target_entity
+
+    def query_range(self, range):
+        entities_in_range = set()
+
+        if not range.intersects(self.boundary):
+            return list(entities_in_range)
+        
+        for entity in self.entities:
+            if range.contains_entity(entity):
+                entities_in_range.add(entity)
+
+        if self.nw:
+            entities_in_range.update(self.nw.query_range(range))
+            entities_in_range.update(self.ne.query_range(range))
+            entities_in_range.update(self.sw.query_range(range))
+            entities_in_range.update(self.se.query_range(range))
+
+        return list(entities_in_range)
+
+    def clear(self):
+        self.entities = []
+
+        if self.nw:
+            self.nw.clear()
+            self.ne.clear()
+            self.sw.clear()
+            self.se.clear()
+        
+        self.nw = None
+        self.ne = None
+        self.sw = None
+        self.se = None
+
+    def show(self, surf, offset=(0, 0)):
+        self.boundary.draw(surf, offset)
+
+        if self.nw:
+            self.nw.show(surf, offset)
+            self.ne.show(surf, offset)
+            self.sw.show(surf, offset)
+            self.se.show(surf, offset)
+
 class Rectangle:
     def __init__(self, position, scale):
         self.position = position
@@ -106,6 +156,11 @@ class Rectangle:
         else:
             return False
         
+    def draw(self, surf, offset=(0, 0)):
+        x, y = self.position
+        w, h = self.scale
+        pygame.draw.rect(surf, (255, 255, 255), [x - offset[0], y - offset[1], w, h], 1)
+
 class Circle:
     def __init__(self, position, radius):
         self.position = position
@@ -113,19 +168,19 @@ class Circle:
         self.sqradius = self.radius * self.radius
         self.scale = None
 
-    def contains_entity(self, particle):
+    def contains_entity(self, entity):
         x1, y1 = self.position
-        x2, y2 = particle.position
+        x2, y2 = entity.pos
         dist = pow(x2 - x1, 2) + pow(y2 - y1, 2)
         if dist <= self.sqradius:
             return True
         else:
             return False
         
-    def intersects(self, _range):
+    def intersects(self, range):
         x1, y1 = self.position
-        x2, y2 = _range.position
-        w, h = _range.scale
+        x2, y2 = range.position
+        w, h = range.scale
         r = self.radius
         dist_x, dist_y = abs(x2 - x1), abs(y2 - y1)
 
@@ -138,70 +193,6 @@ class Circle:
             return True
 
         return (edges <= self.sqradius)
-
-""" class QuadTreeNode:
-    def __init__(self, x, y, width, height, depth=0):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.depth = depth
-        self.entities = []  # List of entities in this node
-        self.children = []  # List of four child nodes
-
-def insert_entity(node, entity):
-    # Insert an entity into the quadtree
-    print(node)
-    print('node children', len(node.children))
-    print('node entities', len(node.entities))
-    if len(node.children) == 0 and len(node.entities) < 4:
-        # If the node is a leaf and has room for the entity, add it to the node
-        node.entities.append(entity)
-    else:
-        # If the node is not a leaf, insert the entity into the appropriate child node
-        index = get_quadrant_index(node, entity.center[0], entity.center[1])
-        if len(node.children) == 0:
-            sub_width = node.width / 2
-            sub_height = node.height / 2
-            node.children = [None] * 4
-            node.children[index] = QuadTreeNode(
-                node.x + (index % 2) * sub_width,
-                node.y + (index // 2) * sub_height,
-                sub_width, sub_height, node.depth + 1
-            )
-        insert_entity(node.children[index], entity)
-
-def get_quadrant_index(node, x, y):
-    # Determine the index of the quadrant in which the point (x, y) belongs
-    mid_x = node.x + node.width / 2
-    mid_y = node.y + node.height / 2
-    index = 0
-    if x > mid_x:
-        index += 1
-    if y > mid_y:
-        index += 2
-    print('index', index)
-    return index
-
-def find_nearest_entity(node, x, y, radius, nearest_entity=None, nearest_distance=float('inf')):
-    # Recursively find the nearest entity within the specified radius from the point (x, y)
-    for entity in node.entities:
-        distance = ((entity.center[0] - x) ** 2 + (entity.center[1] - y) ** 2) ** 0.5
-        if distance < nearest_distance and distance <= radius:
-            nearest_entity = entity
-            nearest_distance = distance
-
-    for child in node.children:
-        if child is not None and intersects_circle(child, x, y, radius):
-            nearest_entity, nearest_distance = find_nearest_entity(
-                child, x, y, radius, nearest_entity, nearest_distance
-            )
-
-    return nearest_entity, nearest_distance
-
-def intersects_circle(node, x, y, radius):
-    # Check if the circle centered at (x, y) with the given radius intersects with the node's bounds
-    dx = abs(x - max(node.x, min(x, node.x + node.width)))
-    dy = abs(y - max(node.y, min(y, node.y + node.height)))
-    return dx ** 2 + dy ** 2 < radius ** 2
- """
+    
+    def draw(self, surf, offset=(0, 0)):
+        pygame.draw.circle(surf, (0, 0, 0), (self.position[0] - offset[0], self.position[1] - offset[1]), self.radius)

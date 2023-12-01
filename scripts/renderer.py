@@ -40,9 +40,10 @@ class Renderer:
 
     def render(self):
         surf = self.game.window.display
+        offset = self.game.world.camera.true_pos
 
         self.game.world.render(surf)
-        self.game.world.entities.render(surf)
+        self.game.world.entities.render(surf, offset)
 
         #self.update_overlay_particles(surf)
 
@@ -64,8 +65,8 @@ class Renderer:
                 pos = (((self.game.window.display.get_width() + (tilesize // 2)) // 2) - ((count * tilesize) // 2)) + (i * tilesize)
                 #surf.blit(self.game.assets.misc['builder_slot'], (pos, self.game.window.display.get_height() - tilesize))
                 if owned_towers[i]:
-                    owned_towers[i].pos = (pos + self.game.world.camera.true_pos[0] + (owned_towers[i].img.get_size()[0] // 2) + 1, self.game.window.display.get_height() - tilesize + self.game.world.camera.true_pos[1] + (owned_towers[i].img.get_size()[1] // 2))
-                    owned_towers[i].render(surf)
+                    owned_towers[i].pos = (pos + offset[0] + (owned_towers[i].img.get_size()[0] // 2) + 1, self.game.window.display.get_height() - tilesize + offset[1] + (owned_towers[i].img.get_size()[1] // 2))
+                    owned_towers[i].render(surf, offset)
         else:
             tilesize = 18
             skill_count = 9

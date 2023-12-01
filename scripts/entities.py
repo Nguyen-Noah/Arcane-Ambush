@@ -7,7 +7,6 @@ from .entity import Entity
 from .tower import Tower
 from .core_funcs import itr
 from .weapons import create_weapon
-from .quadtree import QuadTreeNode
 
 class EntityManager:
     def __init__(self, game):
@@ -16,7 +15,6 @@ class EntityManager:
         self.spawner = Spawner(self.game)
         self.render_entities = True
         self.projectiles = []
-        self.quadtree = QuadTreeNode(0, 0, self.game.world.floor.get_size()[0], self.game.world.floor.get_size()[1])
 
     def gen_player(self):
         self.entities.append(Player(self.game, config['level_data'][self.game.state]['player_spawn_point'], (12, 12), 'player', 'player'))
@@ -35,14 +33,14 @@ class EntityManager:
             return entity[1][1] + entity[0].get_rect().height
 
     def update(self):
-        self.spawner.update(self.game.window.dt)
+        #self.spawner.update(self.game.window.dt)
 
         for i, projectile in itr(self.projectiles):
             alive = projectile.update(self.game.window.dt)
             if not alive:
                 self.projectiles.pop(i)
 
-    def render(self, surf):
+    def render(self, surf, offset=(0, 0)):
         sorted_entities = sorted(self.entities + self.game.world.render_list + self.game.world.towers.towers, key=self.y_sort)
 
         for entity in sorted_entities:
@@ -51,11 +49,11 @@ class EntityManager:
                     alive = entity.update(self.game.window.dt)
                     if not alive:
                         self.entities.remove(entity)
-                    entity.render(surf, self.game.world.camera.true_pos)
+                    entity.render(surf, offset)
             elif isinstance(entity, Tower):
-                entity.render(surf)
+                entity.render(surf, offset)
             else:
                 surf.blit(entity[0], (math.floor(entity[1][0]), math.floor(entity[1][1])))
 
         for projectile in self.projectiles:
-            projectile.render(surf, self.game.world.camera.true_pos)
+            projectile.render(surf, offset)

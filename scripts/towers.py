@@ -32,15 +32,13 @@ class Towers:
             self.towers.append(tower_map[type](game, type, rank, pos))
             self.game.world.player.money -= cost
 
-    def get_selected_tower(self, surf):
+    def get_selected_tower(self):
         tilesize = 26
         count = 5
         tower_index = []
         for i in range(count):
             pos = (((self.game.window.display.get_width() + (tilesize // 2)) // 2) - ((count * tilesize) // 2)) + (i * tilesize)
-            #surf.blit(self.game.assets.misc['builder_slot'], (pos, self.game.window.display.get_height() - tilesize))
             tower_index.append(pygame.Rect(pos, self.game.window.display.get_height() - tilesize, tilesize, tilesize))
-            #pygame.draw.rect(surf, 'red', (pos, self.game.window.display.get_height() - tilesize, tilesize, tilesize), 1)
 
     def update(self):
         for i, tower in enumerate(self.towers):
@@ -57,12 +55,9 @@ class Towers:
         if self.game.world.builder_mode and self.game.input.mouse_state['left_click']:
             self.add(self.game, self.selected_tower, 0, (round_nearest(self.game.input.get_mouse_pos()[0], 8), round_nearest(self.game.input.get_mouse_pos()[1], 8)))
 
-    def render(self, surf):
-        for tower in self.towers:
-            tower.render(surf)
-
+    def render(self, surf, offset):
         if self.displayed_tower:
-            self.displayed_tower.render(surf)
+            self.displayed_tower.render(surf, offset)
 
         if self.game.world.builder_mode:
-            self.get_selected_tower(surf)
+            self.get_selected_tower()

@@ -1,5 +1,5 @@
 import pygame, math
-from .core_funcs import round_nearest, import_csv_layout
+from .core_funcs import import_csv_layout
 from .camera import Camera
 from .config import config
 from .entities import EntityManager
@@ -10,6 +10,8 @@ from .destruction_particles import DestructionParticles
 from .particles import ParticleManager
 from .builder_menu import Builder
 from .vfx import VFX, set_glow_surf
+
+from .quadtree import QuadTree, Rectangle
 
 class World:
     def __init__(self, game):
@@ -37,9 +39,10 @@ class World:
         self.entities = EntityManager(self.game)
         self.player = self.entities.gen_player()
         self.towers = Towers(self.game)
+        self.quadtree = QuadTree(4, Rectangle(pygame.math.Vector2(0, 0), pygame.math.Vector2(self.floor.get_size())))
  
         # camera ----------------------------------------------------------------------- #
-        self.camera.set_restriction(self.player.pos)
+        #self.camera.set_restriction(self.player.pos)
         self.camera.set_tracked_entity(self.player)
 
         # hitboxes --------------------------------------------------------------------- #
@@ -67,15 +70,16 @@ class World:
                     x = col_index * 16
                     y = row_index * 16
                     img = self.game.assets.collideables[col]
-                    self.collideables.append(self.obs_rect((x + offset[0], y + offset[1] - img.get_size()[1]), img, int(col)))
+                    #self.collideables.append(self.obs_rect((x + offset[0], y + offset[1] - img.get_size()[1]), img, int(col)))
                     if col != '10':
                         self.render_list.append([img, (x + offset[0] - self.camera.true_pos[0], y + offset[1] - self.camera.true_pos[1] - img.get_size()[1])])
 
         self.world_animations.render(surf, self.camera.pos)
 
-        self.towers.render(surf)
+        self.towers.render(surf, self.camera.true_pos)
         self.destruction_particles.render(surf, self.camera.true_pos)
         self.vfx.render_front(surf, self.camera.true_pos)
+        self.quadtree.show(surf, self.camera.true_pos)
 
     def obs_rect(self, tile, img, idx):
         # 0 -> big tree, 1 -> short tree, 2 -> alive bush, 3 -> stump, 4 -> fence, 5 -> log, 6 -> right-facing lamp, 7 -> down-facing lamp, 8 -> left-facing lamp, 9 -> broken lamp
@@ -94,6 +98,11 @@ class World:
         self.towers.update()
         self.entities.update()
         self.destruction_particles.update()
+
+        self.quadtree.clear()
+        for entity in self.entities.entities:
+            if entity.category == 'enemy':
+                self.quadtree.insert(entity)
 
         # builder mode handler -------------------------------------------------------- #
         if self.game.input.states['open_build_mode']:
