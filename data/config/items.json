@@ -4,6 +4,11 @@
         "description": "dagger.",
         "type": "weapon"
     },
+    "spear": {
+        "name": "Spear",
+        "description": "dpear.",
+        "type": "weapon"
+    },
     "potion": {
         "name": "Health Potion",
         "description": "Heals 10 health",

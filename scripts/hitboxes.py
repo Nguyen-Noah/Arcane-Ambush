@@ -1,4 +1,4 @@
-import random
+import random, pygame
 import math
 
 from .config import config
@@ -20,7 +20,7 @@ class Hitbox:
         self.angle = angle
         self.ignore = [owner]
 
-    def update(self, dt):
+    def update(self):
         if self.mode == 'tracked':
             tracked_mask, offset = self.tracked.create_mask()
 
@@ -28,11 +28,9 @@ class Hitbox:
                 if (entity not in self.ignore) and (entity.type != 'item'):
                     entity_offset = entity.calculate_render_offset()
                     collision = tracked_mask.overlap(entity.mask, (int((entity.pos[0] - entity_offset[0]) - offset[0]), int((entity.pos[1] - entity_offset[1]) - offset[1])))
-                    #collision_point = (entity.pos[0] - entity_offset[0] + collision[0], entity.pos[1] - entity_offset[1] + collision[1])
                     if collision:
                         collision_point = [offset[0] + collision[0], offset[1] + collision[1]]
                         if self.angle:
-                            #self.game.window.add_freeze(0.2, 0.4)
                             self.game.world.vfx.spawn_vfx('slice', collision_point.copy(), random.random() * math.pi / 4 - math.pi / 8 + self.angle, 20 * random.random() + 60, 2, 1, 0.8)
                             entity.velocity[0] += math.cos(self.angle) * 300 * self.config['knockback']
                             entity.velocity[1] += math.sin(self.angle) * 300 * self.config['knockback']
@@ -60,7 +58,7 @@ class Hitboxes:
 
     def update(self):
         for i, hitbox in itr(self.hitboxes):
-            alive = hitbox.update(self.game.window.dt)
+            alive = hitbox.update()
             if not alive:
                 self.hitboxes.pop(i)
 

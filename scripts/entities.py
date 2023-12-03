@@ -19,6 +19,7 @@ class EntityManager:
     def gen_player(self):
         self.entities.append(Player(self.game, config['level_data'][self.game.state]['player_spawn_point'], (12, 12), 'player', 'player'))
         self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'dagger'), 'active')
+        self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'spear'), 'active')
 
         self.player = self.entities[-1]
         self.player.load_actives()
@@ -33,7 +34,7 @@ class EntityManager:
             return entity[1][1] + entity[0].get_rect().height
 
     def update(self):
-        #self.spawner.update(self.game.window.dt)
+        self.spawner.update(self.game.window.dt)
 
         for i, projectile in itr(self.projectiles):
             alive = projectile.update(self.game.window.dt)

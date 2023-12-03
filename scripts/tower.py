@@ -82,10 +82,9 @@ class Tower:
 
     def target(self):
         cir = Circle(self.center, self.radius)
-        entity_list = self.game.world.quadtree.query_range(Circle(self.center, self.radius))
+        #entity_list = self.game.world.quadtree.query_range(Circle(self.center, self.radius))
         
-        #self.targeted_entity = self.game.world.quadtree.query_closest(cir, self.center)
-        cir.draw(self.game.window.display, self.game.world.camera.true_pos)
+        self.targeted_entity = self.game.world.quadtree.query_closest(cir, self.center)
 
     def show_radius(self, surf, offset=(0, 0)):
         pygame.draw.circle(surf, 'white', (self.center[0] - offset[0], self.center[1] - offset[1]), self.radius, width=1)
@@ -131,7 +130,6 @@ class Tower:
                     angle = math.atan2(self.targeted_entity.center[1] - self.center[1], self.targeted_entity.center[0] - self.center[0])
                     self.game.world.entities.projectiles.append(Projectile(self.type + '_projectile', self.center, angle, 50, self.game, self))
                     self.attack_timer = 1.5
-            self.print_hitbox()
 
     def render(self, surf, offset=(0, 0)):
         if self.hoverable:

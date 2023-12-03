@@ -6,5 +6,9 @@
     "dagger": {
         "power": 7,
         "knockback": 0.7
+    },
+    "spear": {
+        "power": 7,
+        "knockback": 0.7
     }
 }

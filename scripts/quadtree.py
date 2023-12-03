@@ -1,4 +1,4 @@
-import pygame
+import pygame, random
 
 class QuadTree:
     def __init__(self, capacity, boundary):
@@ -48,11 +48,11 @@ class QuadTree:
         self.sw = QuadTree(self.capacity, boundary_sw)
         self.se = QuadTree(self.capacity, boundary_se)
 
-        for entity in range(len(self.entities)):
-            self.nw.insert(self.entities[entity])
-            self.ne.insert(self.entities[entity])
-            self.sw.insert(self.entities[entity])
-            self.se.insert(self.entities[entity])
+        for entity in self.entities:
+            self.nw.insert(entity)
+            self.ne.insert(entity)
+            self.sw.insert(entity)
+            self.se.insert(entity)
 
     def insert(self, entity):
         if not self.boundary.contains_entity(entity):
@@ -151,15 +151,12 @@ class Rectangle:
         x, y = entity.pos
         bx, by = self.position
         w, h = self.scale
-        if x >= bx and x <= bx + w and y >= by and y <= by + h:
-            return True
-        else:
-            return False
+        return x >= bx and x <= bx + w and y >= by and y <= by + h
         
     def draw(self, surf, offset=(0, 0)):
         x, y = self.position
         w, h = self.scale
-        pygame.draw.rect(surf, (255, 255, 255), [x - offset[0], y - offset[1], w, h], 1)
+        pygame.draw.rect(surf, (0, 0, 0), [x - offset[0], y - offset[1], w, h], 1)
 
 class Circle:
     def __init__(self, position, radius):

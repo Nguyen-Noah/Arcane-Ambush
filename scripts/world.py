@@ -87,7 +87,7 @@ class World:
                     x = col_index * 16
                     y = row_index * 16
                     img = self.game.assets.collideables[col]
-                    self.collideables.append(self.obs_rect((x + offset[0], y + offset[1] - img.get_size()[1]), img, int(col)))
+                    #self.collideables.append(self.obs_rect((x + offset[0], y + offset[1] - img.get_size()[1]), img, int(col)))
                     #rect = self.world_rects[int(col)]
                     #self.collideables.append((x + offset[0] - rect[0], y + offset[1] - rect[1], rect[2], rect[3]))
                     if col != '10':
@@ -98,7 +98,6 @@ class World:
         self.towers.render(surf, self.camera.true_pos)
         self.destruction_particles.render(surf, self.camera.true_pos)
         self.vfx.render_front(surf, self.camera.true_pos)
-        self.quadtree.show(surf, self.camera.true_pos)
         
     def update(self):
         self.camera.update()

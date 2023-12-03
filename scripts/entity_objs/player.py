@@ -16,7 +16,7 @@ class Player(Entity):
         self.vy = 0
         self.last_move_attempt = 0
         self.money = 1000
-        self.skills = [SKILLS['dagger'](self.game, self), None, None, None, None, None, None, None, None]
+        self.skills = [None, None, None, None, None, None, None, None, None]
         self.inventory = Inventory(self)
         self.selected_inventory_slot = 0
         self.weapon_hide = 0
@@ -55,7 +55,7 @@ class Player(Entity):
                 self.direction = 'side'
             if not self.moving:
                 if direction != self.last_move_attempt:
-                    self.game.world.world_animations.spawn('player_dust', [self.center[0], self.center[1]], flip=self.flip)
+                    self.game.world.world_animations.spawn('player_dust', self.center.copy(), flip=self.flip)
 
             movement_vector = pygame.math.Vector2(0, 0)
             movement_vector[axis] = direction
@@ -141,8 +141,8 @@ class Player(Entity):
         # skills ----------------------------------------------------------------------- #\
         if self.game.input.states['dash']:
             if self.game.input.input_mode == 'core':
-                if self.skills[1]:
-                    self.skills[1].use()
+                if self.skills[0]:
+                    self.skills[0].use()
 
         # pygame.draw.line(self.game.window.display, 'blue', (self.rect[0] - self.game.world.camera.true_pos[0] + (self.size[0] // 2), self.rect[1] - self.game.world.camera.true_pos[1] + (self.size[1] // 2)), self.game.input.mouse_pos)
 

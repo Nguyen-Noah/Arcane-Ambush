@@ -25,9 +25,9 @@ class AnimationData:
         except FileNotFoundError:
             self.config = {
                 'frames': [5 for i in range(len(self.image_list))],
-                'loop': True,
+                'loop': False,
                 'speed': 30.0,
-                'centered': False,
+                'centered': True,
                 'paused': False,
                 'outline': None,
                 'offset': [0, 0],
@@ -49,13 +49,13 @@ class AnimationData:
         return sum(self.config['frames'])
 
 class Animation:
-    def __init__(self, animation_data):
+    def __init__(self, animation_data, rotation=0):
         self.data = animation_data
         self.frame = 0
         self.paused = self.data.config['paused']
         self.flip = [False, False]
         self.calc_img()
-        self.rotation = 0
+        self.rotation = rotation
         self.just_looped = False
         self.done = False
 
@@ -117,5 +117,5 @@ class AnimationManager:
         for anim in os.listdir(ANIMATION_PATH):
             self.animations[anim] = AnimationData(ANIMATION_PATH + '/' + anim, COLORKEY)
 
-    def new(self, anim_id):
-        return Animation(self.animations[anim_id])
+    def new(self, anim_id, rotation=0):
+        return Animation(self.animations[anim_id], rotation=rotation)

@@ -80,7 +80,7 @@ class Renderer:
                     surf.blit(self.game.assets.misc['selected_inventory_slot'], (pos, self.game.window.display.get_height() - tilesize))
 
         # weapon ------------------------------------------------------------------------------------------------- #
-        '''player = self.game.world.entities.player
+        player = self.game.world.entities.player
 
         player_items = player.inventory.get_custom_group('active_weapons')
         weapon_masks = [pygame.mask.from_surface(self.game.assets.weapons[weapon.type]) for weapon in player_items]
@@ -94,7 +94,7 @@ class Renderer:
             if player_items[i] == player.weapon:
                 pygame.draw.line(surf, ui_color, (22, base_pos + offset), (22, base_pos + offset + weapon_img.get_height()))
             surf.blit(weapon_img, (25 - mask.get_bounding_rects()[0].left, base_pos + offset))
-            offset += weapon_img.get_height() + 2'''
+            offset += weapon_img.get_height() + 2
         
         # tooltips ----------------------------------------------------------------------------------------------- #
         self.tooltips.render(surf, self.game.window.dt)
