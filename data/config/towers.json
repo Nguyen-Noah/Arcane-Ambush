@@ -4,7 +4,6 @@
         "radius": 50,
         "attack_cd": 1.5,
         "rarity": ["common", "uncommon", "rare", "legendary", "mythical"],
-        "damage": [100, 15, 20, 25, 50],
         "player_skill": "dash"
     },
     "archer": {
@@ -12,7 +11,6 @@
         "radius": 250,
         "attack_cd": 1.5,
         "rarity": ["common", "uncommon", "rare", "legendary", "mythical"],
-        "damage": [10, 15, 20, 25, 50],
         "player_skill": "gun"
     },
     "bomber": {
@@ -20,51 +18,44 @@
         "radius": 0,
         "attack_cd": 7.5,
         "rarity": ["common", "uncommon", "rare", "legendary", "mythical"],
-        "damage": [10, 15, 20, 25, 50],
         "player_skill": "bomb"
     },
     "siren": {
         "cost": [10, 50, 100, 250, 500],
         "radius": 100,
         "attack_cd": 1.5,
-        "rarity": ["uncommon", "rare", "legendary", "mythical"],
-        "damage": [10, 15, 20, 25, 50]
+        "rarity": ["uncommon", "rare", "legendary", "mythical"]
     },
     "medusa": {
         "cost": [10, 50, 100, 250, 500],
         "radius": 50,
         "attack_cd": 1.5,
-        "rarity": ["legendary", "mythical"],
-        "damage": [10, 15, 20, 25, 50]
+        "rarity": ["legendary", "mythical"]
     },
     "phoenix": {
         "cost": [10, 50, 100, 250, 500],
         "radius": 200,
         "attack_cd": 1.5,
         "rarity": ["rare", "legendary", "mythical"],
-        "damage": [10, 15, 20, 25, 50],
         "player_skill": "fireball"
     },
     "dragon": {
         "cost": [10, 50, 100, 250, 500],
         "radius": 500,
         "attack_cd": 1.5,
-        "rarity": ["mythical"],
-        "damage": [10, 15, 20, 25, 50]
+        "rarity": ["mythical"]
     },
     "cleric": {
         "cost": [10, 50, 100, 250, 500],
         "radius": 250,
         "attack_cd": 1.5,
         "rarity": ["rare", "legendary", "mythical"],
-        "damage": [10, 15, 20, 25, 50],
         "player_skill": "heal"
     },
     "angel": {
         "cost": [10, 50, 100, 250, 500],
         "radius": 500,
         "attack_cd": 1.5,
-        "rarity": ["mythical"],
-        "damage": [10, 15, 20, 25, 50]
+        "rarity": ["mythical"]
     }
 }
