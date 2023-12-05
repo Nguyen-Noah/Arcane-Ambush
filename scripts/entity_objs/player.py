@@ -1,9 +1,8 @@
-import pygame, math, random
-from ..core_funcs import get_dis
+import pygame, math
 from ..entity import Entity
 from ..skills import SKILLS
 from ..inventory import Inventory
-from ..item import Item
+from ..config import config
 
 class Player(Entity):
     def __init__(self, *args, **kwargs):
@@ -20,10 +19,10 @@ class Player(Entity):
         self.inventory = Inventory(self)
         self.selected_inventory_slot = 0
         self.weapon_hide = 0
-        self.attacking = False
-        self.atk_counter = 0
         self.counter = [False, False]
         self.aim_angle = 0
+        self.attacking = False
+        self.attack_movement_slow = 0
 
     @property
     def weapon(self):
@@ -101,21 +100,24 @@ class Player(Entity):
 
         # animations code
         if self.targetable:
-            if not self.attacking:
-                if self.counter[0] or self.counter[1]:
-                    self.set_action('walk', self.direction)
-                else:
-                    self.set_action('idle', self.direction)
-                    self.moving = False
+            if self.counter[0] or self.counter[1]:
+                self.set_action('walk', self.direction)
+            else:
+                self.set_action('idle', self.direction)
+                self.moving = False
 
         # weapon
-        if (self.game.input.mouse_state['left_click'] or self.attacking) and not self.game.world.builder_mode and self.targetable and self.weapon:
-            self.atk_counter += self.game.window.dt
-            self.weapon.attempt_attack()
-            if self.atk_counter > self.weapon.attack_rate:
-                self.attacking = False
-                self.allow_movement = True
-                self.atk_counter = 0
+        if self.targetable and self.weapon:
+            if self.game.input.mouse_state['left_click'] and not self.game.world.builder_mode:
+                self.attacking = True
+                self.speed = config['entities']['player']['speed'] // 2
+                self.weapon.attempt_attack()
+            if self.attacking:
+                self.attack_movement_slow += dt
+                if self.attack_movement_slow >= self.weapon.attack_rate:
+                    self.attacking = False
+                    self.speed = config['entities']['player']['speed'] 
+                    self.attack_movement_slow = 0
 
         # collisions and move ---------------------------------------------------------- #
         self.collisions = self.move(self.frame_motion, self.game.world.collideables)
@@ -143,8 +145,6 @@ class Player(Entity):
             if self.game.input.input_mode == 'core':
                 if self.skills[0]:
                     self.skills[0].use()
-
-        # pygame.draw.line(self.game.window.display, 'blue', (self.rect[0] - self.game.world.camera.true_pos[0] + (self.size[0] // 2), self.rect[1] - self.game.world.camera.true_pos[1] + (self.size[1] // 2)), self.game.input.mouse_pos)
 
         if not self.targetable:
             self.allow_movement = False

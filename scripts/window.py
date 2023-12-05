@@ -1,5 +1,6 @@
 import pygame, time
 from .config import config
+from .core_funcs import clip
 
 class Window:
     def __init__(self, game):
@@ -34,6 +35,8 @@ class Window:
         self.cursor = None
 
         self.show_fps = True
+
+        self.zoom = 1
 
     def fps(self):
         avg_dt = sum(self.frame_history) / len(self.frame_history)
@@ -83,5 +86,10 @@ class Window:
         self.frame_history.append(self.ui_dt)
         self.frame_history = self.frame_history[-200:]
 
-        self.screen.blit(pygame.transform.scale(self.display, self.scaled_resolution), (0, 0))
+        if self.zoom == 1:
+            self.screen.blit(pygame.transform.scale(self.display, self.scaled_resolution), (0, 0))
+        else:
+            size = [int(self.display.get_width() / self.zoom), int(self.display.get_height() / self.zoom)]
+            self.screen.blit(pygame.transform.scale(clip(self.display, (self.display.get_width() - size[0]) // 2, (self.display.get_height() - size[1]) // 2, size[0], size[1]), self.screen.get_size()), (0, 0))
+
         self.display.fill(self.background_color)

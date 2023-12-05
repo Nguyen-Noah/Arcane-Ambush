@@ -35,14 +35,6 @@ class Skill:
         surf.blit(img, loc)
         if self.charges > 1:
             self.game.assets.small_text.render(surf, str(self.charges), (loc[0] + img.get_width() // 2 - self.game.assets.small_text.width(str(self.charges)) // 2 + 1, loc[1] - 8))
-        
-class Dagger(Skill):
-    def __init__(self, game, owner):
-        super().__init__(game, owner, 'dagger')
-        self.charge_rate = 0.4
-
-    def use(self):
-        self.owner.atk_cd = self.game.window.dt * self.owner.active_animation.data.config['speed']
 
 class Dash(Skill):
     def __init__(self, game, owner):
@@ -52,14 +44,14 @@ class Dash(Skill):
         self.charges = 2
         self.max_charges = 2
 
-        self.dash_distance = 10
+        self.dash_distance = 0
 
     def update(self):
         super().update()
 
         if self.dash_distance:
-            normalize_vector(self.owner.velocity, 1)
-            self.dash_distance = normalize(self.dash_distance, 1)
+            normalize_vector(self.owner.velocity, 0.5)
+            self.dash_distance = normalize(self.dash_distance, 0.5)
 
             self.game.world.vfx.spawn_group('dash_sparks', self.owner.center.copy(), self.owner.aim_angle)
             img = self.owner.img.copy()
@@ -78,7 +70,7 @@ class Dash(Skill):
             else:
                 self.owner.flip[0] = False
 
-            self.dash_distance = 10
+            self.dash_distance = 8
 
             self.owner.velocity[0] = math.cos(self.owner.aim_angle) * self.dash_distance
             self.owner.velocity[1] = math.sin(self.owner.aim_angle) * self.dash_distance
@@ -86,7 +78,19 @@ class Dash(Skill):
             for i in range(random.randint(30, 50)):
                 self.game.world.vfx.spawn_group('arrow_impact_sparks', self.owner.center.copy(), self.owner.aim_angle)
 
+class Bomb(Skill):
+    def __init__(self, game, owner):
+        super().__init__(game, owner, 'bomb')
+        self.game = game
+        self.owner = owner
+
+    def update(self):
+        super().update()
+
+    def use(self):
+        super().use()
+
 SKILLS = {
-    'dagger': Dagger,
-    'dash': Dash
+    'dash': Dash,
+    'bomb': Bomb
 }

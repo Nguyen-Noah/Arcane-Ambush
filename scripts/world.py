@@ -7,6 +7,7 @@ from .towers import Towers
 from .hitboxes import Hitboxes
 from .standalone_animations import StandaloneAnimations
 from .destruction_particles import DestructionParticles
+from .weapon_anims import WeaponAnimations
 from .particles import ParticleManager
 from .builder_menu import Builder
 from .vfx import VFX, set_glow_surf
@@ -47,6 +48,7 @@ class World:
         self.world_animations = StandaloneAnimations(self.game)
         self.particles = ParticleManager(self.game)
         self.vfx = VFX(self.game)
+        self.weapon_anims = WeaponAnimations(self.game)
 
         self.camera = Camera(self.game)
 
@@ -57,6 +59,7 @@ class World:
         self.player = self.entities.gen_player()
         self.towers = Towers(self.game)
         self.quadtree = QuadTree(4, Rectangle(pygame.math.Vector2(0, 0), pygame.math.Vector2(self.floor.get_size())))
+
  
         # camera ----------------------------------------------------------------------- #
         #self.camera.set_restriction(self.player.pos)
@@ -94,6 +97,7 @@ class World:
                         self.render_list.append([img, (x + offset[0] - self.camera.true_pos[0], y + offset[1] - self.camera.true_pos[1] - img.get_size()[1])])
 
         self.world_animations.render(surf, self.camera.pos)
+        self.weapon_anims.render(surf, self.camera.pos)
 
         self.towers.render(surf, self.camera.true_pos)
         self.destruction_particles.render(surf, self.camera.true_pos)
@@ -102,6 +106,7 @@ class World:
     def update(self):
         self.camera.update()
         self.world_animations.update()
+        self.weapon_anims.update()
         self.vfx.update()
         self.towers.update()
         self.hitboxes.update()
@@ -135,3 +140,6 @@ class World:
         if self.builder_mode:
             self.game.window.add_freeze(0.0001, 0.1)
             self.player.weapon.invisible = 0.2
+
+        if self.game.input.mouse_state['right_click']:
+            self.game.window.zoom += 1

@@ -13,7 +13,7 @@
         "capacity": "-1",
         "attack_rate": 0.3,
         "combo": 4,
-        "combo_cooldown": 0.5,
+        "combo_cooldown": 1,
         "range": 30,
         "max_rank": 0
     }
