@@ -34,7 +34,7 @@ class EntityManager:
             return entity[1][1] + entity[0].get_rect().height
 
     def update(self):
-        #self.spawner.update(self.game.window.dt)
+        self.spawner.update(self.game.window.dt)
 
         for i, projectile in itr(self.projectiles):
             alive = projectile.update(self.game.window.dt)

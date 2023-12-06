@@ -55,10 +55,11 @@ class Window:
         if not self.cursor:
             self.cursor = self.game.assets.cursor[self.cursor_id]
         self.display.blit(self.cursor, (self.game.input.mouse_pos[0] - self.offset[0] - self.game.assets.cursor[self.cursor_id].get_width() // 2, self.game.input.mouse_pos[1] - self.offset[1] - self.game.assets.cursor[self.cursor_id].get_height() // 2))
-        
+
         frame_tex = self.mgl.surf_to_texture(self.display)
         frame_tex.use(0)
         self.mgl.program['tex'] = 0
+        self.mgl.program['world_timer'] = self.game.world.world_timer / 100
         self.mgl.render_object.render(mode=moderngl.TRIANGLE_STRIP)
         
         pygame.display.flip()
@@ -100,9 +101,10 @@ class Window:
         self.frame_history = self.frame_history[-200:]
 
         if self.zoom == 1:
-            self.screen.blit(pygame.transform.scale(self.display, self.scaled_resolution), (0, 0))
+            pygame.transform.scale(self.display, self.scaled_resolution)
         else:
             size = [int(self.display.get_width() / self.zoom), int(self.display.get_height() / self.zoom)]
-            self.screen.blit(pygame.transform.scale(clip(self.display, (self.display.get_width() - size[0]) // 2, (self.display.get_height() - size[1]) // 2, size[0], size[1]), self.screen.get_size()), (0, 0))
+            self.display = pygame.transform.scale(clip(self.display, (self.display.get_width() - size[0]) // 2, (self.display.get_height() - size[1]) // 2, size[0], size[1]), self.screen.get_size())
+            print(self.display)
 
         self.display.fill(self.background_color)

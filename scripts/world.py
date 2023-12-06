@@ -21,6 +21,7 @@ class World:
         self.collideables = []
         self.builder_mode = False
         self.show_builder_menu = False
+        self.world_timer = 0
 
         """ self.world_rects = {}
         for i, obstacle in enumerate(config['obst_hitboxes']['tutorial']):
@@ -90,7 +91,7 @@ class World:
                     x = col_index * 16
                     y = row_index * 16
                     img = self.game.assets.collideables[col]
-                    #self.collideables.append(self.obs_rect((x + offset[0], y + offset[1] - img.get_size()[1]), img, int(col)))
+                    self.collideables.append(self.obs_rect((x + offset[0], y + offset[1] - img.get_size()[1]), img, int(col)))
                     #rect = self.world_rects[int(col)]
                     #self.collideables.append((x + offset[0] - rect[0], y + offset[1] - rect[1], rect[2], rect[3]))
                     if col != '10':
@@ -143,3 +144,5 @@ class World:
 
         if self.game.input.mouse_state['right_click']:
             self.game.window.zoom += 1
+
+        self.world_timer += self.game.window.dt
