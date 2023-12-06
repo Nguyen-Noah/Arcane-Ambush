@@ -49,9 +49,9 @@ def swap_color(img, old_c, new_c):
     surf.blit(img,(0,0))
     return surf
 
-def clip(surf,x,y,x_size,y_size):
+def clip(surf, x, y, x_size, y_size):
     handle_surf = surf.copy()
-    clipR = pygame.Rect(x,y,x_size,y_size)
+    clipR = pygame.Rect(x, y, x_size, y_size)
     handle_surf.set_clip(clipR)
     image = surf.subsurface(handle_surf.get_clip())
     return image.copy()

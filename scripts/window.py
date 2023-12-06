@@ -105,6 +105,5 @@ class Window:
         else:
             size = [int(self.display.get_width() / self.zoom), int(self.display.get_height() / self.zoom)]
             self.display = pygame.transform.scale(clip(self.display, (self.display.get_width() - size[0]) // 2, (self.display.get_height() - size[1]) // 2, size[0], size[1]), self.screen.get_size())
-            print(self.display)
 
         self.display.fill(self.background_color)
