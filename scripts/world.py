@@ -63,7 +63,7 @@ class World:
 
  
         # camera ----------------------------------------------------------------------- #
-        #self.camera.set_restriction(self.player.pos)
+        self.camera.set_restriction(self.player.pos)
         self.camera.set_tracked_entity(self.player)
 
         # hitboxes --------------------------------------------------------------------- #

@@ -47,7 +47,14 @@ class Camera:
             self.true_pos[1] += y_direction * 1.5
         else:
             if self.track_entity:
-                self.set_target((self.track_entity.pos[0] - self.game.window.display.get_width() // 2, self.track_entity.pos[1] - self.game.window.display.get_height() // 2))
+                if self.track_entity.type == 'player':
+                    target_pos = self.track_entity.pos.copy()
+                    if self.track_entity.weapon:
+                        angle = math.radians(self.track_entity.weapon.rotation)
+                        dis = math.sqrt((self.game.input.mouse_pos[1] - self.track_entity.center[1] + self.game.world.camera.render_offset[1]) ** 2 + (self.game.input.mouse_pos[0] - self.track_entity.center[0] + self.game.world.camera.render_offset[0]) ** 2)
+                        target_pos[0] += math.cos(angle) * (dis / 8)
+                        target_pos[1] += math.sin(angle) * (dis / 8)
+                self.set_target((target_pos[0] - self.game.window.display.get_width() // 2, target_pos[1] - self.game.window.display.get_height() // 2))
 
             self.true_pos[0] += math.floor(self.target_pos[0] - self.true_pos[0]) / (self.rate / self.game.window.dt)
             self.true_pos[1] += math.floor(self.target_pos[1] - self.true_pos[1]) / (self.rate / self.game.window.dt)

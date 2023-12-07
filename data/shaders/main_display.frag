@@ -2,12 +2,15 @@
 
 uniform sampler2D surface;
 uniform float world_timer;
-uniform ivec2 window_dimensions;
 
-const vec3 midnight_color = vec3(0.00392169, 0.27450980, 0.78431373);
-const vec3 dawn_color = vec3(0.98039216, 0.92156863, 0.78431373);
-const vec3 late_afternoon_color = vec3(0.98039216, 0.94117647, 0.78431373);
-const float aspect_ratio = 3.0f / 2.0f;
+const vec3 midnight = vec3(0.03921569, 0.2745098, 0.78431373);
+const vec3 late_night = vec3(0.03921569, 0.31372549, 0.8627451);
+const vec3 dawn = vec3(0.8627451, 0.78431373, 0.68627451);
+const vec3 morning = vec3(0.98039216, 0.92156863, 0.78431373);
+const vec3 noon = vec3(1.0, 0.98039216, 0.90196078);
+const vec3 late_afternoon = vec3(0.98039216, 0.94117647, 0.78431373);
+const vec3 dusk = vec3(0.84313725, 0.58823529, 0.64705882);
+const vec3 early_night = vec3(0.03921569, 0.31372549, 0.8627451);
 
 in vec2 uvs;
 out vec4 f_color;
@@ -22,15 +25,26 @@ void main() {
 
     // DAY NIGHT CYCLE -------------------------------------------- //
     float wrapped_world_timer = mod(world_timer, 1.0);
-    vec3 timeColor;
-    if (wrapped_world_timer < 0.25) {
-        timeColor = mix(midnight_color, dawn_color, customSmoothStep(0.0, 0.25, wrapped_world_timer));
-    } else if (wrapped_world_timer < 0.5) {
-        timeColor = mix(dawn_color, late_afternoon_color, customSmoothStep(0.25, 0.5, wrapped_world_timer));
-    } else {
-        timeColor = mix(late_afternoon_color, midnight_color, customSmoothStep(0.5, 0.75, wrapped_world_timer));
-    }
+    float range = floor(wrapped_world_timer * 4.0);
 
+    vec3 timeColor;
+    if (wrapped_world_timer < 0.125) {
+        timeColor = mix(morning, noon, customSmoothStep(0.0, 0.125, wrapped_world_timer));
+    } else if (wrapped_world_timer < 0.25) {
+        timeColor = mix(noon, late_afternoon, customSmoothStep(0.125, 0.25, wrapped_world_timer));
+    } else if (wrapped_world_timer < 0.375) {
+        timeColor = mix(late_afternoon, dusk, customSmoothStep(0.25, 0.375, wrapped_world_timer));
+    } else if (wrapped_world_timer < 0.5) {
+        timeColor = mix(dusk, early_night, customSmoothStep(0.375, 0.5, wrapped_world_timer));
+    } else if (wrapped_world_timer < 0.625) {
+        timeColor = mix(early_night, midnight, customSmoothStep(0.5, 0.625, wrapped_world_timer));
+    } else if (wrapped_world_timer < 0.75) {
+        timeColor = mix(midnight, late_night, customSmoothStep(0.625, 0.75, wrapped_world_timer));
+    } else if (wrapped_world_timer < 0.875) {
+        timeColor = mix(late_night, dawn, customSmoothStep(0.75, 0.875, wrapped_world_timer));
+    } else {
+        timeColor = mix(dawn, morning, customSmoothStep(0.875, 1.0, wrapped_world_timer));
+    }
     vec3 render_color = display_sample * timeColor;
 
     f_color = vec4(render_color, 1.0);
