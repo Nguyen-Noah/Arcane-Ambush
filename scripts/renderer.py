@@ -40,6 +40,7 @@ class Renderer:
 
     def render(self):
         surf = self.game.window.display
+        ui_surf = self.game.window.ui_surf
         offset = self.game.world.camera.true_pos
 
         self.game.world.render(surf)
@@ -50,11 +51,11 @@ class Renderer:
         ui_color = (17, 17, 17, 255)
 
         # ui  ----------------------------------------------------------------------------------------------------- #
-        pygame.draw.rect(surf, ui_color, (10, 10, 100, 10))
+        pygame.draw.rect(ui_surf, ui_color, (10, 10, 100, 10))
         ratio = self.game.world.player.health / config['entities']['player']['health']
         # multiply by 98 instead of 100 to compensate for padding
         current_health = 98 * ratio
-        pygame.draw.rect(surf, 'red', (11, 11, current_health, 8))
+        pygame.draw.rect(ui_surf, 'red', (11, 11, current_health, 8))
 
         # inventory ----------------------------------------------------------------------------------------------- #
         if self.game.world.builder_mode:
@@ -63,21 +64,21 @@ class Renderer:
             owned_towers = self.game.world.towers.inventory_towers
             for i in range(count):
                 pos = (((self.game.window.display.get_width() + (tilesize // 2)) // 2) - ((count * tilesize) // 2)) + (i * tilesize)
-                #surf.blit(self.game.assets.misc['builder_slot'], (pos, self.game.window.display.get_height() - tilesize))
+                ui_surf.blit(self.game.assets.misc['builder_slot'], (pos, self.game.window.display.get_height() - tilesize))
                 if owned_towers[i]:
                     owned_towers[i].pos = (pos + offset[0] + (owned_towers[i].img.get_size()[0] // 2) + 1, self.game.window.display.get_height() - tilesize + offset[1] + (owned_towers[i].img.get_size()[1] // 2))
-                    owned_towers[i].render(surf, offset)
+                    owned_towers[i].render(ui_surf, offset)
         else:
             tilesize = 18
             skill_count = 9
             skills = self.game.world.entities.player.skills
             for i in range(skill_count):
                 pos = (((self.game.window.display.get_width() + (tilesize // 2)) // 2) - ((skill_count * tilesize) // 2)) + (i * tilesize)
-                surf.blit(self.game.assets.misc['inventory_slot'], (pos, self.game.window.display.get_height() - tilesize))
+                ui_surf.blit(self.game.assets.misc['inventory_slot'], (pos, self.game.window.display.get_height() - tilesize))
                 if skills[i]:
-                    skills[i].render_skill(surf, (pos + 1, surf.get_height() + self.game.window.offset[1] - tilesize + 1))
+                    skills[i].render_skill(ui_surf, (pos + 1, surf.get_height() + self.game.window.offset[1] - tilesize + 1))
                 if i == self.game.world.entities.player.selected_inventory_slot:
-                    surf.blit(self.game.assets.misc['selected_inventory_slot'], (pos, self.game.window.display.get_height() - tilesize))
+                    ui_surf.blit(self.game.assets.misc['selected_inventory_slot'], (pos, self.game.window.display.get_height() - tilesize))
 
         # weapon ------------------------------------------------------------------------------------------------- #
         player = self.game.world.entities.player
@@ -92,26 +93,24 @@ class Renderer:
                 color = ui_color
             weapon_img = mask.to_surface(setcolor=color, unsetcolor=(0, 0, 0, 0))
             if player_items[i] == player.weapon:
-                pygame.draw.line(surf, ui_color, (22, base_pos + offset), (22, base_pos + offset + weapon_img.get_height()))
-            surf.blit(weapon_img, (25 - mask.get_bounding_rects()[0].left, base_pos + offset))
+                pygame.draw.line(ui_surf, ui_color, (22, base_pos + offset), (22, base_pos + offset + weapon_img.get_height()))
+            ui_surf.blit(weapon_img, (25 - mask.get_bounding_rects()[0].left, base_pos + offset))
             offset += weapon_img.get_height() + 2
         
         # tooltips ----------------------------------------------------------------------------------------------- #
-        self.tooltips.render(surf, self.game.window.dt)
+        self.tooltips.render(ui_surf, self.game.window.dt)
 
         # builder menu ------------------------------------------------------------------------------------------- #
         if self.game.world.show_builder_menu and self.game.world.builder_mode:
-            self.game.world.builder_menu.render(surf)
+            self.game.world.builder_menu.render(ui_surf)
 
         # display the player money ------------------------------------------------------------------------------- #
-        self.game.assets.large_text.render(surf, '$' + str(self.game.world.entities.player.money), (10, 25))
+        self.game.assets.large_text.render(ui_surf, '$' + str(self.game.world.entities.player.money), (10, 25))
 
         # round -------------------------------------------------------------------------------------------------- #
-        self.game.assets.large_text.render(surf, 'ROUND', (self.game.window.display.get_size()[0] // 2, 10))
-        self.game.assets.large_text.render(surf, str(self.game.world.entities.spawner.wave ) + '/' + str(self.game.world.entities.spawner.max_waves), ((self.game.window.display.get_size()[0] // 2) + 4, 25))
+        self.game.assets.large_text.render(ui_surf, 'ROUND', (self.game.window.display.get_size()[0] // 2, 10))
+        self.game.assets.large_text.render(ui_surf, str(self.game.world.entities.spawner.wave ) + '/' + str(self.game.world.entities.spawner.max_waves), ((self.game.window.display.get_size()[0] // 2) + 4, 25))
  
         # fps ---------------------------------------------------------------------------------------------------- #
         if self.game.window.show_fps:
-            self.game.assets.small_text.render(surf, str(int(self.game.window.fps())) + 'FPS', (self.game.window.display.get_width() - 50, 10))
-
-        #pygame.draw.line(surf, 'black', (self.game.window.display.get_size()[0] // 2, 0), (self.game.window.display.get_size()[0] // 2, self.game.window.display.get_size()[1]))
+            self.game.assets.small_text.render(ui_surf, str(int(self.game.window.fps())) + 'FPS', (self.game.window.display.get_width() - 50, 10))

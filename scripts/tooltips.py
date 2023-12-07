@@ -3,7 +3,7 @@ import pygame
 class Tooltips:
     def __init__(self, game):
         self.game = game
-        self.timer = 3
+        self.timer = 1
         self.start_timer = False
         self.render_move = True
 

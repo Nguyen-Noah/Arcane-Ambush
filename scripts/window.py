@@ -18,8 +18,9 @@ class Window:
 
         # screen ------------------------------------------------------------------------- #
         self.screen = pygame.display.set_mode(self.scaled_resolution, pygame.OPENGL | pygame.DOUBLEBUF)
-        self.display = pygame.Surface((self.base_resolution[0], self.base_resolution[1]))
-        self.mgl = MGL(self.game)
+        self.display = pygame.Surface((self.base_resolution[0], self.base_resolution[1]), pygame.SRCALPHA)
+        self.ui_surf = self.display.copy()
+        self.mgl = MGL()
         
         # icon and caption --------------------------------------------------------------- #
         self.icon = pygame.image.load('data/graphics/icon/icon.png')
@@ -54,17 +55,11 @@ class Window:
     def render_frame(self):
         if not self.cursor:
             self.cursor = self.game.assets.cursor[self.cursor_id]
-        self.display.blit(self.cursor, (self.game.input.mouse_pos[0] - self.offset[0] - self.game.assets.cursor[self.cursor_id].get_width() // 2, self.game.input.mouse_pos[1] - self.offset[1] - self.game.assets.cursor[self.cursor_id].get_height() // 2))
+        self.ui_surf.blit(self.cursor, (self.game.input.mouse_pos[0] - self.offset[0] - self.game.assets.cursor[self.cursor_id].get_width() // 2, self.game.input.mouse_pos[1] - self.offset[1] - self.game.assets.cursor[self.cursor_id].get_height() // 2))
 
-        frame_tex = self.mgl.surf_to_texture(self.display)
-        frame_tex.use(0)
-        self.mgl.program['tex'] = 0
-        self.mgl.program['world_timer'] = self.game.world.world_timer / 100
-        self.mgl.render_object.render(mode=moderngl.TRIANGLE_STRIP)
-        
-        pygame.display.flip()
-
-        frame_tex.release()
+        self.mgl.pg2tx(self.display, 'base_display')
+        self.mgl.pg2tx(self.ui_surf, 'ui_surf')
+        self.mgl.render(self.game.world.world_timer / 100)
 
         self.dt = time.time() - self.frame_start
         self.ui_dt = self.dt
@@ -107,3 +102,4 @@ class Window:
             self.display = pygame.transform.scale(clip(self.display, (self.display.get_width() - size[0]) // 2, (self.display.get_height() - size[1]) // 2, size[0], size[1]), self.screen.get_size())
 
         self.display.fill(self.background_color)
+        self.ui_surf.fill((0, 0, 0, 0))
