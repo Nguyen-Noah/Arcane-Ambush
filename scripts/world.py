@@ -22,6 +22,8 @@ class World:
         self.builder_mode = False
         self.show_builder_menu = False
         self.world_timer = 0
+        self.lights = []
+        self.visible_lights = []
 
         """ self.world_rects = {}
         for i, obstacle in enumerate(config['obst_hitboxes']['tutorial']):
@@ -41,8 +43,9 @@ class World:
         return pygame.Rect(hitbox)
 
     def load(self, map_id):
-        self.floor = self.game.assets.maps[map_id]
-        self.map_data = import_csv_layout('data/maps/' + map_id + '/' + map_id + '_Collideables.csv')
+        self.map_id = map_id
+        self.floor = self.game.assets.maps[self.map_id]
+        self.map_data = import_csv_layout('data/maps/' + self.map_id + '/' + self.map_id + '_Collideables.csv')
 
         # polish ----------------------------------------------------------------------- #
         self.destruction_particles = DestructionParticles(self.game)
@@ -50,6 +53,7 @@ class World:
         self.particles = ParticleManager(self.game)
         self.vfx = VFX(self.game)
         self.weapon_anims = WeaponAnimations(self.game)
+        self.lights = config['level_data'][self.map_id]['light_sources']
 
         self.camera = Camera(self.game)
 
@@ -63,7 +67,7 @@ class World:
 
  
         # camera ----------------------------------------------------------------------- #
-        self.camera.set_restriction(self.player.pos)
+        #self.camera.set_restriction(self.player.pos)
         self.camera.set_tracked_entity(self.player)
 
         # hitboxes --------------------------------------------------------------------- #
@@ -103,6 +107,9 @@ class World:
         self.towers.render(surf, self.camera.true_pos)
         self.destruction_particles.render(surf, self.camera.true_pos)
         self.vfx.render_front(surf, self.camera.true_pos)
+        for light in self.visible_lights:
+            #print(light)
+            pygame.draw.circle(surf, 'white', light, 10)
         
     def update(self):
         self.camera.update()
@@ -115,10 +122,14 @@ class World:
         self.entities.update()
         self.destruction_particles.update()
 
-        self.quadtree.clear()
+        self.visible_lights = []
+        for light in self.lights:
+            self.visible_lights.append(((light[0] - self.camera.true_pos[0]) / self.game.window.display.get_width(), (light[1] - self.camera.true_pos[1]) / self.game.window.display.get_height()))
+
+        """ self.quadtree.clear()
         for entity in self.entities.entities:
             if entity.category == 'enemy':
-                self.quadtree.insert(entity)
+                self.quadtree.insert(entity) """
 
         # builder mode handler -------------------------------------------------------- #
         if self.game.input.states['open_build_mode']:
@@ -143,6 +154,6 @@ class World:
             self.player.weapon.invisible = 0.2
 
         if self.game.input.mouse_state['right_click']:
-            self.game.window.zoom += 1
+            print((self.player.center[0] + self.camera.true_pos[0], self.player.center[1] + self.camera.true_pos[1]))
 
         self.world_timer += self.game.window.dt

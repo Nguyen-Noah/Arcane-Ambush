@@ -6,7 +6,7 @@ from .core_funcs import get_dis
 class Input:
     def __init__(self, game):
         self.game = game
-        pygame.event.set_grab(True)
+        #pygame.event.set_grab(True)
 
         self.states = {}
         self.mouse_pos = (0, 0)

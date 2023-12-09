@@ -19,9 +19,14 @@ class MGL:
         self.initialize()
 
     def initialize(self):
+        self.load_texture('noise')
         self.compile_program('texture', 'default_shader', 'default_texture')
         self.compile_program('texture', 'main_display', 'game_display')
         self.compile_program('texture', 'default_shader', 'ui')
+
+    def load_texture(self, name):
+        surf = pygame.image.load('data/graphics/misc/' + name + '.png').convert()
+        self.pg2tx(surf, name)
 
     def compile_program(self, vert_src, frag_src, program_name):
         vert_raw = read_f('./data/shaders/' + vert_src + '.vert')
@@ -31,14 +36,20 @@ class MGL:
         # render object
         self.vaos[program_name] = self.ctx.vertex_array(program, [(self.quad_buffer, '2f 2f', 'vert', 'texcoord')])
 
-    def render(self, world_timer):
+    def render(self, world_timer, base_resolution, camera_offset, lights):
+        print(lights)
         self.ctx.clear()
         self.ctx.enable(moderngl.BLEND)
         if 'base_display' in self.textures:
             self.update_render('game_display', {
                 'surface': self.textures['base_display'],
+                'noise': self.textures['noise'],
                 'world_timer': world_timer,
-                'window_dimensions': pygame.display.get_window_size()
+                'window_dimensions': pygame.display.get_window_size(),
+                'pixel_dimensions': base_resolution,
+                'scroll': camera_offset,
+                'num_lights': len(lights),
+                'lights': lights
             })
         if 'ui_surf' in self.textures:
             self.update_render('ui', {

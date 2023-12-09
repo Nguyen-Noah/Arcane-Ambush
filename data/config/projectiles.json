@@ -15,7 +15,7 @@
     },
     "bomber_projectile": {
         "shape": null,
-        "power": 100,
+        "power": 10,
         "group": "bomber",
         "spawn_advance": 8,
         "knockback": 0

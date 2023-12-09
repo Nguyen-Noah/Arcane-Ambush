@@ -51,11 +51,22 @@ class Renderer:
         ui_color = (17, 17, 17, 255)
 
         # ui  ----------------------------------------------------------------------------------------------------- #
-        pygame.draw.rect(ui_surf, ui_color, (10, 10, 100, 10))
+        ui_surf.blit(self.game.assets.misc['ui_bar'], (10, 10))
+
+        ratio = self.game.world.player.health / config['entities']['player']['health']
+        new_width = self.game.assets.misc['main_health'].get_width() * ratio
+        main_health = pygame.transform.scale(self.game.assets.misc['main_health'], (new_width, self.game.assets.misc['main_health'].get_height()))
+
+        secondary_health = pygame.transform.scale(self.game.assets.misc['under_health'], (new_width + 1, self.game.assets.misc['under_health'].get_height()))
+
+        ui_surf.blit(secondary_health, (12, 12))
+        ui_surf.blit(main_health, (12, 12))
+        ui_surf.blit(self.game.assets.misc['ui_bar_overlay'], (10, 10))
+        """ pygame.draw.rect(ui_surf, ui_color, (10, 10, 100, 10))
         ratio = self.game.world.player.health / config['entities']['player']['health']
         # multiply by 98 instead of 100 to compensate for padding
         current_health = 98 * ratio
-        pygame.draw.rect(ui_surf, 'red', (11, 11, current_health, 8))
+        pygame.draw.rect(ui_surf, 'red', (11, 11, current_health, 8)) """
 
         # inventory ----------------------------------------------------------------------------------------------- #
         if self.game.world.builder_mode:
