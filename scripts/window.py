@@ -60,7 +60,7 @@ class Window:
         self.mgl.pg2tx(self.display, 'base_display')
         self.mgl.pg2tx(self.ui_surf, 'ui_surf')
 
-        self.mgl.render(self.game.world.world_timer, self.base_resolution, self.game.world.camera.true_pos, self.game.world.visible_lights)
+        self.mgl.render(self.game.world.world_timer, self.base_resolution, self.game.world.camera.true_pos, self.game.world.visible_lights, self.game.world.color_mix)
 
         self.dt = time.time() - self.frame_start
         self.ui_dt = self.dt

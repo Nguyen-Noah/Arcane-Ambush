@@ -1,5 +1,5 @@
 import pygame, math
-from .core_funcs import import_csv_layout
+from .core_funcs import import_csv_layout, lerp
 from .camera import Camera
 from .config import config
 from .entities import EntityManager
@@ -24,6 +24,7 @@ class World:
         self.world_timer = 0
         self.lights = []
         self.visible_lights = []
+        self.color_mix = config['shaders']['day_cycle']['vec_values'][0]
 
         """ self.world_rects = {}
         for i, obstacle in enumerate(config['obst_hitboxes']['tutorial']):
@@ -107,10 +108,7 @@ class World:
         self.towers.render(surf, self.camera.true_pos)
         self.destruction_particles.render(surf, self.camera.true_pos)
         self.vfx.render_front(surf, self.camera.true_pos)
-        for light in self.visible_lights:
-            #print(light)
-            pygame.draw.circle(surf, 'white', light, 10)
-        
+
     def update(self):
         self.camera.update()
         self.world_animations.update()
@@ -156,4 +154,17 @@ class World:
         if self.game.input.mouse_state['right_click']:
             print((self.player.center[0] + self.camera.true_pos[0], self.player.center[1] + self.camera.true_pos[1]))
 
+
+        # UGLY I WILL FIX THIS EVENTUALLY
         self.world_timer += self.game.window.dt
+
+        colors = config['shaders']['day_cycle']['vec_values']
+        time = self.world_timer / 10;
+        wrapped_time = time % 1.0
+        key_prev = min(math.floor(wrapped_time * 8), 7)
+        key_next = (key_prev + 1) % 8
+        lerp_amt = (wrapped_time - key_prev / 8) * 8
+
+        self.color_mix = [lerp(colors[key_prev][0], colors[key_next][0], lerp_amt),
+                     lerp(colors[key_prev][1], colors[key_next][1], lerp_amt),
+                     lerp(colors[key_prev][2], colors[key_next][2], lerp_amt)]

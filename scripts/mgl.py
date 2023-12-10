@@ -36,8 +36,7 @@ class MGL:
         # render object
         self.vaos[program_name] = self.ctx.vertex_array(program, [(self.quad_buffer, '2f 2f', 'vert', 'texcoord')])
 
-    def render(self, world_timer, base_resolution, camera_offset, lights):
-        print(lights)
+    def render(self, world_timer, base_resolution, camera_offset, lights, color_mix):
         self.ctx.clear()
         self.ctx.enable(moderngl.BLEND)
         if 'base_display' in self.textures:
@@ -49,7 +48,8 @@ class MGL:
                 'pixel_dimensions': base_resolution,
                 'scroll': camera_offset,
                 'num_lights': len(lights),
-                'lights': lights
+                'lights': lights,
+                'color_mix': color_mix
             })
         if 'ui_surf' in self.textures:
             self.update_render('ui', {
