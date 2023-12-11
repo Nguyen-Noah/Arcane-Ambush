@@ -20,6 +20,7 @@ class Window:
         self.screen = pygame.display.set_mode(self.scaled_resolution, pygame.OPENGL | pygame.DOUBLEBUF)
         self.display = pygame.Surface((self.base_resolution[0], self.base_resolution[1]), pygame.SRCALPHA)
         self.ui_surf = self.display.copy()
+        self.light_surf = self.display.copy()
         self.mgl = MGL()
         
         # icon and caption --------------------------------------------------------------- #
@@ -60,7 +61,7 @@ class Window:
         self.mgl.pg2tx(self.display, 'base_display')
         self.mgl.pg2tx(self.ui_surf, 'ui_surf')
 
-        self.mgl.render(self.game.world.world_timer, self.base_resolution, self.game.world.camera.true_pos, self.game.world.visible_lights, self.game.world.color_mix)
+        self.mgl.render(self.game.world.world_timer, self.game.world.visible_lights, self.game.world.color_mix)
 
         self.dt = time.time() - self.frame_start
         self.ui_dt = self.dt
@@ -104,3 +105,4 @@ class Window:
 
         self.display.fill(self.background_color)
         self.ui_surf.fill((0, 0, 0, 0))
+        self.light_surf.fill((0, 0, 0, 0))

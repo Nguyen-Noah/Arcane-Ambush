@@ -41,12 +41,18 @@ class Renderer:
     def render(self):
         surf = self.game.window.display
         ui_surf = self.game.window.ui_surf
+        light_surf = self.game.window.light_surf
         offset = self.game.world.camera.true_pos
 
         self.game.world.render(surf)
         self.game.world.entities.render(surf, offset)
 
         #self.update_overlay_particles(surf)
+
+        
+        #surf.blit(self.game.assets.misc['light'], (self.game.world.player.center[0] - offset[0] - self.game.assets.misc['light'].get_width() // 2, self.game.world.player.center[1] - offset[1] - self.game.assets.misc['light'].get_height() // 2))
+        for light in self.game.world.visible_lights:
+            light_surf.blit(self.game.assets.misc['light'], (light[0] - self.game.assets.misc['light'].get_width() // 2, light[1] - self.game.assets.misc['light'].get_height() // 2))
 
         ui_color = (17, 17, 17, 255)
 

@@ -5,22 +5,8 @@ const int num_lights =  20;
 uniform sampler2D surface;
 uniform sampler2D noise;
 uniform float world_timer;
-uniform ivec2 window_dimensions;
-uniform ivec2 pixel_dimensions;
-uniform ivec2 scroll;
 uniform vec2 lights[11];
 uniform vec3 color_mix;
-
-const vec3 midnight = vec3(0.03921569, 0.2745098, 0.78431373);
-const vec3 late_night = vec3(0.03921569, 0.31372549, 0.8627451);
-const vec3 dawn = vec3(0.8627451, 0.78431373, 0.68627451);
-const vec3 morning = vec3(0.98039216, 0.92156863, 0.78431373);
-const vec3 noon = vec3(1.0, 0.98039216, 0.90196078);
-const vec3 late_afternoon = vec3(0.98039216, 0.94117647, 0.78431373);
-const vec3 dusk = vec3(0.84313725, 0.58823529, 0.64705882);
-const vec3 early_night = vec3(0.03921569, 0.31372549, 0.8627451);
-
-const int number_of_key_times = 8;
 
 in vec2 uv;
 out vec4 f_color;
@@ -44,16 +30,19 @@ void main() {
     display_sample = mix(display_sample, vec3(0.0), noise_level); */
 
     // DAY NIGHT CYCLE -------------------------------------------- //
-    vec3 render_color = display_sample * color_mix;
+    float grey = dot(display_sample, vec3(0.299, 0.587, 0.114));
+    vec3 render_color = grey > 0.5 ? 1.0 - (1.0 - 2.0 * (display_sample - 0.5)) * (1.0 - color_mix) : 2.0 * display_sample * color_mix;
 
-    /* vec3 col = vec3(0.0);
+    render_color = display_sample * color_mix;
+
+    vec3 col = vec3(0.0);
     for (int i = 0; i < lights.length; i++) {
         vec2 light = lights[i];
         float dist = length(uv - light);
-        col += 0.1 / dist;
-    } 
+        col += 0.01 / dist;
+    }
 
-    render_color = render_color * col; */
+    render_color = render_color * col;
 
    f_color = vec4(render_color, 1.0);
 }

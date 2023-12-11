@@ -36,18 +36,15 @@ class MGL:
         # render object
         self.vaos[program_name] = self.ctx.vertex_array(program, [(self.quad_buffer, '2f 2f', 'vert', 'texcoord')])
 
-    def render(self, world_timer, base_resolution, camera_offset, lights, color_mix):
+    def render(self, world_timer, lights, color_mix):
         self.ctx.clear()
         self.ctx.enable(moderngl.BLEND)
+        self.ctx.blend_equation = moderngl.ONE, moderngl.ONE
         if 'base_display' in self.textures:
             self.update_render('game_display', {
                 'surface': self.textures['base_display'],
                 'noise': self.textures['noise'],
                 'world_timer': world_timer,
-                'window_dimensions': pygame.display.get_window_size(),
-                'pixel_dimensions': base_resolution,
-                'scroll': camera_offset,
-                'num_lights': len(lights),
                 'lights': lights,
                 'color_mix': color_mix
             })

@@ -24,7 +24,8 @@ class World:
         self.world_timer = 0
         self.lights = []
         self.visible_lights = []
-        self.color_mix = config['shaders']['day_cycle']['vec_values'][0]
+        self.color_mix = config['shaders']['day_cycle']['vec_values'][0][:3]
+        self.con_sat_brt = config['shaders']['day_cycle']['vec_values'][0][::-3]
 
         """ self.world_rects = {}
         for i, obstacle in enumerate(config['obst_hitboxes']['tutorial']):
@@ -122,7 +123,7 @@ class World:
 
         self.visible_lights = []
         for light in self.lights:
-            self.visible_lights.append(((light[0] - self.camera.true_pos[0]) / self.game.window.display.get_width(), (light[1] - self.camera.true_pos[1]) / self.game.window.display.get_height()))
+            self.visible_lights.append((((light[0] - self.camera.true_pos[0]) / self.game.window.display.get_width()), ((light[1] - self.camera.true_pos[1]) / self.game.window.display.get_height())))
 
         """ self.quadtree.clear()
         for entity in self.entities.entities:
@@ -157,14 +158,20 @@ class World:
 
         # UGLY I WILL FIX THIS EVENTUALLY
         self.world_timer += self.game.window.dt
-
         colors = config['shaders']['day_cycle']['vec_values']
         time = self.world_timer / 10;
         wrapped_time = time % 1.0
-        key_prev = min(math.floor(wrapped_time * 8), 7)
-        key_next = (key_prev + 1) % 8
-        lerp_amt = (wrapped_time - key_prev / 8) * 8
+        key_prev = min(math.floor(wrapped_time * len(colors)), len(colors) - 1)
+        key_next = (key_prev + 1) % len(colors)
+        lerp_amt = (wrapped_time - key_prev / len(colors)) * len(colors)
 
-        self.color_mix = [lerp(colors[key_prev][0], colors[key_next][0], lerp_amt),
-                     lerp(colors[key_prev][1], colors[key_next][1], lerp_amt),
-                     lerp(colors[key_prev][2], colors[key_next][2], lerp_amt)]
+        self.color_mix = [
+                        lerp(colors[key_prev][0], colors[key_next][0], lerp_amt),
+                        lerp(colors[key_prev][1], colors[key_next][1], lerp_amt),
+                        lerp(colors[key_prev][2], colors[key_next][2], lerp_amt)
+                        ]
+        self.con_sat_brt = [
+                        lerp(colors[key_prev][3], colors[key_next][3], lerp_amt),
+                        lerp(colors[key_prev][4], colors[key_next][4], lerp_amt),
+                        lerp(colors[key_prev][5], colors[key_next][5], lerp_amt)
+                        ]
