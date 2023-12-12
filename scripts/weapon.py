@@ -24,6 +24,7 @@ class Weapon(Item):
         self.flip = False
         self.invisible = 0
         self.accuracy = 1
+        self.enable_update = False
 
     @property
     def rank(self):

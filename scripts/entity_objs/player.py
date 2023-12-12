@@ -140,6 +140,9 @@ class Player(Entity):
         if self.weapon:
             self.weapon.rotation = math.degrees(angle)
 
+            if self.weapon.enable_update:
+                self.weapon.update()
+
         # skills ----------------------------------------------------------------------- #\
         if self.game.input.states['dash']:
             if self.game.input.input_mode == 'core':

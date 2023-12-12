@@ -59,6 +59,7 @@ class Window:
         self.ui_surf.blit(self.cursor, (self.game.input.mouse_pos[0] - self.offset[0] - self.game.assets.cursor[self.cursor_id].get_width() // 2, self.game.input.mouse_pos[1] - self.offset[1] - self.game.assets.cursor[self.cursor_id].get_height() // 2))
 
         self.mgl.pg2tx(self.display, 'base_display')
+        self.mgl.pg2tx(self.light_surf, 'light_surf')
         self.mgl.pg2tx(self.ui_surf, 'ui_surf')
 
         self.mgl.render(self.game.world.world_timer, self.game.world.visible_lights, self.game.world.color_mix)

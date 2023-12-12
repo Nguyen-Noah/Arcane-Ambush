@@ -13,8 +13,6 @@ class WeaponAnimation:
 
     def create_mask(self):
         offset = self.animation.data.image_list[0].get_size()
-        #self.pos[0] += math.cos(math.radians(-self.rotation)) * self.motion * self.game.window.dt
-        #self.pos[1] += math.sin(math.radians(-self.rotation)) * self.motion * self.game.window.dt
         return pygame.mask.from_surface(self.animation.img), (self.pos[0] - offset[0] // 2, self.pos[1] - offset[1] // 2)
 
 class WeaponAnimations:

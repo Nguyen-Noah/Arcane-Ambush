@@ -84,7 +84,7 @@ class World:
         if not self.loaded:
             self.loaded = True
 
-        self.vfx.render_back(surf, self.camera.true_pos)
+        self.vfx.render_back(self.game.window.ui_surf, self.camera.true_pos)
 
         self.collideables = []
         self.render_list = []
@@ -108,7 +108,7 @@ class World:
 
         self.towers.render(surf, self.camera.true_pos)
         self.destruction_particles.render(surf, self.camera.true_pos)
-        self.vfx.render_front(surf, self.camera.true_pos)
+        self.vfx.render_front(self.game.window.ui_surf, self.camera.true_pos)
 
     def update(self):
         self.camera.update()
@@ -123,7 +123,7 @@ class World:
 
         self.visible_lights = []
         for light in self.lights:
-            self.visible_lights.append((((light[0] - self.camera.true_pos[0]) / self.game.window.display.get_width()), ((light[1] - self.camera.true_pos[1]) / self.game.window.display.get_height())))
+            self.visible_lights.append(((light[0] - self.camera.true_pos[0]) / self.game.window.display.get_width(), (light[1] - self.camera.true_pos[1]) / self.game.window.display.get_height()))
 
         """ self.quadtree.clear()
         for entity in self.entities.entities:

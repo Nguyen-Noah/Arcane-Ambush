@@ -22,6 +22,7 @@ class MGL:
         self.load_texture('noise')
         self.compile_program('texture', 'default_shader', 'default_texture')
         self.compile_program('texture', 'main_display', 'game_display')
+        self.compile_program('texture', 'lights', 'lights')
         self.compile_program('texture', 'default_shader', 'ui')
 
     def load_texture(self, name):
@@ -44,9 +45,14 @@ class MGL:
             self.update_render('game_display', {
                 'surface': self.textures['base_display'],
                 'noise': self.textures['noise'],
+                'light_surf': self.textures['light_surf'],
                 'world_timer': world_timer,
                 'lights': lights,
                 'color_mix': color_mix
+            })
+        if 'lights' in self.textures:
+            self.update_render('lights', {
+                'lights': self.textures['light_surf']
             })
         if 'ui_surf' in self.textures:
             self.update_render('ui', {
