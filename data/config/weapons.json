@@ -1,6 +1,7 @@
 {
     "dagger": {
         "projectile_type": "none",
+        "hold_type": "shortsword",
         "capacity": "-1",
         "attack_rate": 0.3,
         "combo": 3,
@@ -10,6 +11,7 @@
     },
     "spear": {
         "projectile_type": "none",
+        "hold_type": "spear",
         "capacity": "-1",
         "attack_rate": 0.3,
         "combo": 4,

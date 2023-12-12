@@ -50,8 +50,8 @@ class Dash(Skill):
         super().update()
 
         if self.dash_distance:
-            normalize_vector(self.owner.velocity, 0.5)
-            self.dash_distance = normalize(self.dash_distance, 0.5)
+            normalize_vector(self.owner.velocity, 0.35)
+            self.dash_distance = normalize(self.dash_distance, 0.35)
 
             self.game.world.vfx.spawn_group('dash_sparks', self.owner.center.copy(), self.owner.aim_angle)
             img = self.owner.img.copy()
@@ -70,7 +70,7 @@ class Dash(Skill):
             else:
                 self.owner.flip[0] = False
 
-            self.dash_distance = 8
+            self.dash_distance = 6
 
             self.owner.velocity[0] = math.cos(self.owner.aim_angle) * self.dash_distance
             self.owner.velocity[1] = math.sin(self.owner.aim_angle) * self.dash_distance
