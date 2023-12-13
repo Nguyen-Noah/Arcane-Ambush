@@ -115,7 +115,7 @@ class Renderer:
             offset += weapon_img.get_height() + 2
         
         # tooltips ----------------------------------------------------------------------------------------------- #
-        self.tooltips.render(ui_surf, self.game.window.dt)
+        #self.tooltips.render(ui_surf, self.game.window.dt)
 
         # builder menu ------------------------------------------------------------------------------------------- #
         if self.game.world.show_builder_menu and self.game.world.builder_mode:

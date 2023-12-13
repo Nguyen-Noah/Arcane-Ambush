@@ -155,6 +155,10 @@ class Entity:
     def damage(self, amount, angle=0):
         self.hurt = 1
         self.health -= amount
+
+        if self.type == 'player':
+            self.game.world.camera.add_screen_shake(20)
+
         if self.health <= 0:
             self.die(angle)
             return True

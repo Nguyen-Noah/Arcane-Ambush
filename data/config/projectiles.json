@@ -33,5 +33,12 @@
         "group": "cleric",
         "spawn_advance": 8,
         "knockback": 0
+    },
+    "earthStaff_projectile": {
+        "shape": null,
+        "power": 5,
+        "group": "player",
+        "spawn_advance": 8,
+        "knockback": 0
     }
 }

@@ -1,8 +1,8 @@
 import pygame, math, random
-from ..weapon import Weapon
+from ..weapon_types.spear_type import SpearWeapon
 from ..core_funcs import normalize, normalize_vector
 
-class SpearWeapon(Weapon):
+class SpearWeapon(SpearWeapon):
     def attack(self):
         self.invisible = 0.2
 

@@ -159,7 +159,7 @@ class World:
         # UGLY I WILL FIX THIS EVENTUALLY
         self.world_timer += self.game.window.dt
         colors = config['shaders']['day_cycle']['vec_values']
-        time = self.world_timer / 10;
+        time = self.world_timer / 200
         wrapped_time = time % 1.0
         key_prev = min(math.floor(wrapped_time * len(colors)), len(colors) - 1)
         key_next = (key_prev + 1) % len(colors)

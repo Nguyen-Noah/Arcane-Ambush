@@ -6,7 +6,17 @@
     },
     "spear": {
         "name": "Spear",
-        "description": "dpear.",
+        "description": "spear.",
+        "type": "weapon"
+    },
+    "stick": {
+        "name": "Stick",
+        "description": "Just a stick lol",
+        "type": "weapon"
+    },
+    "earthStaff": {
+        "name": "Earth Staff",
+        "description": "earth staff.",
         "type": "weapon"
     },
     "potion": {

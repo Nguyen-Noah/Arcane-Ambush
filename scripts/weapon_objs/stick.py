@@ -1,7 +1,7 @@
 import math, random
 from ..weapon_types.shortsword_type import ShortswordWeapon
 
-class DaggerWeapon(ShortswordWeapon):
+class StickWeapon(ShortswordWeapon):
     def attack(self):
         self.invisible = 0.2
 

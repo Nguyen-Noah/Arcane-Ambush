@@ -1,4 +1,4 @@
-import pygame, time, moderngl
+import pygame, time, random
 from .config import config
 from .core_funcs import clip
 from .mgl import MGL

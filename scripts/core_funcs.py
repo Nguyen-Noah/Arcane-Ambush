@@ -25,8 +25,11 @@ def normalize_vector(vector, amount, around=0):
     vector[1] = math.sin(angle) * magnitude
     vector[0] = math.cos(angle) * magnitude
 
-def lerp(a, b, amt):
-    return (1 - amt) * a + amt * b
+def lerp(a, b, t):
+    return a + (b - a) * t
+
+def easeInBack(x, overshoot=1.70158):
+    return x * x * ((overshoot + 1) * x - overshoot)
 
 def read_f(path):
     f = open(path, 'r')

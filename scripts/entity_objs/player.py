@@ -18,7 +18,6 @@ class Player(Entity):
         self.skills = [None, None, None, None, None, None, None, None, None]
         self.inventory = Inventory(self)
         self.selected_inventory_slot = 0
-        self.weapon_hide = 0
         self.counter = [False, False]
         self.aim_angle = 0
         self.attacking = False
@@ -35,8 +34,6 @@ class Player(Entity):
         # remove existing active tags
         item.tags = [tag for tag in item.tags if tag != 'active']
 
-        if not len(self.inventory.get_custom_group('active_weapons')):
-            self.weapon_hide = 3
         if slot_group == 'active':
             item.tags.append('active')
         self.inventory.add_item(item, slot_group if slot_group != 'active' else 'items')
@@ -98,42 +95,6 @@ class Player(Entity):
         if not self.game.input.states['up'] and not self.game.input.states['down']:
             self.counter[1] = False
 
-        # animations code
-        if self.targetable:
-            if self.counter[0] or self.counter[1]:
-                self.set_action('walk', self.direction)
-            else:
-                self.set_action('idle', self.direction)
-                self.moving = False
-
-        # weapon
-        if self.targetable and self.weapon:
-            if self.game.input.mouse_state['left_click'] and not self.game.world.builder_mode:
-                self.attacking = True
-                self.speed = config['entities']['player']['speed'] // 2
-                self.weapon.attempt_attack()
-            if self.attacking:
-                self.attack_movement_slow += dt
-                if self.attack_movement_slow >= self.weapon.attack_rate:
-                    self.attacking = False
-                    self.speed = config['entities']['player']['speed'] 
-                    self.attack_movement_slow = 0
-
-        # collisions and move ---------------------------------------------------------- #
-        self.collisions = self.move(self.frame_motion, self.game.world.collideables)
-
-        # inventory -------------------------------------------------------------------- #
-        if self.game.input.mouse_state['scroll_up']:
-            self.weapon_hide = 3
-            self.selected_inventory_slot += 1
-            if self.selected_inventory_slot >= self.inventory.max_slots:
-                self.selected_inventory_slot = 0
-        if self.game.input.mouse_state['scroll_down']:
-                self.weapon_hide = 3
-                self.selected_inventory_slot -= 1
-                if self.selected_inventory_slot < 0:
-                    self.selected_inventory_slot = self.inventory.max_slots - 1
-
         # weapon stuff ----------------------------------------------------------------- #
         angle = math.atan2(self.game.input.mouse_pos[1] - self.center[1] + self.game.world.camera.render_offset[1], self.game.input.mouse_pos[0] - self.center[0] + self.game.world.camera.render_offset[0])
         self.aim_angle = angle
@@ -143,6 +104,45 @@ class Player(Entity):
             if self.weapon.enable_update:
                 self.weapon.update()
 
+        # animations code
+        if self.targetable:
+            if self.game.input.states['left'] or self.game.input.states['right'] or self.game.input.states['up'] or self.game.input.states['down']:
+                self.set_action('walk', self.direction)
+            else:
+                self.set_action('idle', self.direction)
+                self.moving = False
+
+            # weapon
+            if self.weapon:
+                if self.game.input.mouse_state['left_click'] and not self.game.world.builder_mode:
+                    self.weapon.attacking = True
+                    self.speed = config['entities']['player']['speed'] // 2
+                    self.weapon.attempt_attack()
+                if self.weapon.attacking:
+                    self.attack_movement_slow += dt
+                    if self.attack_movement_slow >= self.weapon.attack_rate:
+                        self.weapon.attacking = False
+                        self.speed = config['entities']['player']['speed'] 
+                        self.attack_movement_slow = 0
+
+            if (math.degrees(self.aim_angle) % 360 < 270) and (math.degrees(self.aim_angle) % 360 > 90):
+                self.flip[0] = True
+            else:
+                self.flip[0] = False
+
+        # collisions and move ---------------------------------------------------------- #
+        self.collisions = self.move(self.frame_motion, self.game.world.collideables)
+
+        # inventory -------------------------------------------------------------------- #
+        if self.game.input.mouse_state['scroll_up']:
+            self.selected_inventory_slot += 1
+            if self.selected_inventory_slot >= self.inventory.max_slots:
+                self.selected_inventory_slot = 0
+        if self.game.input.mouse_state['scroll_down']:
+                self.selected_inventory_slot -= 1
+                if self.selected_inventory_slot < 0:
+                    self.selected_inventory_slot = self.inventory.max_slots - 1
+
         # skills ----------------------------------------------------------------------- #\
         if self.game.input.states['dash']:
             if self.game.input.input_mode == 'core':
@@ -151,11 +151,10 @@ class Player(Entity):
 
         if not self.targetable:
             self.allow_movement = False
-            self.weapon_hide = 0
 
         return self.alive
 
     def render(self, surf, offset=(0, 0)):
         super().render(surf, offset)
-        if self.weapon and self.weapon_hide:
-            self.weapon.render(surf, (self.rect[0] - self.game.world.camera.true_pos[0] + (self.size[0] // 2), self.rect[1] - self.game.world.camera.true_pos[1] + (self.size[1] // 2)))
+        if self.weapon:
+            self.weapon.render(surf, (self.rect[0] - self.game.world.camera.true_pos[0] + (self.size[0] // 2), self.rect[1] - self.game.world.camera.true_pos[1] + (self.size[1] // 2) - 4))
