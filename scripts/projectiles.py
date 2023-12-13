@@ -63,15 +63,22 @@ class Projectile:
                 if entity.rect.collidepoint(self.pos):
                     if entity.category == 'player':
                         self.game.window.add_freeze(0.2, 0.2)
+                        color = (191, 0, 0)
+                    else:
+                        color = (255, 255, 255)
+
                     self.game.world.vfx.spawn_vfx('slice', self.pos.copy(), random.random() * math.pi / 4 - math.pi / 8 + self.rotation, 20 * random.random() + 50, 2, 3, 0.4)
-                    entity.velocity[0] += math.cos(self.rotation) * 300 * self.config['knockback']
-                    entity.velocity[1] += math.sin(self.rotation) * 300 * self.config['knockback']
+
+                    entity.velocity[0] += math.cos(self.rotation) * self.config['knockback']
+                    entity.velocity[1] += math.sin(self.rotation) * self.config['knockback']
+
                     killed = entity.damage(self.config['power'])
                     if killed:
                         if self.owner.type == 'player':
                             self.owner.process_kill(entity)
+
                     for i in range(random.randint(10, 20)):
-                        self.game.world.vfx.spawn_group('arrow_impact_sparks', self.pos.copy(), self.rotation)
+                        self.game.world.vfx.spawn_group('arrow_impact_sparks', self.pos.copy(), self.rotation, color=color)
                     for i in range(random.randint(8, 16)):
                         random_angle = self.rotation + (random.random() - 0.5) / 3.5
                         if random.randint(1, 4) == 1:
@@ -79,7 +86,7 @@ class Projectile:
 
                         random_speed = random.randint(20, 200)
                         vel = [math.cos(random_angle) * random_speed, math.sin(random_angle) * random_speed]
-                        self.game.world.vfx.spawn_vfx('spark', self.pos.copy(), vel, 1 + random.random(), (15, 15, 8), drag=50)
+                        self.game.world.vfx.spawn_vfx('spark', self.pos.copy(), vel, 1 + random.random(), (15, 15, 8), drag=50, color=color)
                     return False
 
         return True

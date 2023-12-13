@@ -18,7 +18,7 @@
         "power": 10,
         "group": "bomber",
         "spawn_advance": 8,
-        "knockback": 0
+        "knockback": 1
     },
     "phoenix_projectile": {
         "shape": null,

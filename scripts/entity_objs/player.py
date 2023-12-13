@@ -1,4 +1,5 @@
 import pygame, math
+from ..core_funcs import normalize_vector
 from ..entity import Entity
 from ..skills import SKILLS
 from ..inventory import Inventory
@@ -95,6 +96,9 @@ class Player(Entity):
         if not self.game.input.states['up'] and not self.game.input.states['down']:
             self.counter[1] = False
 
+        if self.allow_movement:
+            normalize_vector(self.velocity, dt * 8)
+
         # weapon stuff ----------------------------------------------------------------- #
         angle = math.atan2(self.game.input.mouse_pos[1] - self.center[1] + self.game.world.camera.render_offset[1], self.game.input.mouse_pos[0] - self.center[0] + self.game.world.camera.render_offset[0])
         self.aim_angle = angle
@@ -134,11 +138,11 @@ class Player(Entity):
         self.collisions = self.move(self.frame_motion, self.game.world.collideables)
 
         # inventory -------------------------------------------------------------------- #
-        if self.game.input.mouse_state['scroll_up']:
+        if self.game.input.mouse_state['scroll_down']:
             self.selected_inventory_slot += 1
             if self.selected_inventory_slot >= self.inventory.max_slots:
                 self.selected_inventory_slot = 0
-        if self.game.input.mouse_state['scroll_down']:
+        if self.game.input.mouse_state['scroll_up']:
                 self.selected_inventory_slot -= 1
                 if self.selected_inventory_slot < 0:
                     self.selected_inventory_slot = self.inventory.max_slots - 1

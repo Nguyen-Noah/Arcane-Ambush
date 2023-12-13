@@ -57,8 +57,10 @@ class World:
         self.vfx = VFX(self.game)
         self.weapon_anims = WeaponAnimations(self.game)
         self.lights = config['level_data'][self.map_id]['light_sources']
+
+
         self.gm = GrassManager('data/graphics/grass', tile_size=16, stiffness=600, max_unique=5, place_range=[0, 1])
-        self.gm.enable_ground_shadows(shadow_radius=4, shadow_color=(0, 0, 1), shadow_shift=(1, 2))
+        """ self.gm.enable_ground_shadows(shadow_radius=4, shadow_color=(0, 0, 1), shadow_shift=(1, 2))
 
         for y in range(20):
             y += 5
@@ -66,7 +68,7 @@ class World:
                 x += 5
                 v = random.random()
                 if v > 0.1:
-                    self.gm.place_tile((x, y), int(v * 12), [0, 1, 2, 3, 4])
+                    self.gm.place_tile((x, y), int(v * 12), [0, 1, 2, 3, 4]) """
 
 
         self.camera = Camera(self.game)
@@ -117,9 +119,9 @@ class World:
         self.world_animations.render(surf, self.camera.pos)
         self.weapon_anims.render(surf, self.camera.pos)
 
-        t = 0
+        """ t = 0
         rot_function = lambda x, y: int(math.sin(t / 60 + x / 100) * 15)
-        self.gm.update_render(surf, self.game.window.dt, offset=self.camera.true_pos, rot_function=rot_function)
+        self.gm.update_render(surf, self.game.window.dt, offset=self.camera.true_pos, rot_function=rot_function) """
 
         self.towers.render(surf, self.camera.true_pos)
         self.destruction_particles.render(surf, self.camera.true_pos)
@@ -146,7 +148,7 @@ class World:
                 self.quadtree.insert(entity) """
         
 
-        self.gm.apply_force((self.player.center[0] - self.camera.true_pos[0], self.player.center[1] - self.camera.true_pos[1]), 10, 25)
+        """ self.gm.apply_force((self.player.center[0] - self.camera.true_pos[0], self.player.center[1] - self.camera.true_pos[1]), 10, 25) """
 
         # builder mode handler -------------------------------------------------------- #
         if self.game.input.states['open_build_mode']:
@@ -168,7 +170,8 @@ class World:
 
         if self.builder_mode:
             self.game.window.add_freeze(0.0001, 0.1)
-            self.player.weapon.invisible = 0.2
+            if self.player.weapon:
+                self.player.weapon.invisible = 0.2
 
         if self.game.input.mouse_state['right_click']:
             print((self.player.center[0] + self.camera.true_pos[0], self.player.center[1] + self.camera.true_pos[1]))
