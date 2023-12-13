@@ -1,4 +1,4 @@
-import pygame, math
+import pygame, math, random
 from .core_funcs import import_csv_layout, lerp
 from .camera import Camera
 from .config import config
@@ -11,6 +11,7 @@ from .weapon_anims import WeaponAnimations
 from .particles import ParticleManager
 from .builder_menu import Builder
 from .vfx import VFX, set_glow_surf
+from .grass import GrassManager
 
 from .quadtree import QuadTree, Rectangle
 
@@ -56,6 +57,17 @@ class World:
         self.vfx = VFX(self.game)
         self.weapon_anims = WeaponAnimations(self.game)
         self.lights = config['level_data'][self.map_id]['light_sources']
+        self.gm = GrassManager('data/graphics/grass', tile_size=16, stiffness=600, max_unique=5, place_range=[0, 1])
+        self.gm.enable_ground_shadows(shadow_radius=4, shadow_color=(0, 0, 1), shadow_shift=(1, 2))
+
+        for y in range(20):
+            y += 5
+            for x in range(20):
+                x += 5
+                v = random.random()
+                if v > 0.1:
+                    self.gm.place_tile((x, y), int(v * 12), [0, 1, 2, 3, 4])
+
 
         self.camera = Camera(self.game)
 
@@ -67,7 +79,6 @@ class World:
         self.towers = Towers(self.game)
         self.quadtree = QuadTree(4, Rectangle(pygame.math.Vector2(0, 0), pygame.math.Vector2(self.floor.get_size())))
 
- 
         # camera ----------------------------------------------------------------------- #
         #self.camera.set_restriction(self.player.pos)
         self.camera.set_tracked_entity(self.player)
@@ -106,6 +117,10 @@ class World:
         self.world_animations.render(surf, self.camera.pos)
         self.weapon_anims.render(surf, self.camera.pos)
 
+        t = 0
+        rot_function = lambda x, y: int(math.sin(t / 60 + x / 100) * 15)
+        self.gm.update_render(surf, self.game.window.dt, offset=self.camera.true_pos, rot_function=rot_function)
+
         self.towers.render(surf, self.camera.true_pos)
         self.destruction_particles.render(surf, self.camera.true_pos)
         self.vfx.render_front(self.game.window.ui_surf, self.camera.true_pos)
@@ -129,6 +144,9 @@ class World:
         for entity in self.entities.entities:
             if entity.category == 'enemy':
                 self.quadtree.insert(entity) """
+        
+
+        self.gm.apply_force((self.player.center[0] - self.camera.true_pos[0], self.player.center[1] - self.camera.true_pos[1]), 10, 25)
 
         # builder mode handler -------------------------------------------------------- #
         if self.game.input.states['open_build_mode']:

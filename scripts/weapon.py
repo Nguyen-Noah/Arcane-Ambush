@@ -27,7 +27,6 @@ class Weapon(Item):
         self.accuracy = 1
         self.enable_update = False
         self.attacking = False
-        print(self.type, self.projectile_type)
 
     @property
     def rank(self):
