@@ -31,7 +31,17 @@
     },
     "earthStaff": {
         "projectile_type": "earthStaff",
-        "hold_type": "shortsword",
+        "hold_type": "staff",
+        "capacity": "-1",
+        "attack_rate": 0.3,
+        "combo": 3,
+        "combo_cooldown": 0.5,
+        "range": 30,
+        "max_rank": 0
+    },
+    "lightStaff": {
+        "projectile_type": "lightStaff",
+        "hold_type": "staff",
         "capacity": "-1",
         "attack_rate": 0.3,
         "combo": 3,

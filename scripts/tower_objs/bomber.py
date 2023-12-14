@@ -9,13 +9,11 @@ class Bomber(Tower):
     def update(self):
         if self.hoverable:
             self.attack_timer += self.game.window.dt
-
             if self.attack_timer >= self.attack_cd:
-                offset = random.random() * math.pi * 2
-                for i in range(12):
+                num_projectiles = 16
+                for i in range(num_projectiles):
                     speed = 50
-                    angle = math.pi * 2 * i / 12 + offset
-                    vel = [math.cos(angle) * speed, math.sin(angle) * speed]
+                    angle = math.pi * 2 * i / num_projectiles
                     self.game.world.entities.projectiles.append(Projectile(self.type + '_projectile', self.center, angle, speed, self.game, self))
                 self.attack_timer = 0
 

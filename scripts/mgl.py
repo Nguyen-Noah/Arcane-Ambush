@@ -23,7 +23,7 @@ class MGL:
         self.compile_program('texture', 'default_shader', 'default_texture')
         self.compile_program('texture', 'main_display', 'game_display')
         self.compile_program('texture', 'lights', 'lights')
-        self.compile_program('texture', 'default_shader', 'ui')
+        self.compile_program('texture', 'ui', 'ui')
 
     def load_texture(self, name):
         surf = pygame.image.load('data/graphics/misc/' + name + '.png').convert()
@@ -37,7 +37,7 @@ class MGL:
         # render object
         self.vaos[program_name] = self.ctx.vertex_array(program, [(self.quad_buffer, '2f 2f', 'vert', 'texcoord')])
 
-    def render(self, world_timer, lights, color_mix):
+    def render(self, world_timer, lights, color_mix, i_frames):
         self.ctx.clear()
         self.ctx.enable(moderngl.BLEND)
         self.ctx.blend_equation = moderngl.ONE, moderngl.ONE
@@ -48,7 +48,8 @@ class MGL:
                 'light_surf': self.textures['light_surf'],
                 'world_timer': world_timer,
                 'lights': lights,
-                'color_mix': color_mix
+                'color_mix': color_mix,
+                'i_frames': i_frames
             })
         if 'lights' in self.textures:
             self.update_render('lights', {

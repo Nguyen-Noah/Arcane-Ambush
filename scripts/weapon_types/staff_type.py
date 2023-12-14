@@ -28,5 +28,3 @@ class StaffWeapon(Weapon):
             img = pygame.transform.rotate(img, -self.rotation)
             blit_loc = (loc[0] - (img.get_width() // 2) + (math.cos(math.radians(self.rotation)) * 8), loc[1] - (img.get_height() // 2) - (math.sin(math.radians(-self.rotation)) * 8) - 2)
             surf.blit(img, blit_loc)
-            pygame.draw.circle(surf, 'purple', ((loc[0] + math.cos(math.radians(self.rotation)) * 10), (loc[1] + math.sin(math.radians(self.rotation))) + 8), 3)
-            pygame.draw.circle(surf, 'red', ((loc[0] +  math.cos(math.radians(self.rotation)) * 8), (loc[1] + math.sin(math.radians(self.rotation)) * 8) - 2), 3)

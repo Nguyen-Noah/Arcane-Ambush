@@ -18,7 +18,7 @@
         "power": 10,
         "group": "bomber",
         "spawn_advance": 8,
-        "knockback": 1
+        "knockback": 2
     },
     "phoenix_projectile": {
         "shape": null,
@@ -35,6 +35,13 @@
         "knockback": 0
     },
     "earthStaff_projectile": {
+        "shape": null,
+        "power": 5,
+        "group": "player",
+        "spawn_advance": 8,
+        "knockback": 0
+    },
+    "lightStaff_projectile": {
         "shape": null,
         "power": 5,
         "group": "player",

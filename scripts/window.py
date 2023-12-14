@@ -62,7 +62,7 @@ class Window:
         self.mgl.pg2tx(self.light_surf, 'light_surf')
         self.mgl.pg2tx(self.ui_surf, 'ui_surf')
 
-        self.mgl.render(self.game.world.world_timer, self.game.world.visible_lights, self.game.world.color_mix)
+        self.mgl.render(self.game.world.world_timer, self.game.world.visible_lights, self.game.world.color_mix, self.game.world.player.invincible)
 
         self.dt = time.time() - self.frame_start
         self.ui_dt = self.dt

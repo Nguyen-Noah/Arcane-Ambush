@@ -16,7 +16,7 @@
     "bomber": {
         "cost": [10, 50, 100, 250, 500],
         "radius": 0,
-        "attack_cd": 7.5,
+        "attack_cd": 3,
         "rarity": ["common", "uncommon", "rare", "legendary", "mythical"],
         "player_skill": "bomb"
     },

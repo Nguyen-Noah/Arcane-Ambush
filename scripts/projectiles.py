@@ -16,6 +16,7 @@ class Projectile:
         self.rotation = rot
         self.speed = speed
         self.config = config['projectiles'][self.type]
+        self.duration = 10
 
         advance(self.pos, self.rotation, self.config['spawn_advance'])
 
@@ -29,48 +30,23 @@ class Projectile:
         return directions
 
     def update(self, dt):
-        collisions = self.move(dt)
-        if any(collisions.values()):
-            if self.config['group'] == 'normal':
-                if collisions['top']:
-                    angle = math.pi * 3 / 2
-                if collisions['bottom']:
-                    angle = math.pi / 2
-                if collisions['right']:
-                    angle = 0
-                if collisions['left']:
-                    angle = math.pi
-                for i in range(random.randint(2, 3)):
-                    self.game.world.vfx.spawn_group('arrow_impact_sparks', self.pos.copy(), angle)
-                return False
-            elif self.config['group'] == 'blob':
-                vec = to_cart(self.rotation, self.speed)
-                if collisions['top']:
-                    vec[1] *= -1
-                if collisions['bottom']:
-                    vec[1] *= -1
-                if collisions['right']:
-                    vec[0] *= -1
-                if collisions['left']:
-                    vec[0] *= -1
-                self.rotation, self.speed = to_polar(vec)
-                for i in range(random.randint(2, 3)):
-                    self.game.world.vfx.spawn_group('arrow_impact_sparks', self.pos.copy(), self.rotation - 180)
-                advance(self.pos, self.rotation, 2)
+        self.duration -= dt
+        self.move(dt)
 
         for entity in self.game.world.entities.entities:
-            if (entity != self.owner) and ((entity.type == 'player') or (entity.type != self.owner.type)) and (entity.type != 'item') and (entity.health > 0) and entity.targetable:
+            if (entity != self.owner) and ((entity.type == 'player') or (entity.type != self.owner.type)) and (entity.type != 'item') and (entity.health > 0) and entity.targetable and (entity.invincible == 0):
                 if entity.rect.collidepoint(self.pos):
                     if entity.category == 'player':
                         self.game.window.add_freeze(0.2, 0.2)
+                        entity.invincible = 0.4
                         color = (191, 0, 0)
                     else:
                         color = (255, 255, 255)
 
                     self.game.world.vfx.spawn_vfx('slice', self.pos.copy(), random.random() * math.pi / 4 - math.pi / 8 + self.rotation, 20 * random.random() + 50, 2, 3, 0.4)
 
-                    entity.velocity[0] += math.cos(self.rotation) * self.config['knockback']
-                    entity.velocity[1] += math.sin(self.rotation) * self.config['knockback']
+                    entity.velocity[0] += math.cos(self.rotation) * 100 * dt * self.config['knockback']
+                    entity.velocity[1] += math.sin(self.rotation) * 100 * dt * self.config['knockback']
 
                     killed = entity.damage(self.config['power'])
                     if killed:
@@ -89,7 +65,7 @@ class Projectile:
                         self.game.world.vfx.spawn_vfx('spark', self.pos.copy(), vel, 1 + random.random(), (15, 15, 8), drag=50, color=color)
                     return False
 
-        return True
+        return True if self.duration > 0 else False
 
     def render(self, surf, offset=(0, 0)):
         render_pos = [self.pos[0] - offset[0], self.pos[1] - offset[1]]

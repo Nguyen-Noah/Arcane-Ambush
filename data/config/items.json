@@ -19,6 +19,11 @@
         "description": "earth staff.",
         "type": "weapon"
     },
+    "lightStaff": {
+        "name": "Light Staff",
+        "description": "light staff.",
+        "type": "weapon"
+    },
     "potion": {
         "name": "Health Potion",
         "description": "Heals 10 health",

@@ -75,7 +75,19 @@ class Renderer:
         pygame.draw.rect(ui_surf, 'red', (11, 11, current_health, 8)) """
 
         # inventory ----------------------------------------------------------------------------------------------- #
-        if self.game.world.builder_mode:
+        skills = self.game.world.entities.player.skills
+
+        skill_count = len([skill for skill in skills if skill is not None])
+        skill_padding = 10
+        tilesize = 18
+
+        for i in range(skill_count):
+            pos = ((((self.game.window.display.get_width() + (tilesize // 2)) // 2) - ((skill_count * tilesize) // 2)) + (i * tilesize), self.game.window.display.get_height() - tilesize - 4)
+            ui_surf.blit(self.game.assets.misc['inventory_slot'], pos)
+            if skills[i]:
+                skills[i].render_skill(ui_surf, (pos[0] + 1, pos[1] + 1))
+
+        """ if self.game.world.builder_mode:
             tilesize = 26
             count = 5
             owned_towers = self.game.world.towers.inventory_towers
@@ -93,9 +105,7 @@ class Renderer:
                 pos = (((self.game.window.display.get_width() + (tilesize // 2)) // 2) - ((skill_count * tilesize) // 2)) + (i * tilesize)
                 ui_surf.blit(self.game.assets.misc['inventory_slot'], (pos, self.game.window.display.get_height() - tilesize))
                 if skills[i]:
-                    skills[i].render_skill(ui_surf, (pos + 1, surf.get_height() + self.game.window.offset[1] - tilesize + 1))
-                if i == self.game.world.entities.player.selected_inventory_slot:
-                    ui_surf.blit(self.game.assets.misc['selected_inventory_slot'], (pos, self.game.window.display.get_height() - tilesize))
+                    skills[i].render_skill(ui_surf, (pos + 1, surf.get_height() + self.game.window.offset[1] - tilesize + 1)) """
 
         # weapon ------------------------------------------------------------------------------------------------- #
         player = self.game.world.entities.player
@@ -104,14 +114,17 @@ class Renderer:
         weapon_masks = [pygame.mask.from_surface(self.game.assets.weapons[weapon.type]) for weapon in player_items]
         offset = 0
         base_pos = 46
+        padding = 2
         for i, mask in enumerate(weapon_masks):
             color = (139, 171, 191, 255)
             if player_items[i] == player.weapon:
-                color = ui_color
+                color = (235, 235, 235, 255)
             weapon_img = mask.to_surface(setcolor=color, unsetcolor=(0, 0, 0, 0))
+            if weapon_img.get_height() > weapon_img.get_width():
+                weapon_img = pygame.transform.rotate(weapon_img, -90)
             if player_items[i] == player.weapon:
-                pygame.draw.line(ui_surf, ui_color, (22, base_pos + offset), (22, base_pos + offset + weapon_img.get_height()))
-            ui_surf.blit(weapon_img, (25 - mask.get_bounding_rects()[0].left, base_pos + offset))
+                pygame.draw.line(ui_surf, color, (22, base_pos + offset), (22, base_pos + offset + weapon_img.get_height() + (padding * i)))
+            ui_surf.blit(weapon_img, (25 - mask.get_bounding_rects()[0].left, base_pos + offset + (padding * i)))
             offset += weapon_img.get_height() + 2
         
         # tooltips ----------------------------------------------------------------------------------------------- #

@@ -32,6 +32,7 @@ class Entity:
             self.speed = config['entities'][self.type]['speed']
         self.bounce = 0
         self.health = self.max_health
+        self.invincible = 0
 
         if self.type + '_walk_side' in self.game.assets.animations.animations:
             self.set_action('walk', 'side')
@@ -150,7 +151,6 @@ class Entity:
             self.death_frames = sum(self.active_animation.data.config['frames'])
 
             self.targetable = False
-            print(self.active_animation.data.id)
 
     def damage(self, amount, angle=0):
         self.hurt = 1

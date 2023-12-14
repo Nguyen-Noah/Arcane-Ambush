@@ -132,7 +132,6 @@ class World:
         self.world_animations.update()
         self.weapon_anims.update()
         self.vfx.update()
-        self.towers.update()
         self.hitboxes.update()
         self.towers.update()
         self.entities.update()
