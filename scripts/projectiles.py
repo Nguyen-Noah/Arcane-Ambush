@@ -39,11 +39,11 @@ class Projectile:
                     if entity.category == 'player':
                         self.game.window.add_freeze(0.2, 0.2)
                         entity.invincible = 0.4
-                        color = (191, 0, 0)
+                        color = (100, 0, 0)
                     else:
                         color = (255, 255, 255)
 
-                    self.game.world.vfx.spawn_vfx('slice', self.pos.copy(), random.random() * math.pi / 4 - math.pi / 8 + self.rotation, 20 * random.random() + 50, 2, 3, 0.4)
+                    self.game.world.vfx.spawn_vfx('slice', self.pos.copy(), random.random() * math.pi / 4 - math.pi / 8 + self.rotation, 20 * random.random() + 50, 2, 3, 0.4, color=color)
 
                     entity.velocity[0] += math.cos(self.rotation) * 100 * dt * self.config['knockback']
                     entity.velocity[1] += math.sin(self.rotation) * 100 * dt * self.config['knockback']

@@ -139,6 +139,7 @@ class World:
 
         self.visible_lights = []
         for light in self.lights:
+            #self.visible_lights.append((light[0] - self.camera.true_pos[0], light[1] - self.camera.true_pos[1]))
             self.visible_lights.append(((light[0] - self.camera.true_pos[0]) / self.game.window.display.get_width(), (light[1] - self.camera.true_pos[1]) / self.game.window.display.get_height()))
 
         """ self.quadtree.clear()
@@ -175,12 +176,12 @@ class World:
         if self.game.input.mouse_state['right_click']:
             print((self.player.center[0] + self.camera.true_pos[0], self.player.center[1] + self.camera.true_pos[1]))
 
-
         # UGLY I WILL FIX THIS EVENTUALLY
         self.world_timer += self.game.window.dt
         colors = config['shaders']['day_cycle']['vec_values']
-        time = self.world_timer / 200
-        wrapped_time = time % 1.0
+        #time = self.world_timer / 200
+        #wrapped_time = time % 1.0
+        wrapped_time = 0.5
         key_prev = min(math.floor(wrapped_time * len(colors)), len(colors) - 1)
         key_next = (key_prev + 1) % len(colors)
         lerp_amt = (wrapped_time - key_prev / len(colors)) * len(colors)

@@ -51,10 +51,10 @@ class MGL:
                 'color_mix': color_mix,
                 'i_frames': i_frames
             })
-        if 'lights' in self.textures:
+        """ if 'lights' in self.textures:
             self.update_render('lights', {
                 'lights': self.textures['light_surf']
-            })
+            }) """
         if 'ui_surf' in self.textures:
             self.update_render('ui', {
                 'surface': self.textures['ui_surf']

@@ -276,7 +276,7 @@ class Spark:
         surf.set_at(center, self.color)
 
 class Slice:
-    def __init__(self, game, pos, angle, length, width, decay_rate, speed=0, glow=True):
+    def __init__(self, game, pos, angle, length, width, decay_rate, speed=0, glow=True, color=(255, 255, 255)):
         self.game = game
         self.angle = angle
         self.length = length
@@ -287,6 +287,7 @@ class Slice:
         self.pos = list(pos)
         self.speed = speed
         self.glow = glow
+        self.color = color
 
     def update(self, dt):
         self.time_left -= self.decay_rate * dt
@@ -297,7 +298,6 @@ class Slice:
             return True
 
     def render(self, surf, offset=(0, 0)):
-        color = (255, 255, 255)
         if self.length > 1.5:
             pos = [self.pos[0] - offset[0], self.pos[1] - offset[1]]
             advance(pos, self.angle, (self.orig_length - self.length) * self.speed)
@@ -307,7 +307,7 @@ class Slice:
                 advance(pos.copy(), self.angle + math.pi, self.length),
                 advance(pos.copy(), self.angle + math.pi * 3 / 2, self.width * (self.length / self.orig_length)),
             ]
-            pygame.draw.polygon(surf, color, points)
+            pygame.draw.polygon(surf, self.color, points)
             #if self.glow:
             #    glow(pos, self.width // 2 + 1, -math.degrees(self.angle), width=self.length * 2 + 2, color=(24, 24, 24), padding=0)
             #    glow(pos, self.width // 2 + 2, -math.degrees(self.angle), width=self.length * 2 + 30, color=(14, 14, 14), padding=0)

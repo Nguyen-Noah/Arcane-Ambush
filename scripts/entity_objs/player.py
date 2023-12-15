@@ -139,6 +139,8 @@ class Player(Entity):
             self.velocity = [0, 0]
             self.weapon.invisible = 0.2
 
+        self.game.world.visible_lights.append(((self.center[0] - self.game.world.camera.true_pos[0]) / self.game.window.display.get_width(), (self.center[1] - self.game.world.camera.true_pos[1]) / self.game.window.display.get_height()))
+
         # collisions and move ---------------------------------------------------------- #
         self.collisions = self.move(self.frame_motion, self.game.world.collideables)
 
