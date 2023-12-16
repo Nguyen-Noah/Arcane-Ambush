@@ -2,8 +2,11 @@ import pygame
 from .core_funcs import clip
 
 class Text:
-    def __init__(self, path):
-        self.character_order = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '!', '?', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '$', '/']
+    def __init__(self, path, nums=False):
+        if nums:
+            self.character_order = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        else:
+            self.character_order = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '!', '?', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '$', '/']
         self.spacing = 1
         font_img = pygame.image.load(path).convert()
         font_img.set_colorkey((255, 255, 255))
@@ -25,7 +28,10 @@ class Text:
             else:
                 current_char_width += 1
 
-        self.space_width = self.characters['A'].get_width()
+        if nums:
+            self.space_width = self.characters['0'].get_width()
+        else:
+            self.space_width = self.characters['A'].get_width()
     
     def width(self, text):
         text_width = 0

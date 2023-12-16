@@ -13,6 +13,7 @@ class Game:
         self.world = World(self)
 
         self.game_state = False
+        #self.state = 'new_test_graphics'
         self.state = 'new_format'
 
     def load_map(self, map_id):

@@ -28,7 +28,7 @@ void main() {
 
     render_color = display_sample.rgb * color_mix; */
 
-    vec3 render_color = vec3(0.0);
+    /* vec3 render_color = vec3(0.0);
     // BACK TO LIGHTING ------------------------------------------- //
     for (int i = 0; i < lights.length; i++) {
         vec2 light = lights[i];
@@ -37,7 +37,8 @@ void main() {
         render_color += attenuation * vec3(1.0, 1.0, 0.5);
     }
 
-    render_color = display_sample.rgb * render_color;
+    render_color = display_sample.rgb * render_color; */
+    vec3 render_color = display_sample.rgb;
 
     // DAMAGE VIGNETTE -------------------------------------------- //
     float center_dist = distance(uv, vec2(0.5));

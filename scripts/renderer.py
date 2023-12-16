@@ -48,7 +48,6 @@ class Renderer:
         self.game.world.entities.render(surf, offset)
 
         #self.update_overlay_particles(surf)
-
         
         #surf.blit(self.game.assets.misc['light'], (self.game.world.player.center[0] - offset[0] - self.game.assets.misc['light'].get_width() // 2, self.game.world.player.center[1] - offset[1] - self.game.assets.misc['light'].get_height() // 2))
         for light in self.game.world.visible_lights:
@@ -57,22 +56,10 @@ class Renderer:
         ui_color = (17, 17, 17, 255)
 
         # ui  ----------------------------------------------------------------------------------------------------- #
-        ui_surf.blit(self.game.assets.misc['ui_bar'], (10, 10))
-
         ratio = self.game.world.player.health / config['entities']['player']['health']
-        new_width = self.game.assets.misc['main_health'].get_width() * ratio
-        main_health = pygame.transform.scale(self.game.assets.misc['main_health'], (new_width, self.game.assets.misc['main_health'].get_height()))
-
-        secondary_health = pygame.transform.scale(self.game.assets.misc['under_health'], (new_width + 1, self.game.assets.misc['under_health'].get_height()))
-
-        ui_surf.blit(secondary_health, (12, 12))
-        ui_surf.blit(main_health, (12, 12))
-        ui_surf.blit(self.game.assets.misc['ui_bar_overlay'], (10, 10))
-        """ pygame.draw.rect(ui_surf, ui_color, (10, 10, 100, 10))
-        ratio = self.game.world.player.health / config['entities']['player']['health']
-        # multiply by 98 instead of 100 to compensate for padding
-        current_health = 98 * ratio
-        pygame.draw.rect(ui_surf, 'red', (11, 11, current_health, 8)) """
+        new_width = self.game.assets.misc['health'].get_width() * ratio
+        
+        surf.blit(self.game.assets.misc['health_mana_ui'], (0, 10))
 
         # inventory ----------------------------------------------------------------------------------------------- #
         skills = self.game.world.entities.player.skills
@@ -135,7 +122,7 @@ class Renderer:
             self.game.world.builder_menu.render(ui_surf)
 
         # display the player money ------------------------------------------------------------------------------- #
-        self.game.assets.large_text.render(ui_surf, '$' + str(self.game.world.entities.player.money), (10, 25))
+        self.game.assets.money_text.render(ui_surf, str(self.game.world.entities.player.money), (10, 27))
 
         # round -------------------------------------------------------------------------------------------------- #
         self.game.assets.large_text.render(ui_surf, 'ROUND', (self.game.window.display.get_size()[0] // 2, 10))

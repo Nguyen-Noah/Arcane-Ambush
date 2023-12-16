@@ -15,7 +15,7 @@ class Player(Entity):
         self.vx = 0
         self.vy = 0
         self.last_move_attempt = 0
-        self.money = 1000
+        self.money = 100000
         self.skills = [None, None, None, None, None, None, None, None, None]
         self.inventory = Inventory(self)
         self.selected_inventory_slot = 0

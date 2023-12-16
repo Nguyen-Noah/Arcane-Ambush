@@ -1,5 +1,6 @@
 import math, random
 from .config import config
+from .core_funcs import clamp_between
 
 class Camera:
     def __init__(self, game):
@@ -58,6 +59,7 @@ class Camera:
             self.camera_offset[0] += x_direction * 1.5
             self.camera_offset[1] += y_direction * 1.5
         else:
+            # Weapon Lead --------------------------------------- #
             if self.track_entity:
                 if self.track_entity.type == 'player':
                     target_pos = self.track_entity.pos.copy()
@@ -68,8 +70,13 @@ class Camera:
                         target_pos[1] += math.sin(angle) * (dis / 8)
                 self.set_target((target_pos[0] - self.game.window.display.get_width() // 2, target_pos[1] - self.game.window.display.get_height() // 2))
 
+            # Core Camera Functionality -------------------------- #
             self.camera_offset[0] += math.floor(self.target_pos[0] - self.camera_offset[0]) / (self.rate / self.game.window.dt)
             self.camera_offset[1] += math.floor(self.target_pos[1] - self.camera_offset[1]) / (self.rate / self.game.window.dt)
+
+        # clamp the camera so that the camera will not show anything outside of the map
+        # use 4 pixel padding to compensate for screenshake
+        self.camera_offset = clamp_between(self.camera_offset, min_offset=(4, 4), max_offset=(self.game.world.floor.get_width() - self.game.window.base_resolution[0] - 4, self.game.world.floor.get_height() - self.game.window.base_resolution[1] - 4))
 
         if self.restriction_point:
             if self.camera_offset[0] + self.game.window.display.get_width() // 2 - self.restriction_point[0] > self.lock_distance[0]:

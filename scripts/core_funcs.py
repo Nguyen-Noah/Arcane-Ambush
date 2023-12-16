@@ -25,6 +25,11 @@ def normalize_vector(vector, amount, around=0):
     vector[1] = math.sin(angle) * magnitude
     vector[0] = math.cos(angle) * magnitude
 
+def clamp_between(tuple, min_offset=(0, 0), max_offset=(100, 100)):
+    clamped_x = max(min_offset[0], min(tuple[0], max_offset[0]))
+    clamped_y = max(min_offset[1], min(tuple[1], max_offset[1]))
+    return [clamped_x, clamped_y]
+
 def lerp(a, b, t):
     return a + (b - a) * t
 
