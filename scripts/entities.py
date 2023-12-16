@@ -37,6 +37,10 @@ class EntityManager:
 
     def update(self):
         #self.spawner.update(self.game.window.dt)
+        for entity in self.entities:
+            alive = entity.update(self.game.window.dt)
+            if not alive:
+                self.entities.pop(i)
 
         for i, projectile in itr(self.projectiles):
             alive = projectile.update(self.game.window.dt)
@@ -49,9 +53,6 @@ class EntityManager:
         for entity in sorted_entities:
             if isinstance(entity, Entity):
                 if self.render_entities or entity.category in ['player', 'enemy']:
-                    alive = entity.update(self.game.window.dt)
-                    if not alive:
-                        self.entities.remove(entity)
                     entity.render(surf, offset)
             elif isinstance(entity, Tower):
                 entity.render(surf, offset)

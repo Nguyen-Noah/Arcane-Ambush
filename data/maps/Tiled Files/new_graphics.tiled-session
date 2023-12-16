@@ -3,25 +3,59 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_test_graphics/new_test_graphics.tmx",
     "expandedProjectPaths": [
     ],
     "fileStates": {
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_test_graphics/collideables.tsx": {
+            "scaleInDock": 4,
+            "scaleInEditor": 1
+        },
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_test_graphics/floor.tsx": {
+            "scaleInDock": 8,
+            "scaleInEditor": 1
+        },
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_test_graphics/new_test_graphics.tmx": {
+            "scale": 4,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 916,
+                "y": 426
+            }
+        },
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_test_graphics/walls.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 11
+        },
+        "collideables.tsx": {
+            "scaleInDock": 3,
+            "scaleInEditor": 11
+        }
     },
     "last.exportedFilePath": "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_test_graphics",
     "last.imagePath": "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/graphics/test/new",
     "map.height": 64,
-    "map.lastUsedExportFilter": "All Files (*)",
+    "map.lastUsedExportFilter": "CSV files (*.csv)",
+    "map.lastUsedFormat": "tmx",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "map.width": 64,
     "openFiles": [
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_test_graphics/new_test_graphics.tmx",
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_test_graphics/floor.tsx",
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_test_graphics/collideables.tsx",
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_test_graphics/walls.tsx"
     ],
     "project": "new_graphics.tiled-project",
     "recentFiles": [
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_test_graphics/walls.tsx",
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_test_graphics/collideables.tsx",
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_test_graphics/floor.tsx",
+        "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_test_graphics/new_test_graphics.tmx",
+        "collideables.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
-    "tileset.spacing": 0,
+    "tileset.spacing": 1,
     "tileset.tileSize": {
         "height": 16,
         "width": 16

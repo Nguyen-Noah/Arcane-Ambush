@@ -20,7 +20,6 @@ class Window:
         self.screen = pygame.display.set_mode(self.scaled_resolution, pygame.OPENGL | pygame.DOUBLEBUF)
         self.display = pygame.Surface((self.base_resolution[0], self.base_resolution[1]), pygame.SRCALPHA)
         self.ui_surf = self.display.copy()
-        self.light_surf = self.display.copy()
         self.mgl = MGL()
         
         # icon and caption --------------------------------------------------------------- #
@@ -59,10 +58,9 @@ class Window:
         self.ui_surf.blit(self.cursor, (self.game.input.mouse_pos[0] - self.offset[0] - self.game.assets.cursor[self.cursor_id].get_width() // 2, self.game.input.mouse_pos[1] - self.offset[1] - self.game.assets.cursor[self.cursor_id].get_height() // 2))
 
         self.mgl.pg2tx(self.display, 'base_display')
-        self.mgl.pg2tx(self.light_surf, 'light_surf')
         self.mgl.pg2tx(self.ui_surf, 'ui_surf')
 
-        self.mgl.render(self.game.world.world_timer, self.game.world.visible_lights, self.game.world.color_mix, self.game.world.player.invincible)
+        self.mgl.render(self.game.world.world_timer, self.game.world.render_lights, self.game.world.render_light_colors, self.game.world.color_mix, self.game.world.player.invincible)
 
         self.dt = time.time() - self.frame_start
         self.ui_dt = self.dt
@@ -106,4 +104,3 @@ class Window:
 
         self.display.fill(self.background_color)
         self.ui_surf.fill((0, 0, 0, 0))
-        self.light_surf.fill((0, 0, 0, 0))

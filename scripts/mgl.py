@@ -22,7 +22,6 @@ class MGL:
         self.load_texture('noise')
         self.compile_program('texture', 'default_shader', 'default_texture')
         self.compile_program('texture', 'main_display', 'game_display')
-        self.compile_program('texture', 'lights', 'lights')
         self.compile_program('texture', 'ui', 'ui')
 
     def load_texture(self, name):
@@ -37,7 +36,8 @@ class MGL:
         # render object
         self.vaos[program_name] = self.ctx.vertex_array(program, [(self.quad_buffer, '2f 2f', 'vert', 'texcoord')])
 
-    def render(self, world_timer, lights, color_mix, i_frames):
+    def render(self, world_timer, lights, light_colors, color_mix, i_frames):
+        print(lights)
         self.ctx.clear()
         self.ctx.enable(moderngl.BLEND)
         self.ctx.blend_equation = moderngl.ONE, moderngl.ONE
@@ -45,16 +45,12 @@ class MGL:
             self.update_render('game_display', {
                 'surface': self.textures['base_display'],
                 'noise': self.textures['noise'],
-                'light_surf': self.textures['light_surf'],
                 'world_timer': world_timer,
                 'lights': lights,
+                'light_colors': light_colors,
                 'color_mix': color_mix,
                 'i_frames': i_frames
             })
-        """ if 'lights' in self.textures:
-            self.update_render('lights', {
-                'lights': self.textures['light_surf']
-            }) """
         if 'ui_surf' in self.textures:
             self.update_render('ui', {
                 'surface': self.textures['ui_surf']

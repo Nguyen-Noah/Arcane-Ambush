@@ -24,6 +24,10 @@ class Player(Entity):
         self.attacking = False
         self.attack_movement_slow = 0
 
+
+        # PUT THIS IN THE CONFIG EVENTUALLY
+        self.mana = 100
+
     @property
     def weapon(self):
         if self.selected_inventory_slot < len(self.inventory.get_custom_group('active_weapons')):
@@ -139,8 +143,8 @@ class Player(Entity):
             self.velocity = [0, 0]
             self.weapon.invisible = 0.2
 
-        self.game.world.visible_lights.append(((self.center[0] - self.game.world.camera.true_pos[0]) / self.game.window.display.get_width(), (self.center[1] - self.game.world.camera.true_pos[1]) / self.game.window.display.get_height()))
-
+        self.game.world.add_light_source(self.center[0] - self.game.world.camera.true_pos[0], self.center[1] - self.game.world.camera.true_pos[1], 0.4, (255, 255, 255))
+        
         # collisions and move ---------------------------------------------------------- #
         self.collisions = self.move(self.frame_motion, self.game.world.collideables)
 

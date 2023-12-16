@@ -1,20 +1,21 @@
 #version 330 core
 
-const int num_lights =  20;
+const int max_lights =  50;
 
 uniform sampler2D surface;
 uniform sampler2D noise;
 uniform sampler2D light_surf;
 uniform float world_timer;
-uniform vec2 lights[12];
+uniform vec3 lights[max_lights];
+uniform vec3 light_colors[max_lights];
 uniform vec3 color_mix;
 uniform float i_frames;
 
 const float light_radius = 0.1;
 const vec3 light_color = vec3(1.0, 0.5, 0.5);
 
-const float intensity = 0.1;
-const float max_dist = pow(0.5, intensity);
+const float intensity = 0.4;
+const float max_dist = pow(0.8, intensity);
 
 in vec2 uv;
 out vec4 f_color;
@@ -28,17 +29,21 @@ void main() {
 
     render_color = display_sample.rgb * color_mix; */
 
-    /* vec3 render_color = vec3(0.0);
+    vec3 render_color = vec3(0.0);
     // BACK TO LIGHTING ------------------------------------------- //
-    for (int i = 0; i < lights.length; i++) {
-        vec2 light = lights[i];
-        float dist = distance(uv, light);
-        float attenuation = 1.0 - min(pow(dist, intensity), max_dist) / max_dist;
-        render_color += attenuation * vec3(1.0, 1.0, 0.5);
+    for (int i = 0; i < lights.length - 1; i++) {
+        vec3 light = lights[i];
+
+        if (light.z == -1)
+            continue;
+
+        float dist = distance(uv, light.xy);
+        float attenuation = 1.0 - min(pow(dist, light.z), max_dist) / max_dist;
+        render_color += attenuation * light_colors[i];
     }
 
-    render_color = display_sample.rgb * render_color; */
-    vec3 render_color = display_sample.rgb;
+    render_color = display_sample.rgb * render_color;
+    //vec3 render_color = display_sample.rgb;
 
     // DAMAGE VIGNETTE -------------------------------------------- //
     float center_dist = distance(uv, vec2(0.5));

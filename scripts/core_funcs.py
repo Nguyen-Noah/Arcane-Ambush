@@ -8,6 +8,9 @@ def import_csv_layout(path):
         for row in layout:
             terrain_map.append(list(row))
         return terrain_map
+    
+def normalize_color(color):
+    return (color[0] / 255, color[1] / 255, color[2] / 255)
 
 def normalize(value, amount, around=0):
     if (value - amount) > around:

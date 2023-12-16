@@ -8,7 +8,7 @@ class Renderer:
     def __init__(self, game):
         self.game = game
         self.particles = ParticleManager(self.game)
-        #self.overlay_particles()
+        self.overlay_particles()
         self.tooltips = Tooltips(self.game)
         self.profiler = cProfile.Profile()
 
@@ -41,25 +41,29 @@ class Renderer:
     def render(self):
         surf = self.game.window.display
         ui_surf = self.game.window.ui_surf
-        light_surf = self.game.window.light_surf
         offset = self.game.world.camera.true_pos
 
         self.game.world.render(surf)
         self.game.world.entities.render(surf, offset)
 
-        #self.update_overlay_particles(surf)
+        self.update_overlay_particles(surf)
         
         #surf.blit(self.game.assets.misc['light'], (self.game.world.player.center[0] - offset[0] - self.game.assets.misc['light'].get_width() // 2, self.game.world.player.center[1] - offset[1] - self.game.assets.misc['light'].get_height() // 2))
-        for light in self.game.world.visible_lights:
-            light_surf.blit(self.game.assets.misc['light'], (light[0] - self.game.assets.misc['light'].get_width() // 2, light[1] - self.game.assets.misc['light'].get_height() // 2))
 
         ui_color = (17, 17, 17, 255)
 
         # ui  ----------------------------------------------------------------------------------------------------- #
-        ratio = self.game.world.player.health / config['entities']['player']['health']
-        new_width = self.game.assets.misc['health'].get_width() * ratio
+        health_ratio = self.game.world.player.health / config['entities']['player']['health']
+        new_health_width = self.game.assets.misc['health'].get_width() * health_ratio
+        adjusted_health = pygame.transform.scale(self.game.assets.misc['health'], (new_health_width, self.game.assets.misc['health'].get_height()))
+
+        mana_ratio = self.game.world.player.mana / 100
+        new_mana_width = self.game.assets.misc['mana'].get_width() * mana_ratio
+        adjusted_mana = pygame.transform.scale(self.game.assets.misc['mana'], (new_mana_width, self.game.assets.misc['mana'].get_height()))
         
-        surf.blit(self.game.assets.misc['health_mana_ui'], (0, 10))
+        ui_surf.blit(self.game.assets.misc['health_mana_ui'], (0, 10))
+        ui_surf.blit(adjusted_health, (1, 12))
+        ui_surf.blit(adjusted_mana, (1, 20))
 
         # inventory ----------------------------------------------------------------------------------------------- #
         skills = self.game.world.entities.player.skills

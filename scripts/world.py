@@ -1,5 +1,5 @@
 import pygame, math, random
-from .core_funcs import import_csv_layout, lerp
+from .core_funcs import import_csv_layout, lerp, normalize_color
 from .camera import Camera
 from .config import config
 from .entities import EntityManager
@@ -11,9 +11,10 @@ from .weapon_anims import WeaponAnimations
 from .particles import ParticleManager
 from .builder_menu import Builder
 from .vfx import VFX, set_glow_surf
-from .grass import GrassManager
 
 from .quadtree import QuadTree, Rectangle
+
+MAX_LIGHT_SOURCES = 50
 
 class World:
     def __init__(self, game):
@@ -23,27 +24,10 @@ class World:
         self.builder_mode = False
         self.show_builder_menu = False
         self.world_timer = 0
-        self.lights = []
-        self.visible_lights = []
         self.color_mix = config['shaders']['day_cycle']['vec_values'][0][:3]
         self.con_sat_brt = config['shaders']['day_cycle']['vec_values'][0][::-3]
-
-        """ self.world_rects = {}
-        for i, obstacle in enumerate(config['obst_hitboxes']['tutorial']):
-            self.world_rects[i] = self.set_obstacle_hitbox(i, obstacle) """
-
-    def set_obstacle_hitbox(self, idx, offset):
-        img = self.game.assets.collideables[str(idx)]
-        hitbox = (offset[2] + offset[0] // 2, offset[1], img.get_width() + offset[0], img.get_height() + offset[1])
-        return pygame.Rect(hitbox)
-
-    def obs_rect(self, tile, img, idx):
-        # 0 -> big tree, 1 -> short tree, 2 -> alive bush, 3 -> stump, 4 -> fence, 5 -> log, 6 -> right-facing lamp, 7 -> down-facing lamp, 8 -> left-facing lamp, 9 -> broken lamp
-        offset = config['obst_hitboxes']['tutorial'][idx]
-        coord = (tile[0], tile[1])
-        hitbox = (coord[0] - (offset[0] // 2) + offset[2], coord[1] - offset[1], img.get_rect().width + offset[0], img.get_rect().height + offset[1])
-        #pygame.draw.rect(self.game.window.display, 'red', (hitbox[0] - self.camera.true_pos[0], hitbox[1] - self.camera.true_pos[1], hitbox[2], hitbox[3]), 1)
-        return pygame.Rect(hitbox)
+        self.render_lights = []
+        self.render_light_colors = []
 
     def load(self, map_id):
         self.map_id = map_id
@@ -56,20 +40,6 @@ class World:
         self.particles = ParticleManager(self.game)
         self.vfx = VFX(self.game)
         self.weapon_anims = WeaponAnimations(self.game)
-        self.lights = config['level_data'][self.map_id]['light_sources']
-
-
-        self.gm = GrassManager('data/graphics/grass', tile_size=16, stiffness=600, max_unique=5, place_range=[0, 1])
-        """ self.gm.enable_ground_shadows(shadow_radius=4, shadow_color=(0, 0, 1), shadow_shift=(1, 2))
-
-        for y in range(20):
-            y += 5
-            for x in range(20):
-                x += 5
-                v = random.random()
-                if v > 0.1:
-                    self.gm.place_tile((x, y), int(v * 12), [0, 1, 2, 3, 4]) """
-
 
         self.camera = Camera(self.game)
 
@@ -93,6 +63,11 @@ class World:
 
         self.master_clock = 0
 
+    def add_light_source(self, x, y, intensity, col):
+        normalized_color = normalize_color(col)
+        self.render_lights.append((x / self.game.window.display.get_width(), y / self.game.window.display.get_height(), intensity))
+        self.render_light_colors.append(normalized_color)
+
     def render(self, surf):
         if not self.loaded:
             self.loaded = True
@@ -111,23 +86,23 @@ class World:
                     y = row_index * 16
                     img = self.game.assets.collideables[col]
                     #self.collideables.append(self.obs_rect((x + offset[0], y + offset[1] - img.get_size()[1]), img, int(col)))
+                    self.collideables.append(pygame.Rect(x, y, 16, 16))
                     #rect = self.world_rects[int(col)]
                     #self.collideables.append((x + offset[0] - rect[0], y + offset[1] - rect[1], rect[2], rect[3]))
-                    if col != '10':
-                        self.render_list.append([img, (x + offset[0] - self.camera.true_pos[0], y + offset[1] - self.camera.true_pos[1] - img.get_size()[1])])
+                    """ if col != '10':
+                        self.render_list.append([img, (x + offset[0] - self.camera.true_pos[0], y + offset[1] - self.camera.true_pos[1] - img.get_size()[1])]) """
 
         self.world_animations.render(surf, self.camera.pos)
         self.weapon_anims.render(surf, self.camera.pos)
-
-        """ t = 0
-        rot_function = lambda x, y: int(math.sin(t / 60 + x / 100) * 15)
-        self.gm.update_render(surf, self.game.window.dt, offset=self.camera.true_pos, rot_function=rot_function) """
 
         self.towers.render(surf, self.camera.true_pos)
         self.destruction_particles.render(surf, self.camera.true_pos)
         self.vfx.render_front(self.game.window.ui_surf, self.camera.true_pos)
 
     def update(self):
+        self.render_lights = []
+        self.render_light_colors = []
+
         self.camera.update()
         self.world_animations.update()
         self.weapon_anims.update()
@@ -137,18 +112,9 @@ class World:
         self.entities.update()
         self.destruction_particles.update()
 
-        self.visible_lights = []
-        for light in self.lights:
-            #self.visible_lights.append((light[0] - self.camera.true_pos[0], light[1] - self.camera.true_pos[1]))
-            self.visible_lights.append(((light[0] - self.camera.true_pos[0]) / self.game.window.display.get_width(), (light[1] - self.camera.true_pos[1]) / self.game.window.display.get_height()))
-
-        """ self.quadtree.clear()
-        for entity in self.entities.entities:
-            if entity.category == 'enemy':
-                self.quadtree.insert(entity) """
-        
-
-        """ self.gm.apply_force((self.player.center[0] - self.camera.true_pos[0], self.player.center[1] - self.camera.true_pos[1]), 10, 25) """
+        # pad the lights list with empty light sources -- stupid glsl stuff
+        while len(self.render_lights) < MAX_LIGHT_SOURCES:
+            self.render_lights.append((0, 0, -1))
 
         # builder mode handler -------------------------------------------------------- #
         if self.game.input.states['open_build_mode']:

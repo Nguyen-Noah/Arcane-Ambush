@@ -35,7 +35,7 @@
     },
     "new_test_graphics": {
         "waves": 80,
-        "tile_offset": 0,
+        "tile_offset": [0, 0],
         "camera_starting_pos": [203, 264],
         "lock_distance": [188, 248],
         "player_spawn_point": [384, 384],
