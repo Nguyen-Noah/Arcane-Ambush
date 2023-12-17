@@ -37,7 +37,7 @@ class EntityManager:
 
     def update(self):
         #self.spawner.update(self.game.window.dt)
-        for entity in self.entities:
+        for i, entity in enumerate(self.entities):
             alive = entity.update(self.game.window.dt)
             if not alive:
                 self.entities.pop(i)

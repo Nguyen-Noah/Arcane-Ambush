@@ -16,14 +16,14 @@ class Player(Entity):
         self.vy = 0
         self.last_move_attempt = 0
         self.money = 100000
-        self.skills = [None, None, None, None, None, None, None, None, None]
+        self.skills = [SKILLS['teleport'](self.game, self), None, None, None, None, None, None, None, None]
         self.inventory = Inventory(self)
         self.selected_inventory_slot = 0
         self.counter = [False, False]
         self.aim_angle = 0
         self.attacking = False
         self.attack_movement_slow = 0
-
+        self.movement_skill = False
 
         # PUT THIS IN THE CONFIG EVENTUALLY
         self.mana = 100
@@ -68,6 +68,12 @@ class Player(Entity):
 
             self.frame_motion += movement_vector
         self.moving = True
+
+    def die(self, angle=0):
+        self.game.world.world_animations.spawn('player_die_side', (self.pos[0] - self.img.get_width() // 2, self.pos[1] - self.img.get_height() // 2), flip=self.flip)
+        self.death_frames = sum(self.active_animation.data.config['frames'])
+
+        self.alive = False
         
     def update(self, dt):
         self.frame_motion = self.velocity.copy()
@@ -137,14 +143,15 @@ class Player(Entity):
 
             if self.invincible > 0:
                 self.invincible = normalize(self.invincible, dt)
-
-            normalize_vector(self.velocity, dt * 8)
+            
+            if not self.movement_skill:
+                normalize_vector(self.velocity, dt * 8)
         else:
             self.velocity = [0, 0]
             self.weapon.invisible = 0.2
 
-        self.game.world.add_light_source(self.center[0] - self.game.world.camera.true_pos[0], self.center[1] - self.game.world.camera.true_pos[1], 0.4, (255, 255, 255))
-        
+        self.game.world.add_light_source(self.center[0], self.center[1], 0.4, (255, 255, 255))
+
         # collisions and move ---------------------------------------------------------- #
         self.collisions = self.move(self.frame_motion, self.game.world.collideables)
 

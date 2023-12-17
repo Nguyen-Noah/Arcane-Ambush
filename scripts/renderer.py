@@ -63,7 +63,11 @@ class Renderer:
         
         ui_surf.blit(self.game.assets.misc['health_mana_ui'], (0, 10))
         ui_surf.blit(adjusted_health, (1, 12))
+        if new_health_width > 0:
+            ui_surf.blit(self.game.assets.misc['health_tip'], (1 + new_health_width, 12))
         ui_surf.blit(adjusted_mana, (1, 20))
+        if new_mana_width > 0:
+            ui_surf.blit(self.game.assets.misc['mana_tip'], (1 + new_mana_width, 20))
 
         # inventory ----------------------------------------------------------------------------------------------- #
         skills = self.game.world.entities.player.skills
@@ -114,8 +118,8 @@ class Renderer:
             if weapon_img.get_height() > weapon_img.get_width():
                 weapon_img = pygame.transform.rotate(weapon_img, -90)
             if player_items[i] == player.weapon:
-                pygame.draw.line(ui_surf, color, (22, base_pos + offset), (22, base_pos + offset + weapon_img.get_height() + (padding * i)))
-            ui_surf.blit(weapon_img, (25 - mask.get_bounding_rects()[0].left, base_pos + offset + (padding * i)))
+                pygame.draw.line(ui_surf, color, (10, base_pos + offset), (10, base_pos + offset + weapon_img.get_height() + (padding * i)))
+            ui_surf.blit(weapon_img, (12 - mask.get_bounding_rects()[0].left, base_pos + offset + (padding * i)))
             offset += weapon_img.get_height() + 2
         
         # tooltips ----------------------------------------------------------------------------------------------- #

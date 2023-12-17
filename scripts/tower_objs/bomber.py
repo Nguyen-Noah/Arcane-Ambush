@@ -6,9 +6,9 @@ class Bomber(Tower):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def update(self):
+    def update(self, dt):
         if self.hoverable:
-            self.attack_timer += self.game.window.dt
+            self.attack_timer += dt
             if self.attack_timer >= self.attack_cd:
                 num_projectiles = 16
                 for i in range(num_projectiles):
@@ -17,7 +17,7 @@ class Bomber(Tower):
                     self.game.world.entities.projectiles.append(Projectile(self.type + '_projectile', self.center, angle, speed, self.game, self))
                 self.attack_timer = 0
 
-            self.game.world.add_light_source(self.center[0] - self.game.world.camera.true_pos[0], self.center[1] - self.game.world.camera.true_pos[1], 0.4, (255, 50, 50))
+            self.game.world.add_light_source(self.center[0], self.center[1], 0.4, (255, 50, 50))
 
     def render(self, surf, offset):
         super().render(surf, offset)

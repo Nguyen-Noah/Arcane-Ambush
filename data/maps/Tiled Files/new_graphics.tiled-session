@@ -16,11 +16,11 @@
             "scaleInEditor": 1
         },
         "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_test_graphics/new_test_graphics.tmx": {
-            "scale": 4,
+            "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 916,
-                "y": 426
+                "x": 593,
+                "y": 634
             }
         },
         "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/new_test_graphics/walls.tsx": {

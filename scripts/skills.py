@@ -59,13 +59,16 @@ class Dash(Skill):
 
             # subtract 4 to compensate offset
             self.game.world.destruction_particles.add_particle(img, (self.owner.center.copy()[0], self.owner.center.copy()[1] - 4), [0, 0, 0], duration=0.05, gravity=False)
-
+        else:
+            self.owner.movement_skill = False
+            
         self.owner.allow_movement = not bool(self.dash_distance)
         self.owner.targetable = not bool(self.dash_distance)
 
     def use(self):
         if super().use():
             self.dash_distance = 6
+            self.owner.movement_skill = True
 
             self.owner.velocity[0] = math.cos(self.owner.aim_angle) * self.dash_distance
             self.owner.velocity[1] = math.sin(self.owner.aim_angle) * self.dash_distance
@@ -73,11 +76,30 @@ class Dash(Skill):
             for i in range(random.randint(30, 50)):
                 self.game.world.vfx.spawn_group('arrow_impact_sparks', self.owner.center.copy(), self.owner.aim_angle)
 
+class Teleport(Skill):
+    def __init__(self, game, owner):
+        super().__init__(game, owner, 'teleport')
+        self.charge = 0
+        self.cast = True
+        self.teleport_pos = [0, 0]
+
+    def update(self):
+        super().update()
+
+    def use(self):
+        super().use()
+        
+        if self.cast:
+            self.teleport_pos = self.owner.pos.copy()
+            self.cast = False
+        else:
+            self.owner.pos = self.teleport_pos
+            self.game.window.add_freeze(0.2, 0.2)
+            self.cast = True
+
 class Bomb(Skill):
     def __init__(self, game, owner):
         super().__init__(game, owner, 'bomb')
-        self.game = game
-        self.owner = owner
 
     def update(self):
         super().update()
@@ -87,5 +109,6 @@ class Bomb(Skill):
 
 SKILLS = {
     'dash': Dash,
+    'teleport': Teleport,
     'bomb': Bomb
 }

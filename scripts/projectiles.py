@@ -1,10 +1,6 @@
-import math
-import random
-
-import pygame
-
+import pygame, math, random
 from .config import config
-from .core_funcs import advance, to_cart, to_polar
+from .core_funcs import advance
 from .vfx import glow
 
 class Projectile:
@@ -32,6 +28,8 @@ class Projectile:
     def update(self, dt):
         self.duration -= dt
         self.move(dt)
+
+        #self.game.world.add_light_source(self.pos[0], self.pos[1], 0.1, (100, 0, 0))
 
         for entity in self.game.world.entities.entities:
             if (entity != self.owner) and ((entity.type == 'player') or (entity.type != self.owner.type)) and (entity.type != 'item') and (entity.health > 0) and entity.targetable and (entity.invincible == 0):

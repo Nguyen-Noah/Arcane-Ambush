@@ -14,7 +14,7 @@ from .vfx import VFX, set_glow_surf
 
 from .quadtree import QuadTree, Rectangle
 
-MAX_LIGHT_SOURCES = 50
+MAX_LIGHT_SOURCES = 500
 
 class World:
     def __init__(self, game):
@@ -24,8 +24,6 @@ class World:
         self.builder_mode = False
         self.show_builder_menu = False
         self.world_timer = 0
-        self.color_mix = config['shaders']['day_cycle']['vec_values'][0][:3]
-        self.con_sat_brt = config['shaders']['day_cycle']['vec_values'][0][::-3]
         self.render_lights = []
         self.render_light_colors = []
 
@@ -65,7 +63,7 @@ class World:
 
     def add_light_source(self, x, y, intensity, col):
         normalized_color = normalize_color(col)
-        self.render_lights.append((x / self.game.window.display.get_width(), y / self.game.window.display.get_height(), intensity))
+        self.render_lights.append(((x - self.camera.true_pos[0]) / self.game.window.display.get_width(), (y - self.camera.true_pos[1]) / self.game.window.display.get_height(), intensity))
         self.render_light_colors.append(normalized_color)
 
     def render(self, surf):
@@ -115,6 +113,7 @@ class World:
         # pad the lights list with empty light sources -- stupid glsl stuff
         while len(self.render_lights) < MAX_LIGHT_SOURCES:
             self.render_lights.append((0, 0, -1))
+            self.render_light_colors.append((0, 0, 0))
 
         # builder mode handler -------------------------------------------------------- #
         if self.game.input.states['open_build_mode']:
@@ -142,23 +141,4 @@ class World:
         if self.game.input.mouse_state['right_click']:
             print((self.player.center[0] + self.camera.true_pos[0], self.player.center[1] + self.camera.true_pos[1]))
 
-        # UGLY I WILL FIX THIS EVENTUALLY
         self.world_timer += self.game.window.dt
-        colors = config['shaders']['day_cycle']['vec_values']
-        #time = self.world_timer / 200
-        #wrapped_time = time % 1.0
-        wrapped_time = 0.5
-        key_prev = min(math.floor(wrapped_time * len(colors)), len(colors) - 1)
-        key_next = (key_prev + 1) % len(colors)
-        lerp_amt = (wrapped_time - key_prev / len(colors)) * len(colors)
-
-        self.color_mix = [
-                        lerp(colors[key_prev][0], colors[key_next][0], lerp_amt),
-                        lerp(colors[key_prev][1], colors[key_next][1], lerp_amt),
-                        lerp(colors[key_prev][2], colors[key_next][2], lerp_amt)
-                        ]
-        self.con_sat_brt = [
-                        lerp(colors[key_prev][3], colors[key_next][3], lerp_amt),
-                        lerp(colors[key_prev][4], colors[key_next][4], lerp_amt),
-                        lerp(colors[key_prev][5], colors[key_next][5], lerp_amt)
-                        ]

@@ -18,6 +18,7 @@ class StaffWeapon(Weapon):
             super().attempt_attack()
 
     def render(self, surf, loc):
+        self.invisible = 0
         img = self.game.assets.weapons[self.type].copy()
         if not self.invisible:
             if (self.rotation % 360 < 270) and (self.rotation % 360 > 90):

@@ -101,11 +101,11 @@ class Tower:
                 surf.blit(mask_surf, (loc[0], loc[1] - 1))
                 surf.blit(mask_surf, (loc[0], loc[1] + 1))
 
-    def update(self):
+    def update(self, dt):
         if self.hoverable:
             #self.target()
             if self.targeted_entity:
-                self.attack_timer += self.game.window.dt
+                self.attack_timer += dt
 
                 if self.attack_timer >= self.attack_cd:
                     angle = math.atan2(self.targeted_entity.center[1] - self.center[1], self.targeted_entity.center[0] - self.center[0])

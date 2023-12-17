@@ -11,7 +11,7 @@
         "radius": 250,
         "attack_cd": 1.5,
         "rarity": ["common", "uncommon", "rare", "legendary", "mythical"],
-        "player_skill": "gun"
+        "player_skill": "teleport"
     },
     "bomber": {
         "cost": [10, 50, 100, 250, 500],

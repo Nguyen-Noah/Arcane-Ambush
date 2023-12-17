@@ -13,7 +13,7 @@ class ShortswordWeapon(Weapon):
         self.swing = -1
         self.swing_angle = 0
         self.target = 0
-        self.weapon_angle = -90
+        self.weapon_angle = -134
         self.swinging = False
 
     def process_swing(self, dt):

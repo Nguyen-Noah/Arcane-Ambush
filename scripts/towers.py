@@ -9,7 +9,7 @@ class Towers:
         self.game = game
         self.towers = []
         self.inventory_towers = []
-        self.selected_tower = 'bomber'
+        self.selected_tower = 'archer'
         self.displayed_tower = None
 
         for tower in tower_map:
@@ -44,10 +44,10 @@ class Towers:
         for i, tower in enumerate(self.towers):
             if tower.tower_hover() and self.game.input.mouse_state['right_click']:
                 self.towers.pop(i)
-            tower.update()
+            tower.update(self.game.window.dt)
 
         for i, tower in enumerate(self.inventory_towers):
-            tower.update()
+            tower.update(self.game.window.dt)
 
         if self.displayed_tower:
             self.displayed_tower.pos = (round_nearest(self.game.input.get_mouse_pos()[0], 8), round_nearest(self.game.input.get_mouse_pos()[1], 8))

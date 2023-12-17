@@ -63,7 +63,7 @@ class Camera:
             if self.track_entity:
                 if self.track_entity.type == 'player':
                     target_pos = self.track_entity.pos.copy()
-                    if self.track_entity.weapon:
+                    if self.track_entity.weapon and self.track_entity.alive:
                         angle = math.radians(self.track_entity.weapon.rotation)
                         dis = math.sqrt((self.game.input.mouse_pos[1] - self.track_entity.center[1] + self.game.world.camera.render_offset[1]) ** 2 + (self.game.input.mouse_pos[0] - self.track_entity.center[0] + self.game.world.camera.render_offset[0]) ** 2)
                         target_pos[0] += math.cos(angle) * (dis / 8)

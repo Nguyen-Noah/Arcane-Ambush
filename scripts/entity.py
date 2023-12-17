@@ -133,24 +133,18 @@ class Entity:
         pygame.draw.rect(self.game.window.display, 'blue', (self.rect[0] - self.game.world.camera.true_pos[0], self.rect[1] - self.game.world.camera.true_pos[1], self.rect[2], self.rect[3]), 1)
 
     def die(self, angle=0):
-        if self.type != 'player':
-            #self.game.world.world_animations.spawn('death_sparks', self.center, flip=self.flip)
-            self.game.world.vfx.spawn_vfx('circle', self.center.copy(), 4, 6, 25, 25)
-            self.game.world.vfx.spawn_vfx('circle', self.center.copy(), 4, 8, 25, 100)
-            for i in range(random.randint(7, 20)):
-                random_angle = angle + (random.random() - 0.5) / 3.5
-                if random.randint(1, 4) == 1:
-                    random_angle = angle + (random.random() - 0.5) / 7 + math.pi
-                random_speed = random.randint(20, 100)
-                vel = [math.cos(random_angle) * random_speed, math.sin(random_angle) * random_speed]
-                self.game.world.vfx.spawn_vfx('spark', self.center.copy(), vel, 1 + random.random(), (15, 15, 8), drag=50)
+        #self.game.world.world_animations.spawn('death_sparks', self.center, flip=self.flip)
+        self.game.world.vfx.spawn_vfx('circle', self.center.copy(), 4, 6, 25, 25)
+        self.game.world.vfx.spawn_vfx('circle', self.center.copy(), 4, 8, 25, 100)
+        for i in range(random.randint(7, 20)):
+            random_angle = angle + (random.random() - 0.5) / 3.5
+            if random.randint(1, 4) == 1:
+                random_angle = angle + (random.random() - 0.5) / 7 + math.pi
+            random_speed = random.randint(20, 100)
+            vel = [math.cos(random_angle) * random_speed, math.sin(random_angle) * random_speed]
+            self.game.world.vfx.spawn_vfx('spark', self.center.copy(), vel, 1 + random.random(), (15, 15, 8), drag=50)
 
-            self.alive = False
-        else:
-            self.active_animation = self.game.assets.animations.new(self.type + '_die_side')
-            self.death_frames = sum(self.active_animation.data.config['frames'])
-
-            self.targetable = False
+        self.alive = False
 
     def damage(self, amount, angle=0):
         self.hurt = 1
