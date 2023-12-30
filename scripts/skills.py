@@ -52,6 +52,7 @@ class Dash(Skill):
         if self.dash_distance:
             normalize_vector(self.owner.velocity, 0.35)
             self.dash_distance = normalize(self.dash_distance, 0.35)
+            print(self.owner.velocity)
 
             self.game.world.vfx.spawn_group('dash_sparks', self.owner.center.copy(), self.owner.aim_angle)
             img = self.owner.img.copy()

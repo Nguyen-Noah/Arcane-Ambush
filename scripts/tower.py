@@ -23,9 +23,19 @@ class Tower:
         self.targeting = 'closest'
         self.targeted_entity = None
         self.shooting = True
-        self.img = load_img(path + self.type + '/' + str(self.rank) + '.png', colorkey)
+        #self.img = load_img(path + self.type + '/' + str(self.rank) + '.png', colorkey)
+        self.animation = self.game.assets.animations.new(self.type + '_tower')
         
         self.gen_mask()
+
+    @property
+    def img(self):
+        if not self.animation:
+            img = self.current_image
+        else:
+            self.set_image(self.animation.img)
+            img = self.current_image
+        return img
 
     @property
     def rect(self):
@@ -43,6 +53,10 @@ class Tower:
 
     def set_opacity(self, opacity):
         self.img.set_alpha(opacity)
+
+    def set_image(self, surf):
+        self.current_image = surf.copy()
+        self.image_base_dimensions = list(surf.get_size())
 
     def gen_mask(self):
         if self.hoverable:
@@ -88,7 +102,7 @@ class Tower:
         cursor_mask = pygame.mask.from_surface(self.game.window.cursor)
         cursor_offset = self.game.input.get_mouse_pos()
         if self.mask.overlap(cursor_mask, (cursor_offset[0] - (self.pos[0] - (self.rect[2] // 2)), cursor_offset[1] - (self.pos[1] - (self.rect[3] // 2)))):
-            self.show_radius(surf, self.game.world.camera.true_pos)
+            #self.show_radius(surf, self.game.world.camera.true_pos)
             if not self.game.world.builder_mode:
                 mask = pygame.mask.from_surface(self.img)
                 mask_outline = mask.outline()
@@ -102,15 +116,15 @@ class Tower:
                 surf.blit(mask_surf, (loc[0], loc[1] + 1))
 
     def update(self, dt):
-        if self.hoverable:
-            #self.target()
-            if self.targeted_entity:
-                self.attack_timer += dt
+        if self.animation:
+            self.animation.play(dt)
 
-                if self.attack_timer >= self.attack_cd:
-                    angle = math.atan2(self.targeted_entity.center[1] - self.center[1], self.targeted_entity.center[0] - self.center[0])
-                    self.game.world.entities.projectiles.append(Projectile(self.type + '_projectile', self.center, angle, 50, self.game, self))
-                    self.attack_timer = 0
+        self.attack_timer += dt
+
+        """ if self.attack_timer >= self.attack_cd:
+            angle = math.atan2(self.targeted_entity.center[1] - self.center[1], self.targeted_entity.center[0] - self.center[0])
+            self.game.world.entities.projectiles.append(Projectile(self.type + '_projectile', self.center, angle, 50, self.game, self))
+            self.attack_timer = 0 """
 
     def render(self, surf, offset=(0, 0)):
         if self.hoverable:

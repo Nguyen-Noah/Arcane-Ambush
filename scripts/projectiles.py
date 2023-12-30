@@ -17,19 +17,19 @@ class Projectile:
         advance(self.pos, self.rotation, self.config['spawn_advance'])
 
     def move(self, dt):
-        directions = {k : False for k in ['top', 'left', 'right', 'bottom']}
         cx = math.cos(self.rotation) * self.speed * dt
         self.pos[0] += cx
         cy = math.sin(self.rotation) * self.speed * dt
         self.pos[1] += cy
 
-        return directions
-
     def update(self, dt):
         self.duration -= dt
         self.move(dt)
 
-        #self.game.world.add_light_source(self.pos[0], self.pos[1], 0.1, (100, 0, 0))
+        img = self.game.assets.projectiles[self.type]
+
+        if self.config['group'] == 'player':
+            self.game.world.add_light_source(self.pos[0] - (img.get_width() // 2), self.pos[1] - (img.get_height() // 2), 0.8, 0.2, (225, 0, 0))
 
         for entity in self.game.world.entities.entities:
             if (entity != self.owner) and ((entity.type == 'player') or (entity.type != self.owner.type)) and (entity.type != 'item') and (entity.health > 0) and entity.targetable and (entity.invincible == 0):

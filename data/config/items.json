@@ -24,6 +24,11 @@
         "description": "light staff.",
         "type": "weapon"
     },
+    "fireGrimoire": {
+        "name": "Fire Grimoire",
+        "description": "fire grimoire.",
+        "type": "weapon"
+    },
     "potion": {
         "name": "Health Potion",
         "description": "Heals 10 health",

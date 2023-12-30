@@ -1,21 +1,16 @@
 #version 330 core
 
-const int max_lights =  500;
+const int max_lights =  200;
 
 uniform sampler2D surface;
 uniform sampler2D noise;
 uniform sampler2D perlin_noise;
 uniform float world_timer;
 uniform vec2 base_resolution;
-uniform vec3 lights[max_lights];
+uniform vec2 lights[max_lights];
+uniform vec2 light_rad_int[max_lights];
 uniform vec3 light_colors[max_lights];
 uniform float i_frames;
-
-const float light_radius = 0.1;
-const vec3 light_color = vec3(1.0, 0.5, 0.5);
-
-const float intensity = 0.4;
-const float max_dist = pow(0.8, intensity);
 
 in vec2 uv;
 out vec4 f_color;
@@ -35,19 +30,22 @@ void main() {
     vec3 render_color = vec3(0.0);
     // BACK TO LIGHTING ------------------------------------------- //
     for (int i = 0; i < lights.length - 1; i++) {
-        vec3 light = lights[i];
+        vec2 light_pos = lights[i];
+        float radius = light_rad_int[i].x;
+        float intensity = light_rad_int[i].y;
 
-        if (light.z == -1)
+        if (radius == -1)
             continue;
 
-        float dist = distance(pixel_uv, light.xy);
-        float attenuation = 1.0 - min(pow(dist, light.z), max_dist) / max_dist;
+        float dist = distance(pixel_uv, light_pos.xy);
+        float max_dist = pow(radius, intensity);
+        float attenuation = 1.0 - min(pow(dist, intensity), max_dist) / max_dist;
         render_color += attenuation * light_colors[i];
     }
 
     render_color = display_sample.rgb * render_color;
-    //vec3 render_color = display_sample.rgb;
-    
+
+    // Noise edge
     float center_dist = distance(uv, vec2(0.5));
     float noise_val = center_dist + perlin_noise.r * 0.55;
     vec3 dark_color = vec3(0.0, 0.0, 0.0);

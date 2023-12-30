@@ -1,19 +1,19 @@
 {
-    "wizard_tower": {
+    "hecate": {
         "cost": [10, 50, 100, 250, 500],
         "radius": 50,
         "attack_cd": 1.5,
         "rarity": ["common", "uncommon", "rare", "legendary", "mythical"],
         "player_skill": "dash"
     },
-    "archer": {
+    "artemis": {
         "cost": [10, 50, 100, 250, 500],
         "radius": 250,
         "attack_cd": 1.5,
         "rarity": ["common", "uncommon", "rare", "legendary", "mythical"],
         "player_skill": "teleport"
     },
-    "bomber": {
+    "hephaestus": {
         "cost": [10, 50, 100, 250, 500],
         "radius": 0,
         "attack_cd": 3,
@@ -32,7 +32,7 @@
         "attack_cd": 1.5,
         "rarity": ["legendary", "mythical"]
     },
-    "phoenix": {
+    "aether": {
         "cost": [10, 50, 100, 250, 500],
         "radius": 200,
         "attack_cd": 1.5,
@@ -45,7 +45,7 @@
         "attack_cd": 1.5,
         "rarity": ["mythical"]
     },
-    "cleric": {
+    "asclepius": {
         "cost": [10, 50, 100, 250, 500],
         "radius": 250,
         "attack_cd": 1.5,

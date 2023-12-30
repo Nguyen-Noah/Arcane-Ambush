@@ -1,33 +1,33 @@
 {
-    "wizard_tower_projectile": {
+    "hecate_projectile": {
         "shape": null,
         "power": 5,
         "group": "wizard_tower",
         "spawn_advance": 8,
         "knockback": 0
     },
-    "archer_projectile": {
+    "artemis_projectile": {
         "shape": null,
         "power": 5,
         "group": "archer",
         "spawn_advance": 8,
         "knockback": 0
     },
-    "bomber_projectile": {
+    "hephaestus_projectile": {
         "shape": null,
-        "power": 100,
-        "group": "bomber",
+        "power": 10,
+        "group": "hephaestus",
         "spawn_advance": 8,
         "knockback": 2
     },
-    "phoenix_projectile": {
+    "aether_projectile": {
         "shape": null,
         "power": 5,
         "group": "phoenix",
         "spawn_advance": 8,
         "knockback": 0
     },
-    "cleric_projectile": {
+    "asclepius_projectile": {
         "shape": null,
         "power": 5,
         "group": "cleric",
@@ -42,6 +42,13 @@
         "knockback": 0
     },
     "lightStaff_projectile": {
+        "shape": null,
+        "power": 5,
+        "group": "player",
+        "spawn_advance": 8,
+        "knockback": 0
+    },
+    "fireGrimoire_projectile": {
         "shape": null,
         "power": 5,
         "group": "player",

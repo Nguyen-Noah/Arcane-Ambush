@@ -9,7 +9,7 @@ class Towers:
         self.game = game
         self.towers = []
         self.inventory_towers = []
-        self.selected_tower = 'archer'
+        self.selected_tower = 'artemis'
         self.displayed_tower = None
 
         for tower in tower_map:

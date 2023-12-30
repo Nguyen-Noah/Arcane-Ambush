@@ -1,13 +1,13 @@
-from .tower_objs.wizard_tower import WizardTower
-from .tower_objs.archer import Archer
-from .tower_objs.bomber import Bomber
-from .tower_objs.phoenix import Phoenix
-from .tower_objs.cleric import Cleric
+from .tower_objs.hecate import Hecate
+from .tower_objs.artemis import Artemis
+from .tower_objs.hephaestus import Hephaestus
+from .tower_objs.aether import Aether
+from .tower_objs.asclepius import Asclepius
 
 tower_map = {
-    'wizard_tower': WizardTower,
-    'archer': Archer,
-    'bomber': Bomber,
-    'phoenix': Phoenix,
-    'cleric': Cleric
+    'hecate': Hecate,
+    'artemis': Artemis,
+    'hephaestus': Hephaestus,
+    'aether': Aether,
+    'asclepius': Asclepius
 }

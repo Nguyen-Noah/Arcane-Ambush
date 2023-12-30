@@ -14,7 +14,7 @@ from .vfx import VFX, set_glow_surf
 
 from .quadtree import QuadTree, Rectangle
 
-MAX_LIGHT_SOURCES = 500
+MAX_LIGHT_SOURCES = 200
 
 class World:
     def __init__(self, game):
@@ -24,7 +24,8 @@ class World:
         self.builder_mode = False
         self.show_builder_menu = False
         self.world_timer = 0
-        self.render_lights = []
+        self.render_lights_pos = []
+        self.render_lights_rad_int = []
         self.render_light_colors = []
 
     def load(self, map_id):
@@ -61,9 +62,10 @@ class World:
 
         self.master_clock = 0
 
-    def add_light_source(self, x, y, intensity, col):
+    def add_light_source(self, x, y, radius, intensity, col):
         normalized_color = normalize_color(col)
-        self.render_lights.append(((x - self.camera.true_pos[0]) / self.game.window.display.get_width(), (y - self.camera.true_pos[1]) / self.game.window.display.get_height(), intensity))
+        self.render_lights_pos.append(((x - self.camera.true_pos[0]) / self.game.window.display.get_width(), (y - self.camera.true_pos[1]) / self.game.window.display.get_height()))
+        self.render_lights_rad_int.append((radius, intensity))
         self.render_light_colors.append(normalized_color)
 
     def render(self, surf):
@@ -82,7 +84,7 @@ class World:
                 if col != '-1':
                     x = col_index * 16
                     y = row_index * 16
-                    img = self.game.assets.collideables[col]
+                    #img = self.game.assets.collideables[col]
                     #self.collideables.append(self.obs_rect((x + offset[0], y + offset[1] - img.get_size()[1]), img, int(col)))
                     self.collideables.append(pygame.Rect(x, y, 16, 16))
                     #rect = self.world_rects[int(col)]
@@ -98,7 +100,8 @@ class World:
         self.vfx.render_front(self.game.window.ui_surf, self.camera.true_pos)
 
     def update(self):
-        self.render_lights = []
+        self.render_lights_pos = []
+        self.render_lights_rad_int = []
         self.render_light_colors = []
 
         self.camera.update()
@@ -111,8 +114,9 @@ class World:
         self.destruction_particles.update()
 
         # pad the lights list with empty light sources -- stupid glsl stuff
-        while len(self.render_lights) < MAX_LIGHT_SOURCES:
-            self.render_lights.append((0, 0, -1))
+        while len(self.render_lights_pos) < MAX_LIGHT_SOURCES:
+            self.render_lights_pos.append((0, 0))
+            self.render_lights_rad_int.append((-1, 0))
             self.render_light_colors.append((0, 0, 0))
 
         # builder mode handler -------------------------------------------------------- #

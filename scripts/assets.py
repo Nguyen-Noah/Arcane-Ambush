@@ -15,7 +15,7 @@ class Assets:
         self.particles = self.load_dirs('data/graphics/particles')
         self.weapons = self.load_dir('data/graphics/weapons')
         self.cursor = self.load_dir('data/graphics/cursor')
-        self.towers = self.load_dirs('data/graphics/towers')
+        #self.towers = self.load_dirs('data/graphics/towers')
         self.projectiles = self.load_dir('data/graphics/projectiles')
         self.skills = self.load_dir('data/graphics/skills')
         self.misc = self.load_dir('data/graphics/misc')

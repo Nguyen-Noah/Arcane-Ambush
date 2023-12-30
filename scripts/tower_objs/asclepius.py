@@ -1,6 +1,6 @@
 from ..tower import Tower
 
-class Cleric(Tower):
+class Asclepius(Tower):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

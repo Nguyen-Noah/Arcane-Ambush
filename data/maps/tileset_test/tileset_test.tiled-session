@@ -3,10 +3,34 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "tileset_test.tmx",
     "expandedProjectPaths": [
     ],
     "fileStates": {
+        "campfire.tsx": {
+            "scaleInDock": 5.5,
+            "scaleInEditor": 16
+        },
+        "collideables.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "floor.tsx": {
+            "scaleInDock": 11,
+            "scaleInEditor": 8
+        },
+        "tileset_test.tmx": {
+            "scale": 2,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 228,
+                "y": 237
+            }
+        },
+        "walls.tsx": {
+            "scaleInDock": 3,
+            "scaleInEditor": 8
+        }
     },
     "last.exportedFilePath": "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/maps/tileset_test",
     "last.imagePath": "C:/Users/nohan/Desktop/Projects/Original/Tower Defense/data/graphics/test/new",
@@ -17,9 +41,19 @@
     "map.tileWidth": 16,
     "map.width": 32,
     "openFiles": [
+        "tileset_test.tmx",
+        "floor.tsx",
+        "walls.tsx",
+        "campfire.tsx",
+        "collideables.tsx"
     ],
     "project": "tileset_test.tiled-project",
     "recentFiles": [
+        "collideables.tsx",
+        "campfire.tsx",
+        "walls.tsx",
+        "floor.tsx",
+        "tileset_test.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.spacing": 0,

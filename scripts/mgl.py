@@ -37,7 +37,7 @@ class MGL:
         # render object
         self.vaos[program_name] = self.ctx.vertex_array(program, [(self.quad_buffer, '2f 2f', 'vert', 'texcoord')])
 
-    def render(self, world_timer, base_resolution, lights, light_colors, i_frames):
+    def render(self, world_timer, base_resolution, lights_pos, light_rad_int, light_colors, i_frames):
         self.ctx.clear()
         self.ctx.enable(moderngl.BLEND)
         self.ctx.blend_equation = moderngl.ONE, moderngl.ONE
@@ -48,7 +48,8 @@ class MGL:
                 'perlin_noise': self.textures['perlin_noise'],
                 'world_timer': world_timer,
                 'base_resolution': base_resolution,
-                'lights': lights,
+                'lights': lights_pos,
+                'light_rad_int': light_rad_int,
                 'light_colors': light_colors,
                 'i_frames': i_frames
             })

@@ -21,7 +21,8 @@ class EntityManager:
         self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'dagger'), 'active')
         #self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'spear'), 'active')
         self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'earthStaff'), 'active')
-        self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'lightStaff'), 'active')
+        #self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'lightStaff'), 'active')
+        self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'fireGrimoire'), 'active')
 
         self.player = self.entities[-1]
         self.player.load_actives()

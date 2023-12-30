@@ -41,9 +41,6 @@ class Window:
         self.cursor_id = 'normal'
         self.cursor = None
 
-        # zoom ---------------------------------------------------------------------------- #
-        self.zoom = 1
-
     def fps(self):
         avg_dt = sum(self.frame_history) / len(self.frame_history)
         avg_fps = 1 / avg_dt
@@ -53,15 +50,20 @@ class Window:
         self.freeze_frame[rate] = duration
 
     def render_frame(self):
+        # render the cursor
         if not self.cursor:
             self.cursor = self.game.assets.cursor[self.cursor_id]
         self.ui_surf.blit(self.cursor, (self.game.input.mouse_pos[0] - self.offset[0] - self.game.assets.cursor[self.cursor_id].get_width() // 2, self.game.input.mouse_pos[1] - self.offset[1] - self.game.assets.cursor[self.cursor_id].get_height() // 2))
 
+        # converting the screen surfaces into mgl textures
         self.mgl.pg2tx(self.display, 'base_display')
         self.mgl.pg2tx(self.ui_surf, 'ui_surf')
 
-        self.mgl.render(self.game.world.world_timer, self.base_resolution, self.game.world.render_lights, self.game.world.render_light_colors, self.game.world.player.invincible)
+        # passing in uniforms to the shaders
+        world = self.game.world
+        self.mgl.render(world.world_timer, self.base_resolution, world.render_lights_pos, world.render_lights_rad_int, world.render_light_colors, world.player.invincible)
 
+        # get dt
         self.dt = time.time() - self.frame_start
         self.ui_dt = self.dt
 
@@ -69,6 +71,7 @@ class Window:
 
         orig_dt = self.dt
 
+        # screen freezes
         if self.freeze_frame != {}:
             slowest_freeze = min(list(self.freeze_frame))
             if self.freeze_frame[slowest_freeze] > self.dt:
@@ -86,6 +89,7 @@ class Window:
         for freeze in delete_list:
             del self.freeze_frame[freeze]
 
+        # used for debugging frame spikes
         self.timer += self.dt
         if self.dt > 0.05:
             print('lag spike', + self.timer)
@@ -95,12 +99,6 @@ class Window:
         self.frame_start = time.time()
         self.frame_history.append(self.ui_dt)
         self.frame_history = self.frame_history[-200:]
-
-        if self.zoom == 1:
-            pygame.transform.scale(self.display, self.scaled_resolution)
-        else:
-            size = [int(self.display.get_width() / self.zoom), int(self.display.get_height() / self.zoom)]
-            self.display = pygame.transform.scale(clip(self.display, (self.display.get_width() - size[0]) // 2, (self.display.get_height() - size[1]) // 2, size[0], size[1]), self.screen.get_size())
 
         self.display.fill(self.background_color)
         self.ui_surf.fill((0, 0, 0, 0))
