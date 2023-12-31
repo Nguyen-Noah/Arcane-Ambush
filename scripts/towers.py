@@ -42,8 +42,8 @@ class Towers:
 
     def update(self):
         for i, tower in enumerate(self.towers):
-            if tower.tower_hover() and self.game.input.mouse_state['right_click']:
-                self.towers.pop(i)
+            """ if tower.tower_hover() and self.game.input.mouse_state['right_click']:
+                self.towers.pop(i) """
             tower.update(self.game.window.dt)
 
         for i, tower in enumerate(self.inventory_towers):

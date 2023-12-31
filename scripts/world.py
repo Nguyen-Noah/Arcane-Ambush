@@ -144,6 +144,6 @@ class World:
                 self.player.weapon.invisible = 0.2
 
         if self.game.input.mouse_state['right_click']:
-            self.game.world.vfx.spawn_vfx('circle', self.game.input.get_mouse_pos(), 100, 8, 25, 100, reverse=True, ease=easeInOutExpo)#
+            self.game.world.vfx.spawn_vfx('circle', self.game.input.get_mouse_pos(), 100, 12, 16, 100, reverse=False, ease=easeInOutExpo)#
 
         self.world_timer += self.game.window.dt

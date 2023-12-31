@@ -321,27 +321,34 @@ class Circle:
         self.target_radius = radius
         self.current_radius = 0
         self.radius = self.current_radius
-        self.width = width
+        self.width = 0 if reverse else width
         self.decay_rate = decay_rate
         self.speed = speed
         self.glow = glow
         self.reverse = reverse
         self.ease = ease
+        self.alive = True
 
     def update(self, dt):
-        # using the easing function
         if self.current_radius < self.target_radius:
             self.current_radius += self.speed * dt
             self.current_radius = min(self.target_radius, self.current_radius)
             radius_value = self.ease(self.current_radius / self.target_radius)
             if self.reverse:
+                # stuff to affect the circle
                 radius_value = 1 - radius_value
+                self.width += self.decay_rate * dt
+                # stuff to kill the circle
+                if radius_value == 0:
+                    self.alive = False
+            else:
+                # stuff to affect the circle
+                self.width -= self.decay_rate * dt
+                # stuff to kill the circle
+                if radius_value == 1 or self.width <= 0:
+                    self.alive = False
             self.radius = radius_value * self.target_radius
-            #self.width -= self.decay_rate * dt
-
-        if self.width <= 0:
-            return False
-        return True
+        return self.alive
     
     def render(self, surf, offset=(0, 0)):
         color = (255, 255, 255)

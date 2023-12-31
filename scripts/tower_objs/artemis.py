@@ -1,12 +1,14 @@
 import pygame
 from ..tower import Tower
 from ..core_funcs import colideRectLine
+from ..ease_functions import easeInOutExpo
 
 class Artemis(Tower):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.targeted_entity = self.game.world.player
         self.target_pos = None
+        self.circle_spawned = False
         self.charging = 1
 
         """
@@ -22,8 +24,17 @@ class Artemis(Tower):
     def update(self, dt):
         super().update(dt)
         if self.hoverable:
+            # idle time
+            # self.attack_timer being incremented in parent Tower class
             #print(self.attack_timer)
-            if self.target_pos:
+            if self.attack_timer >= self.attack_cd:
+                self.charging -= dt
+                if not self.circle_spawned:
+                    self.game.world.vfx.spawn_vfx('circle', self.center, 120, 10, 8, 100, reverse=True, ease=easeInOutExpo)
+                    self.circle_spawned = True
+                    self.circle_status = self.game.world.vfx.get_last()
+                #print(self.circle_status)
+            """ if self.target_pos:
                 self.charging -= dt
                 #print('charging')
             else:
@@ -34,7 +45,7 @@ class Artemis(Tower):
                 pygame.draw.circle(self.game.window.display, 'white', (self.target_pos[0] - self.game.world.camera.true_pos[0], self.target_pos[1] - self.game.world.camera.true_pos[1]), 20)
                 self.target_pos = None
                 self.charging = 1
-                #print('shoot')
+                #print('shoot') """
         
         self.game.world.add_light_source(self.center[0], self.center[1], 0.8, 0.4, (200, 200, 50))
 
