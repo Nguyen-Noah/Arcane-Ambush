@@ -1,5 +1,5 @@
 import pygame, math, random
-from .core_funcs import import_csv_layout, lerp, normalize_color
+from .core_funcs import import_csv_layout, normalize_color
 from .camera import Camera
 from .config import config
 from .entities import EntityManager
@@ -11,6 +11,7 @@ from .weapon_anims import WeaponAnimations
 from .particles import ParticleManager
 from .builder_menu import Builder
 from .vfx import VFX, set_glow_surf
+from .ease_functions import easeInExpo, easeInOutExpo
 
 from .quadtree import QuadTree, Rectangle
 
@@ -143,6 +144,6 @@ class World:
                 self.player.weapon.invisible = 0.2
 
         if self.game.input.mouse_state['right_click']:
-            print((self.player.center[0] + self.camera.true_pos[0], self.player.center[1] + self.camera.true_pos[1]))
+            self.game.world.vfx.spawn_vfx('circle', self.game.input.get_mouse_pos(), 100, 8, 25, 100, reverse=True, ease=easeInOutExpo)#
 
         self.world_timer += self.game.window.dt

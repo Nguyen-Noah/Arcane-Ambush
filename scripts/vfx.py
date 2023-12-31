@@ -4,6 +4,7 @@ import random
 import pygame
 
 from .core_funcs import *
+from .ease_functions import linear
 
 def rdm(scale, offset):
     return random.random() * scale + offset
@@ -314,18 +315,30 @@ class Slice:
             #    glow(pos, 1, -math.degrees(self.angle), width=self.length * 2 + 800, color=(14, 14, 14), padding=0)
 
 class Circle:
-    def __init__(self, game, pos, radius, width, decay_rate, speed, glow=True):
+    def __init__(self, game, pos, radius, width, decay_rate, speed, glow=True, reverse=False, ease=linear):
         self.game = game
         self.pos = pos
-        self.radius = radius
+        self.target_radius = radius
+        self.current_radius = 0
+        self.radius = self.current_radius
         self.width = width
         self.decay_rate = decay_rate
         self.speed = speed
         self.glow = glow
+        self.reverse = reverse
+        self.ease = ease
 
     def update(self, dt):
-        self.radius += self.speed * dt
-        self.width -= self.decay_rate * dt
+        # using the easing function
+        if self.current_radius < self.target_radius:
+            self.current_radius += self.speed * dt
+            self.current_radius = min(self.target_radius, self.current_radius)
+            radius_value = self.ease(self.current_radius / self.target_radius)
+            if self.reverse:
+                radius_value = 1 - radius_value
+            self.radius = radius_value * self.target_radius
+            #self.width -= self.decay_rate * dt
+
         if self.width <= 0:
             return False
         return True

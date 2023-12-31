@@ -22,7 +22,7 @@ class Artemis(Tower):
     def update(self, dt):
         super().update(dt)
         if self.hoverable:
-            print(self.attack_timer)
+            #print(self.attack_timer)
             if self.target_pos:
                 self.charging -= dt
                 #print('charging')
@@ -34,7 +34,7 @@ class Artemis(Tower):
                 pygame.draw.circle(self.game.window.display, 'white', (self.target_pos[0] - self.game.world.camera.true_pos[0], self.target_pos[1] - self.game.world.camera.true_pos[1]), 20)
                 self.target_pos = None
                 self.charging = 1
-                print('shoot')
+                #print('shoot')
         
         self.game.world.add_light_source(self.center[0], self.center[1], 0.8, 0.4, (200, 200, 50))
 

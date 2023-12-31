@@ -2,6 +2,7 @@ import pygame, random
 from .config import config
 from .particles import ParticleManager
 from .tooltips import Tooltips
+from .vfx import draw_glows
 import cProfile
 
 class Renderer:
@@ -45,6 +46,7 @@ class Renderer:
 
         self.game.world.render(surf)
         self.game.world.entities.render(surf, offset)
+        draw_glows(surf)
 
         self.update_overlay_particles(surf)
         
