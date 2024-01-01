@@ -26,7 +26,6 @@ class Projectile:
 
     def update(self, dt):
         self.duration -= dt
-        print(self.duration)
         self.move(dt)
 
         if self.config['group'] == 'player':

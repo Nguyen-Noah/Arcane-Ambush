@@ -54,5 +54,12 @@
         "group": "player",
         "spawn_advance": 8,
         "knockback": 0
+    },
+    "book_of_necromancy_projectile": {
+        "shape": null,
+        "power": 5,
+        "group": "player",
+        "spawn_advance": 8,
+        "knockback": 0
     }
 }

@@ -6,7 +6,7 @@ class Hephaestus(Tower):
         super().__init__(*args, **kwargs)
 
     def update(self, dt):
-        super().update(dt)
+        super().update(dt, color=(255, 50, 50))
         if self.hoverable:
             if self.attack_timer >= self.attack_cd:
                 num_projectiles = 16
@@ -15,8 +15,6 @@ class Hephaestus(Tower):
                     angle = math.pi * 2 * i / num_projectiles
                     self.game.world.entities.projectiles.spawn_projectile(self.type + '_projectile', self.center, angle, speed, self)
                 self.attack_timer = 0
-
-            self.game.world.add_light_source(self.center[0], self.center[1], 0.8, 0.4, (255, 50, 50))
 
     def render(self, surf, offset):
         super().render(surf, offset)

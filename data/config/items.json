@@ -29,6 +29,11 @@
         "description": "fire grimoire.",
         "type": "weapon"
     },
+    "book_of_necromancy": {
+        "name": "Book of Necromancy",
+        "description": "undead.",
+        "type": "weapon"
+    },
     "potion": {
         "name": "Health Potion",
         "description": "Heals 10 health",

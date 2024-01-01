@@ -24,6 +24,7 @@ class EntityManager:
         #self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'earthStaff'), 'active')
         #self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'lightStaff'), 'active')
         self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'fireGrimoire'), 'active')
+        self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'book_of_necromancy'), 'active')
 
         self.player = self.entities[-1]
         self.player.load_actives()
@@ -38,7 +39,7 @@ class EntityManager:
             return entity[1][1] + entity[0].get_rect().height
 
     def update(self, dt):
-        #self.spawner.update(self.game.window.dt)
+        self.spawner.update(self.game.window.dt)
         for i, entity in enumerate(self.entities):
             alive = entity.update(dt)
             if not alive:

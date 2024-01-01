@@ -43,7 +43,7 @@ def glow_mask(radius, color):
     GLOW_BASE_CACHE[mask_id] = color_surf
     return GLOW_BASE_CACHE[mask_id]
 
-def glow(location, radius, angle, width=0, color=(20, 20, 20), padding=0, surf=None):
+def glow(location, radius, width=0, color=(20, 20, 20), surf=None):
     global GLOW_SURFS
 
     # padding the surface is used as a math hack to prevent the need to use trig for rotated placement
@@ -62,30 +62,6 @@ def glow(location, radius, angle, width=0, color=(20, 20, 20), padding=0, surf=N
         GLOW_CACHE[glow_id] = render_surf
     else:
         return
-        '''
-        render_surf = pygame.Surface((radius * 2 + width + abs(padding * (width + 2 * radius)), radius * 2))
-        offset_x = 0
-        if padding < 0:
-            offset_x = (width + 2 * radius) * abs(padding)
-        pygame.draw.rect(render_surf, color, pygame.Rect(radius + offset_x, 0, width, radius * 2))
-        pygame.draw.circle(render_surf, color, (radius + offset_x, radius), radius)
-        pygame.draw.circle(render_surf, color, (radius + width + offset_x, radius), radius)
-
-        # a hack to get around the pygame rotation bug resulting in a segfault with surfs that have dimensions of 0 if the angle isn't 90deg
-        if render_surf.get_width() * render_surf.get_height() == 0:
-            angle = 0
-
-        if angle:
-            render_surf.set_colorkey((0, 0, 0))
-            rotated_surf = pygame.transform.rotate(render_surf, angle)
-        else:
-            rotated_surf = render_surf
-
-        if not surf:
-            GLOW_SURFS.append([rotated_surf, (location[0] - rotated_surf.get_width() // 2, location[1] - rotated_surf.get_height() // 2)])
-        else:
-            surf.blit(rotated_surf, (location[0] - rotated_surf.get_width() // 2, location[1] - rotated_surf.get_height() // 2), special_flags=pygame.BLEND_RGBA_ADD)
-        '''
 
 def draw_glows(surf):
     global GLOW_SURFS

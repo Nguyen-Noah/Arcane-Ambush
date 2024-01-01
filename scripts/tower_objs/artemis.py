@@ -25,7 +25,7 @@ class Artemis(Tower):
         """
 
     def update(self, dt):
-        super().update(dt)
+        super().update(dt, color=(200, 200, 50))
         if self.hoverable:
             # idle time
             # self.attack_timer being incremented in parent Tower class
@@ -54,8 +54,6 @@ class Artemis(Tower):
                             self.since_first_circle = 0
                             self.second_circle_spawned = False
                         print('BVVVV')
-
-        self.game.world.add_light_source(self.center[0], self.center[1], 0.8, 0.4, (200, 200, 50))
 
     def render(self, surf, offset=[0, 0]):
         super().render(surf, offset)

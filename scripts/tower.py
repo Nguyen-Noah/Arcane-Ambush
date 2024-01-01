@@ -1,9 +1,8 @@
 import pygame, math
-from .core_funcs import load_img
 from .config import config
 from .core_funcs import get_dis
-from .projectiles import Projectile
 from .quadtree import Circle
+from .vfx import glow
 
 path = 'data/graphics/towers/'
 colorkey = (0, 0, 0, 0)
@@ -115,16 +114,12 @@ class Tower:
                 surf.blit(mask_surf, (loc[0], loc[1] - 1))
                 surf.blit(mask_surf, (loc[0], loc[1] + 1))
 
-    def update(self, dt):
+    def update(self, dt, color=(0, 0, 0)):
         if self.animation:
             self.animation.play(dt)
 
         self.attack_timer += dt
-
-        """ if self.attack_timer >= self.attack_cd:
-            angle = math.atan2(self.targeted_entity.center[1] - self.center[1], self.targeted_entity.center[0] - self.center[0])
-            self.game.world.entities.projectiles.append(Projectile(self.type + '_projectile', self.center, angle, 50, self.game, self))
-            self.attack_timer = 0 """
+        self.game.world.add_light_source(self.center[0], self.center[1], 0.8, 0.8, color)
 
     def render(self, surf, offset=(0, 0)):
         if self.hoverable:

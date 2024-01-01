@@ -147,6 +147,6 @@ class World:
 
         if self.game.input.mouse_state['right_click']:
             #self.game.world.vfx.spawn_vfx('circle', self.game.input.get_mouse_pos(), 100, 12, 16, 100, reverse=False, ease=easeInOutExpo)#
-            self.towers.selected_tower = 'hephaestus'
+            self.towers.selected_tower = 'aether'
 
         self.world_timer += self.game.window.dt

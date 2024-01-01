@@ -73,6 +73,9 @@ class Player(Entity):
 
             self.frame_motion += movement_vector
         self.moving = True
+    
+    def process_kill(self, entity):
+        pass
 
     def die(self, angle=0):
         self.game.world.world_animations.spawn('player_die_side', (self.pos[0] - self.img.get_width() // 2, self.pos[1] - self.img.get_height() // 2), flip=self.flip)
