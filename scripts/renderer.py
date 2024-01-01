@@ -18,9 +18,9 @@ class Renderer:
             loc = [random.random() * self.game.window.display.get_width(), random.random() * self.game.window.display.get_height()]
             r = random.randint(1, 4)
             if r == 4:
-                self.particles.add_particle('overlay', loc, 'p', [random.random() * -25 - 15, random.random() * 25 + 25], 0, random.choice([5, 5, 4]), custom_color=(200, 200, 200), glow=(10, 10, 10), glow_radius=4) #(201, 255, 229)
+                self.particles.add_particle('overlay', loc, 'circle', [random.random() * -25 - 15, random.random() * 25 + 25], 0, random.choice([5, 5, 4]), custom_color=(200, 200, 200), glow=(10, 10, 10), glow_radius=4) #(201, 255, 229)
             else:
-                self.particles.add_particle('overlay', loc, 'p', [random.random() * -25 - 15, random.random() * 25 + 25], 0, random.choice([5, 5, 4]), custom_color=(50, 50, 50))
+                self.particles.add_particle('overlay', loc, 'circle', [random.random() * -25 - 15, random.random() * 25 + 25], 0, random.choice([5, 5, 4]), custom_color=(50, 50, 50))
 
     def update_overlay_particles(self, surf):
         self.particles.update()

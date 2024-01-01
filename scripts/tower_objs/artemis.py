@@ -1,4 +1,4 @@
-import pygame
+import pygame, math
 from ..tower import Tower
 from ..core_funcs import colideRectLine
 from ..ease_functions import easeInOutExpo
@@ -8,8 +8,11 @@ class Artemis(Tower):
         super().__init__(*args, **kwargs)
         self.targeted_entity = self.game.world.player
         self.target_pos = None
-        self.circle_spawned = False
-        self.charging = 1
+        self.since_first_circle = 0
+        self.second_circle_spawned = False
+        self.shooting_counter = 1               # shoot the beam for 1 second
+        self.beam_rect = pygame.Rect(self.center[0], self.center[1], 100, 100)
+        self.shooting = False
 
         """
         1. set the target to the player
@@ -28,26 +31,33 @@ class Artemis(Tower):
             # self.attack_timer being incremented in parent Tower class
             #print(self.attack_timer)
             if self.attack_timer >= self.attack_cd:
-                self.charging -= dt
-                if not self.circle_spawned:
+                # spawn the first vfx circle
+                if not self.since_first_circle:
                     self.game.world.vfx.spawn_vfx('circle', self.center, 120, 10, 8, 100, reverse=True, ease=easeInOutExpo)
-                    self.circle_spawned = True
-                    self.circle_status = self.game.world.vfx.get_last()
-                #print(self.circle_status)
-            """ if self.target_pos:
-                self.charging -= dt
-                #print('charging')
-            else:
-                if self.attack_timer >= self.attack_cd:
-                    self.target_pos = self.targeted_entity.pos.copy()
-                    self.attack_timer = 0
-            if self.charging <= 0:
-                pygame.draw.circle(self.game.window.display, 'white', (self.target_pos[0] - self.game.world.camera.true_pos[0], self.target_pos[1] - self.game.world.camera.true_pos[1]), 20)
-                self.target_pos = None
-                self.charging = 1
-                #print('shoot') """
-        
+                
+                # once 0.5 seconds passed since the first circle, start the second one
+                self.since_first_circle += dt
+                if self.since_first_circle >= 0.5:
+                    if not self.second_circle_spawned:
+                        self.game.world.vfx.spawn_vfx('circle', self.center, 100, 10, 10, 100, reverse=True, ease=easeInOutExpo)
+                        self.second_circle_spawned = True
+                        self.circle_status = self.game.world.vfx.get_last()
+
+                    # once the last circle is gone, shoot the beam
+                    if not self.circle_status.alive:
+                        self.shooting = True
+                        self.shooting_counter -= dt
+                        if self.shooting_counter <= 0:
+                            self.shooting = False
+                            self.shooting_counter = 1
+                            self.attack_timer = 0
+                            self.since_first_circle = 0
+                            self.second_circle_spawned = False
+                        print('BVVVV')
+
         self.game.world.add_light_source(self.center[0], self.center[1], 0.8, 0.4, (200, 200, 50))
 
-    def render(self, surf, offset):
+    def render(self, surf, offset=[0, 0]):
         super().render(surf, offset)
+        #if self.shooting:
+        pygame.draw.line(self.game.window.display, 'red', (self.center[0] - offset[0], self.center[1] - offset[1]), (self.targeted_entity.center[0] - offset[0], self.targeted_entity.center[1] - offset[1]), 20)

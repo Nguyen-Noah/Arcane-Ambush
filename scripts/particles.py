@@ -1,37 +1,8 @@
-import os, random, math
+import random
 
-from .core_funcs import blit_center
+from .core_funcs import blit_center, swap_color, itr
 from .vfx import glow
 import pygame
-
-global e_colorkey
-e_colorkey = (0, 0, 0, 0)
-
-class ParticleManager:
-    def __init__(self, game):
-        self.game = game
-        self.particle_groups = {}
-        self.cache = True
-        self.particle_cache = {}
-
-    def add_particle(self, group, *args, **kwargs):
-        if group not in self.particle_groups:
-            self.particle_groups[group] = []
-        self.particle_groups[group].append(Particle(self.game, *args, **kwargs, manager=self))
-
-    def add(self, x, y, particle_type, motion, decay_rate, start_frame, custom_color=None):
-        self.particles.append(Particle(self.game, x, y, particle_type, motion, decay_rate, start_frame, custom_color=None))
-
-    def render(self, group, surf, offset=[0,0]):
-        for i, particle in sorted(enumerate(self.particle_groups[group]), reverse=True):
-            particle.draw(surf, offset)
-
-    def update(self):
-        for group in self.particle_groups:
-            for i, particle in sorted(enumerate(self.particle_groups[group]), reverse=True):
-                alive = particle.update(self.game.window.dt)
-                if not alive:
-                    self.particle_groups[group].pop(i)
 
 class Particle(object):
     def __init__(self, game, pos, particle_type, motion, decay_rate, start_frame, physics=None, custom_color=None, glow=None, glow_radius=None, manager=None):
@@ -91,11 +62,31 @@ class Particle(object):
 
             blit_center(surface, img, (self.pos[0] - scroll[0] + self.internal_offset[0], self.pos[1] - scroll[1] + self.internal_offset[1]))
 
-def swap_color(img,old_c,new_c):
-    global e_colorkey
-    img.set_colorkey(old_c)
-    surf = img.copy()
-    surf.fill(new_c)
-    surf.blit(img,(0,0))
-    surf.set_colorkey(e_colorkey)
-    return surf
+class ParticleManager:
+    def __init__(self, game):
+        self.game = game
+        self.particle_groups = {}
+        self.cache = True
+        self.particle_cache = {}
+
+    def add_particle(self, group, *args, **kwargs):
+        if group not in self.particle_groups:
+            self.particle_groups[group] = []
+        self.particle_groups[group].append(Particle(self.game, *args, **kwargs, manager=self))
+
+    def render(self, group, surf, offset=[0,0]):
+        for i, particle in itr(self.particle_groups[group]):
+            particle.draw(surf, offset)
+
+    def update(self):
+        for group in self.particle_groups:
+            for i, particle in sorted(enumerate(self.particle_groups[group]), reverse=True):
+                alive = particle.update(self.game.window.dt)
+                if not alive:
+                    self.particle_groups[group].pop(i)
+
+    def output_stats(self):
+        print('- particle manager stats -')
+        print('cache size:', len(self.particle_cache))
+        for group in self.particle_groups:
+            print(group + ':', len(self.particle_groups[group]))

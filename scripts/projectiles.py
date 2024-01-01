@@ -1,18 +1,20 @@
 import pygame, math, random
 from .config import config
-from .core_funcs import advance
+from .core_funcs import advance, itr
 from .vfx import glow
 
 class Projectile:
-    def __init__(self, type, pos, rot, speed, game, owner):
+    def __init__(self, game, type, pos, rot, speed, owner):
         self.game = game
         self.owner = owner
         self.type = type
         self.pos = list(pos)
         self.rotation = rot
         self.speed = speed
+        self.img = self.game.assets.projectiles[self.type]
         self.config = config['projectiles'][self.type]
         self.duration = 10
+        self.alive = True
 
         advance(self.pos, self.rotation, self.config['spawn_advance'])
 
@@ -24,12 +26,11 @@ class Projectile:
 
     def update(self, dt):
         self.duration -= dt
+        print(self.duration)
         self.move(dt)
 
-        img = self.game.assets.projectiles[self.type]
-
         if self.config['group'] == 'player':
-            self.game.world.add_light_source(self.pos[0] - (img.get_width() // 2), self.pos[1] - (img.get_height() // 2), 0.8, 0.2, (225, 0, 0))
+            self.game.world.add_light_source(self.pos[0] - (self.img.get_width() // 2), self.pos[1] - (self.img.get_height() // 2), 0.8, 0.2, (225, 0, 0))
 
         for entity in self.game.world.entities.entities:
             if (entity != self.owner) and ((entity.type == 'player') or (entity.type != self.owner.type)) and (entity.type != 'item') and (entity.health > 0) and entity.targetable and (entity.invincible == 0):
@@ -61,9 +62,12 @@ class Projectile:
                         random_speed = random.randint(20, 200)
                         vel = [math.cos(random_angle) * random_speed, math.sin(random_angle) * random_speed]
                         self.game.world.vfx.spawn_vfx('spark', self.pos.copy(), vel, 1 + random.random(), (15, 15, 8), drag=50, color=color)
-                    return False
+                    self.alive = False
 
-        return True if self.duration > 0 else False
+        if self.duration <= 0:
+            self.alive = False
+
+        return self.alive
 
     def render(self, surf, offset=(0, 0)):
         render_pos = [self.pos[0] - offset[0], self.pos[1] - offset[1]]
@@ -77,3 +81,24 @@ class Projectile:
             render_pos[0] -= img.get_width()
             render_pos[1] -= img.get_height()
             surf.blit(img, render_pos)
+
+class ProjectileManager:
+    def __init__(self, game):
+        self.game = game
+        self.projectiles = []
+
+    def spawn_projectile(self, type, pos, rot, speed, owner):
+        self.projectiles.append(Projectile(self.game, type, pos, rot, speed, owner))
+
+    def get_last(self):
+        return self.projectiles[-1]
+
+    def update(self, dt):
+        for i, projectile in itr(self.projectiles):
+            alive = projectile.update(dt)
+            if not alive:
+                self.projectiles.pop(i)
+
+    def render(self, surf, offset=(0, 0)):
+        for projectile in self.projectiles:
+            projectile.render(surf, offset)

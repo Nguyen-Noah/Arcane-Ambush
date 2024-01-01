@@ -101,6 +101,8 @@ class World:
         self.vfx.render_front(self.game.window.ui_surf, self.camera.true_pos)
 
     def update(self):
+        dt = self.game.window.dt
+        
         self.render_lights_pos = []
         self.render_lights_rad_int = []
         self.render_light_colors = []
@@ -111,7 +113,7 @@ class World:
         self.vfx.update()
         self.hitboxes.update()
         self.towers.update()
-        self.entities.update()
+        self.entities.update(dt)
         self.destruction_particles.update()
 
         # pad the lights list with empty light sources -- stupid glsl stuff
@@ -144,6 +146,7 @@ class World:
                 self.player.weapon.invisible = 0.2
 
         if self.game.input.mouse_state['right_click']:
-            self.game.world.vfx.spawn_vfx('circle', self.game.input.get_mouse_pos(), 100, 12, 16, 100, reverse=False, ease=easeInOutExpo)#
+            #self.game.world.vfx.spawn_vfx('circle', self.game.input.get_mouse_pos(), 100, 12, 16, 100, reverse=False, ease=easeInOutExpo)#
+            self.towers.selected_tower = 'hephaestus'
 
         self.world_timer += self.game.window.dt

@@ -4,6 +4,7 @@ from .config import config
 from .entity_objs.player import Player
 from .spawner import Spawner
 from .entity import Entity
+from .projectiles import ProjectileManager
 from .tower import Tower
 from .core_funcs import itr
 from .weapons import create_weapon
@@ -14,13 +15,13 @@ class EntityManager:
         self.entities = []
         self.spawner = Spawner(self.game)
         self.render_entities = True
-        self.projectiles = []
+        self.projectiles = ProjectileManager(self.game)
 
     def gen_player(self):
         self.entities.append(Player(self.game, config['level_data'][self.game.state]['player_spawn_point'], (12, 12), 'player', 'player'))
-        self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'dagger'), 'active')
+        #self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'dagger'), 'active')
         #self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'spear'), 'active')
-        self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'earthStaff'), 'active')
+        #self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'earthStaff'), 'active')
         #self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'lightStaff'), 'active')
         self.entities[-1].give_item(create_weapon(self.game, self.entities[-1], 'fireGrimoire'), 'active')
 
@@ -36,17 +37,14 @@ class EntityManager:
         else:
             return entity[1][1] + entity[0].get_rect().height
 
-    def update(self):
+    def update(self, dt):
         #self.spawner.update(self.game.window.dt)
         for i, entity in enumerate(self.entities):
-            alive = entity.update(self.game.window.dt)
+            alive = entity.update(dt)
             if not alive:
                 self.entities.pop(i)
 
-        for i, projectile in itr(self.projectiles):
-            alive = projectile.update(self.game.window.dt)
-            if not alive:
-                self.projectiles.pop(i)
+        self.projectiles.update(dt)
 
     def render(self, surf, offset=(0, 0)):
         sorted_entities = sorted(self.entities + self.game.world.render_list + self.game.world.towers.towers, key=self.y_sort)
@@ -60,5 +58,4 @@ class EntityManager:
             else:
                 surf.blit(entity[0], (math.floor(entity[1][0]), math.floor(entity[1][1])))
 
-        for projectile in self.projectiles:
-            projectile.render(surf, offset)
+        self.projectiles.render(surf, offset)

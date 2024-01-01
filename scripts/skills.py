@@ -108,8 +108,19 @@ class Bomb(Skill):
     def use(self):
         super().use()
 
+class Heal(Skill):
+    def __init__(self, game, owner):
+        super().__init__(game, owner, 'heal')
+
+    def update(self):
+        super().update()
+
+    def use(self):
+        super().use()
+
 SKILLS = {
     'dash': Dash,
     'teleport': Teleport,
-    'bomb': Bomb
+    'bomb': Bomb,
+    'heal': Heal
 }

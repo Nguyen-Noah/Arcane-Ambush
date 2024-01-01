@@ -1,7 +1,6 @@
 import pygame, math, random
 from ..weapon import Weapon
 from ..core_funcs import advance
-from ..projectiles import Projectile
 
 class StaffWeapon(Weapon):
     def __init__(self, game, owner, type, amount=1, tags=[]):
@@ -9,7 +8,7 @@ class StaffWeapon(Weapon):
 
     def attack(self):
         angle_offset = (1 - self.accuracy) * math.pi
-        self.game.world.entities.projectiles.append(Projectile(self.projectile_type + '_projectile', self.owner.center.copy(), math.radians(self.rotation) - angle_offset + random.random() * angle_offset * 2, 300, self.game, self.owner))
+        self.game.world.entities.projectiles.spawn_projectile(self.projectile_type + '_projectile', self.owner.center.copy(), math.radians(self.rotation) - angle_offset + random.random() * angle_offset * 2, 300, self.game, self.owner)
         self.game.world.vfx.spawn_group('bow_sparks', advance(self.owner.center.copy(), math.radians(self.rotation), 8), math.radians(self.rotation))
     
     def attempt_attack(self):

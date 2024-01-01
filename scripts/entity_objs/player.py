@@ -24,6 +24,7 @@ class Player(Entity):
         self.attacking = False
         self.attack_movement_slow = 0
         self.movement_skill = False
+        self.base_health = config['entities']['player']['health']
 
         # PUT THIS IN THE CONFIG EVENTUALLY
         self.mana = 100
@@ -34,6 +35,10 @@ class Player(Entity):
             return self.inventory.get_custom_group('active_weapons')[self.selected_inventory_slot]
         else:
             return None
+        
+    def heal(self, amount):
+        self.health += amount
+        self.health = min(self.health, self.base_health)
 
     def give_item(self, item, slot_group='items'):
         # remove existing active tags
@@ -179,4 +184,4 @@ class Player(Entity):
     def render(self, surf, offset=(0, 0)):
         super().render(surf, offset)
         if self.weapon:
-            self.weapon.render(surf, (self.rect[0] - self.game.world.camera.true_pos[0] + (self.size[0] // 2), self.rect[1] - self.game.world.camera.true_pos[1] + (self.size[1] // 2) - 4))
+            self.weapon.render(surf, (self.rect[0] + (self.size[0] // 2), self.rect[1] + (self.size[1] // 2) - 4), offset)
