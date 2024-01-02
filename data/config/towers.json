@@ -11,7 +11,7 @@
         "radius": 250,
         "attack_cd": 3,
         "rarity": ["common", "uncommon", "rare", "legendary", "mythical"],
-        "player_skill": "teleport"
+        "player_skill": "shield"
     },
     "hephaestus": {
         "cost": [10, 50, 100, 250, 500],

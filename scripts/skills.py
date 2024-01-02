@@ -77,7 +77,7 @@ class Dash(Skill):
             for i in range(random.randint(30, 50)):
                 self.game.world.vfx.spawn_group('arrow_impact_sparks', self.owner.center.copy(), self.owner.aim_angle)
 
-class Teleport(Skill):
+class Shield(Skill):
     def __init__(self, game, owner):
         super().__init__(game, owner, 'teleport')
         self.charge = 0
@@ -130,7 +130,7 @@ class Fireball(Skill):
 
 SKILLS = {
     'dash': Dash,
-    'teleport': Teleport,
+    'shield': Shield,
     'bomb': Bomb,
     'heal': Heal,
     'fireball': Fireball

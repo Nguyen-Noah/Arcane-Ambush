@@ -6,7 +6,6 @@ from ..ease_functions import easeInOutExpo
 class Artemis(Tower):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.targeted_entity = self.game.world.player
         self.target_pos = None
         self.since_first_circle = 0
         self.second_circle_spawned = False

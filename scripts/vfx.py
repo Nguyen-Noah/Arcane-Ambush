@@ -368,6 +368,15 @@ EFFECT_GROUPS = {
         'random': [
             [[[0, 0], [0, 0]], [math.pi / 10, -math.pi / 20], [0, 0], [2, 0], [1, 0], [0.3, 0], [0, 0]],
         ],
+    },
+    "aether_sparks": {
+        'base': [
+            # effect, 0, 0, speed, scale, decay, thiccness
+            ['curved_spark', 0, 0, 4, 3, 0.1, 0.4]
+        ],
+        'random': [
+            [[[0, 0], [0, 0]], [math.pi * 3 / 4, math.pi * 5 / 8], [0, 0], [2, 0], [1, 0], [0.3, 0], [0, 0]]
+        ]
     }
 }
 

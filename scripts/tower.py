@@ -20,9 +20,8 @@ class Tower:
         self.attack_timer = 0
         self.rotation = 0
         self.targeting = 'closest'
-        self.targeted_entity = None
+        self.targeted_entity = self.game.world.player
         self.shooting = True
-        #self.img = load_img(path + self.type + '/' + str(self.rank) + '.png', colorkey)
         self.animation = self.game.assets.animations.new(self.type + '_tower')
         
         self.gen_mask()
@@ -118,6 +117,7 @@ class Tower:
         if self.animation:
             self.animation.play(dt)
 
+        self.rotation = math.atan2(self.targeted_entity.center[1] - self.center[1], self.targeted_entity.center[0] - self.center[0])
         self.attack_timer += dt
         self.game.world.add_light_source(self.center[0], self.center[1], 0.8, 0.8, color)
 

@@ -9,7 +9,7 @@ class Hephaestus(Tower):
         super().update(dt, color=(255, 50, 50))
         if self.hoverable:
             if self.attack_timer >= self.attack_cd:
-                num_projectiles = 16
+                num_projectiles = 20
                 for i in range(num_projectiles):
                     speed = 50
                     angle = math.pi * 2 * i / num_projectiles
