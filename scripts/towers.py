@@ -46,9 +46,6 @@ class Towers:
                 self.towers.pop(i) """
             tower.update(self.game.window.dt)
 
-        for i, tower in enumerate(self.inventory_towers):
-            tower.update(self.game.window.dt)
-
         if self.displayed_tower:
             self.displayed_tower.pos = (round_nearest(self.game.input.get_mouse_pos()[0], 8), round_nearest(self.game.input.get_mouse_pos()[1], 8))
 
@@ -61,3 +58,7 @@ class Towers:
 
         if self.game.world.builder_mode:
             self.get_selected_tower()
+
+    def output_stats(self):
+        print('-------tower--------')
+        print('number of towers', len(self.towers))

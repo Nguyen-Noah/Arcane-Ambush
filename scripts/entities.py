@@ -39,7 +39,7 @@ class EntityManager:
             return entity[1][1] + entity[0].get_rect().height
 
     def update(self, dt):
-        self.spawner.update(self.game.window.dt)
+        #self.spawner.update(self.game.window.dt)
         for i, entity in enumerate(self.entities):
             alive = entity.update(dt)
             if not alive:

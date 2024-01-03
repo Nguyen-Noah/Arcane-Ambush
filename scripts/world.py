@@ -87,7 +87,7 @@ class World:
                     y = row_index * 16
                     #img = self.game.assets.collideables[col]
                     #self.collideables.append(self.obs_rect((x + offset[0], y + offset[1] - img.get_size()[1]), img, int(col)))
-                    self.collideables.append(pygame.Rect(x, y, 16, 16))
+                    #self.collideables.append(pygame.Rect(x, y, 16, 16))
                     #rect = self.world_rects[int(col)]
                     #self.collideables.append((x + offset[0] - rect[0], y + offset[1] - rect[1], rect[2], rect[3]))
                     """ if col != '10':

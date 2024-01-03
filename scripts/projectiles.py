@@ -2,9 +2,10 @@ import pygame, math, random
 from .config import config
 from .core_funcs import advance, itr
 from .vfx import glow
+from .ease_functions import linear
 
 class Projectile:
-    def __init__(self, game, type, pos, rot, speed, owner):
+    def __init__(self, game, type, pos, rot, speed, duration, owner, ease):
         self.game = game
         self.owner = owner
         self.type = type
@@ -13,7 +14,8 @@ class Projectile:
         self.speed = speed
         self.img = self.game.assets.projectiles[self.type]
         self.config = config['projectiles'][self.type]
-        self.duration = 10
+        self.duration = duration
+        self.ease = ease
         self.alive = True
 
         advance(self.pos, self.rotation, self.config['spawn_advance'])
@@ -86,8 +88,8 @@ class ProjectileManager:
         self.game = game
         self.projectiles = []
 
-    def spawn_projectile(self, type, pos, rot, speed, owner):
-        self.projectiles.append(Projectile(self.game, type, pos, rot, speed, owner))
+    def spawn_projectile(self, type, pos, rot, speed, duration, owner, ease=linear):
+        self.projectiles.append(Projectile(self.game, type, pos, rot, speed, duration, owner, ease))
 
     def get_last(self):
         return self.projectiles[-1]
