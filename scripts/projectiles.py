@@ -5,17 +5,20 @@ from .vfx import glow
 from .ease_functions import linear
 
 class Projectile:
-    def __init__(self, game, type, pos, rot, speed, duration, owner, ease):
+    def __init__(self, game, type, pos, rot, speed, duration, owner, ease, ease_speed):
         self.game = game
         self.owner = owner
         self.type = type
         self.pos = list(pos)
         self.rotation = rot
         self.speed = speed
+        self.true_speed = speed
         self.img = self.game.assets.projectiles[self.type]
         self.config = config['projectiles'][self.type]
         self.duration = duration
+        self.dist_moved = 0
         self.ease = ease
+        self.ease_speed = ease_speed
         self.alive = True
 
         advance(self.pos, self.rotation, self.config['spawn_advance'])
@@ -88,8 +91,9 @@ class ProjectileManager:
         self.game = game
         self.projectiles = []
 
-    def spawn_projectile(self, type, pos, rot, speed, duration, owner, ease=linear):
-        self.projectiles.append(Projectile(self.game, type, pos, rot, speed, duration, owner, ease))
+    def spawn_projectile(self, type, pos, rot, speed, duration, owner, ease=linear, ease_speed=100):
+        if not self.game.world.builder_mode:
+            self.projectiles.append(Projectile(self.game, type, pos, rot, speed, duration, owner, ease, ease_speed))
 
     def get_last(self):
         return self.projectiles[-1]

@@ -26,12 +26,12 @@
     },
     "fireGrimoire": {
         "name": "Fire Grimoire",
-        "description": "fire grimoire.",
+        "description": "Emblazoned with fiery sigils, the Fire Grimoire is a potent artifact of scorching power. Its covers, warm to the touch, seem to pulse with an inner flame. Each page crackles with ancient knowledge, detailing spells that harness the primal fury of fire. When unleashed, the grimoire ignites a blazing aura around its bearer. Enemies caught in this inferno are set ablaze, their forms wreathed in relentless, dancing flames. The fire consumes not only their flesh but spreads rapidly, threatening to engulf all in its unquenchable thirst. Wielders of the grimoire must exercise caution, for the wild nature of fire respects no master and can easily spiral out of control.",
         "type": "weapon"
     },
     "book_of_necromancy": {
         "name": "Book of Necromancy",
-        "description": "undead.",
+        "description": "The Book of Necromancy, bound in shadowy leather and adorned with cryptic, silver runes, is a tome of ancient and forbidden knowledge. Its pages, written in a ghostly script, whisper dark secrets that allow the wielder to bend the veil between life and death. When used, it casts a chilling aura, turning enemies within its reach into undead minions. These reanimated foes, now bound to the caster's will, exhibit hauntingly pale eyes and a spectral glow, fighting relentlessly on behalf of their new master. This cursed book is a powerful yet dangerous tool, as its eerie influence can slowly corrupt the user's soul.",
         "type": "weapon"
     },
     "potion": {

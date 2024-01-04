@@ -11,6 +11,7 @@ class GrimoireWeapon(Weapon):
 
     def attack(self):
         angle_offset = (1 - self.accuracy) * math.pi
+        #self.game.world.entities.projectiles.spawn_projectile(self.projectile_type + '_projectile', self.owner.center.copy(), math.radians(self.rotation) - angle_offset + random.random() * angle_offset * 2, 250, 2, self.owner)
         self.game.world.entities.projectiles.spawn_projectile(self.projectile_type + '_projectile', self.owner.center.copy(), math.radians(self.rotation) - angle_offset + random.random() * angle_offset * 2, 250, 2, self.owner)
         self.game.world.vfx.spawn_group('bow_sparks', advance(self.owner.center.copy(), math.radians(self.rotation), 8), math.radians(self.rotation))
         self.active_projectiles.append(self.game.world.entities.projectiles.get_last())
@@ -40,4 +41,4 @@ class GrimoireWeapon(Weapon):
             else:
                 self.flip = False
             img = pygame.transform.rotate(img, -self.rotation)
-            surf.blit(img, (loc[0] - (img.get_width() // 2) + (math.cos(math.radians(self.rotation)) * 8) - offset[0], loc[1] - (img.get_height() // 2) - (math.sin(math.radians(-self.rotation)) * 8) + 4 - offset[1]))
+            surf.blit(img, (loc[0] - (img.get_width() // 2) + (math.cos(math.radians(self.rotation)) * 10) - offset[0], loc[1] - (img.get_height() // 2) - (math.sin(math.radians(-self.rotation)) * 10) + 2 - offset[1]))

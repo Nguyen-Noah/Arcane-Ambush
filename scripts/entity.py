@@ -134,8 +134,8 @@ class Entity:
 
     def die(self, angle=0):
         #self.game.world.world_animations.spawn('death_sparks', self.center, flip=self.flip)
-        self.game.world.vfx.spawn_vfx('circle', self.center.copy(), 4, 6, 25, 25)
-        self.game.world.vfx.spawn_vfx('circle', self.center.copy(), 4, 8, 25, 100)
+        self.game.world.vfx.spawn_vfx('circle', self.center.copy(), 4, 6, 25)
+        self.game.world.vfx.spawn_vfx('circle', self.center.copy(), 4, 8, 100)
         for i in range(random.randint(7, 20)):
             random_angle = angle + (random.random() - 0.5) / 3.5
             if random.randint(1, 4) == 1:

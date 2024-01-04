@@ -69,37 +69,6 @@ class World:
         self.render_lights_rad_int.append((radius, intensity))
         self.render_light_colors.append(normalized_color)
 
-    def render(self, surf):
-        if not self.loaded:
-            self.loaded = True
-
-        self.vfx.render_back(self.game.window.ui_surf, self.camera.true_pos)
-
-        self.collideables = []
-        self.render_list = []
-
-        surf.blit(self.floor, (0 - self.camera.true_pos[0], 0 - self.camera.true_pos[1]))
-        offset = config['level_data'][self.game.state]['tile_offset']
-        for row_index, row in enumerate(self.map_data):
-            for col_index, col in enumerate(row):
-                if col != '-1':
-                    x = col_index * 16
-                    y = row_index * 16
-                    #img = self.game.assets.collideables[col]
-                    #self.collideables.append(self.obs_rect((x + offset[0], y + offset[1] - img.get_size()[1]), img, int(col)))
-                    #self.collideables.append(pygame.Rect(x, y, 16, 16))
-                    #rect = self.world_rects[int(col)]
-                    #self.collideables.append((x + offset[0] - rect[0], y + offset[1] - rect[1], rect[2], rect[3]))
-                    """ if col != '10':
-                        self.render_list.append([img, (x + offset[0] - self.camera.true_pos[0], y + offset[1] - self.camera.true_pos[1] - img.get_size()[1])]) """
-
-        self.world_animations.render(surf, self.camera.pos)
-        self.weapon_anims.render(surf, self.camera.pos)
-
-        self.towers.render(surf, self.camera.true_pos)
-        self.destruction_particles.render(surf, self.camera.true_pos)
-        self.vfx.render_front(self.game.window.ui_surf, self.camera.true_pos)
-
     def update(self):
         dt = self.game.window.dt
         
@@ -135,7 +104,6 @@ class World:
         if self.game.input.states['close_build_mode']:
             self.entities.render_entities = True
             self.camera.set_tracked_entity(self.player)
-            self.camera.mode = None
             self.builder_mode = False
             self.game.input.input_mode = 'core'
             self.towers.displayed_tower = None
@@ -146,7 +114,38 @@ class World:
                 self.player.weapon.invisible = 0.2
 
         if self.game.input.mouse_state['right_click']:
-            #self.game.world.vfx.spawn_vfx('circle', self.game.input.get_mouse_pos(), 100, 12, 16, 100, reverse=False, ease=easeInOutExpo)#
-            self.towers.selected_tower = 'aether'
+            #self.game.world.vfx.spawn_vfx('circle', self.game.input.get_mouse_pos(), 100, 12, 100, reverse=True, ease=easeInExpo)#
+            self.towers.selected_tower = 'artemis'
 
         self.world_timer += self.game.window.dt
+
+    def render(self, surf):
+        if not self.loaded:
+            self.loaded = True
+
+        self.vfx.render_back(self.game.window.ui_surf, self.camera.true_pos)
+
+        self.collideables = []
+        self.render_list = []
+
+        surf.blit(self.floor, (0 - self.camera.true_pos[0], 0 - self.camera.true_pos[1]))
+        offset = config['level_data'][self.game.state]['tile_offset']
+        for row_index, row in enumerate(self.map_data):
+            for col_index, col in enumerate(row):
+                if col != '-1':
+                    x = col_index * 16
+                    y = row_index * 16
+                    #img = self.game.assets.collideables[col]
+                    #self.collideables.append(self.obs_rect((x + offset[0], y + offset[1] - img.get_size()[1]), img, int(col)))
+                    self.collideables.append(pygame.Rect(x, y, 16, 16))
+                    #rect = self.world_rects[int(col)]
+                    #self.collideables.append((x + offset[0] - rect[0], y + offset[1] - rect[1], rect[2], rect[3]))
+                    """ if col != '10':
+                        self.render_list.append([img, (x + offset[0] - self.camera.true_pos[0], y + offset[1] - self.camera.true_pos[1] - img.get_size()[1])]) """
+
+        self.world_animations.render(surf, self.camera.pos)
+        self.weapon_anims.render(surf, self.camera.pos)
+
+        self.towers.render(surf, self.camera.true_pos)
+        self.destruction_particles.render(surf, self.camera.true_pos)
+        self.vfx.render_front(self.game.window.ui_surf, self.camera.true_pos)

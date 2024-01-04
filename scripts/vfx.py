@@ -291,19 +291,20 @@ class Slice:
             #    glow(pos, 1, -math.degrees(self.angle), width=self.length * 2 + 800, color=(14, 14, 14), padding=0)
 
 class Circle:
-    def __init__(self, game, pos, radius, width, dw, speed, glow=True, reverse=False, ease=linear):
+    def __init__(self, game, pos, radius, width, speed, glow=True, reverse=False, ease=linear):
         self.game = game
         self.pos = pos
         self.target_radius = radius
         self.current_radius = 0
         self.radius = self.current_radius
-        self.width = 0 if reverse else width
-        self.dw = dw                    # delta width
+        self.width = width
         self.speed = speed
         self.glow = glow
         self.reverse = reverse
         self.ease = ease
         self.alive = True
+        if self.reverse:
+            self.true_width = self.width
 
     def update(self, dt):
         if self.current_radius < self.target_radius:
@@ -312,14 +313,17 @@ class Circle:
             radius_value = self.ease(self.current_radius / self.target_radius)
             if self.reverse:
                 # stuff to affect the circle
+                print(self.true_width)
+                self.width = self.true_width * radius_value
+
                 radius_value = 1 - radius_value
-                self.width += self.dw * dt
+                #self.width += self.dw * dt
                 # stuff to kill the circle
                 if radius_value == 0:
                     self.alive = False
             else:
                 # stuff to affect the circle
-                self.width -= self.dw * dt
+                self.width = self.width * (1 - radius_value)
                 # stuff to kill the circle
                 if radius_value == 1 or self.width <= 0:
                     self.alive = False

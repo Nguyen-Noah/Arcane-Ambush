@@ -173,7 +173,7 @@ class Player(Entity):
                 if self.selected_inventory_slot < 0:
                     self.selected_inventory_slot = self.inventory.max_slots - 1
 
-        # skills ----------------------------------------------------------------------- #\
+        # skills ----------------------------------------------------------------------- #
         if self.game.input.states['dash']:
             if self.game.input.input_mode == 'core':
                 if self.skills[0]:
@@ -187,4 +187,4 @@ class Player(Entity):
     def render(self, surf, offset=(0, 0)):
         super().render(surf, offset)
         if self.weapon:
-            self.weapon.render(surf, (self.rect[0] + (self.size[0] // 2), self.rect[1] + (self.size[1] // 2) - 4), offset)
+            self.weapon.render(surf, (self.rect[0] + (self.size[0] // 2) + 2, self.rect[1] + (self.size[1] // 2)), offset)

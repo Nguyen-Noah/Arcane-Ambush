@@ -52,14 +52,12 @@ class Dash(Skill):
         if self.dash_distance:
             normalize_vector(self.owner.velocity, 0.35)
             self.dash_distance = normalize(self.dash_distance, 0.35)
-            print(self.owner.velocity)
 
             self.game.world.vfx.spawn_group('dash_sparks', self.owner.center.copy(), self.owner.aim_angle)
             img = self.owner.img.copy()
             img.set_alpha(70)
 
-            # subtract 4 to compensate offset
-            self.game.world.destruction_particles.add_particle(img, (self.owner.center.copy()[0], self.owner.center.copy()[1] - 4), [0, 0, 0], duration=0.05, gravity=False)
+            self.game.world.destruction_particles.add_particle(img, self.owner.center.copy(), [0, 0, 0], duration=0.05, gravity=False)
         else:
             self.owner.movement_skill = False
             

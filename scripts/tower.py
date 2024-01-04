@@ -56,6 +56,12 @@ class Tower:
         self.current_image = surf.copy()
         self.image_base_dimensions = list(surf.get_size())
 
+    def draw_shadow(self, surf, offset):
+        shadow_surf = pygame.Surface((self.img.get_width(), 2))
+        shadow_surf.fill((0, 0, 0))
+        shadow_surf.set_alpha(100)
+        surf.blit(shadow_surf, (self.pos[0] - (self.img.get_width() // 2) - offset[0], self.pos[1] + (self.img.get_height() // 1.5) - offset[1]))
+
     def gen_mask(self):
         if self.hoverable:
             self.mask = pygame.mask.from_surface(self.img)
@@ -74,12 +80,6 @@ class Tower:
                     entities.append(entity)
             
         return entities
-
-    def target(self):
-        cir = Circle(self.center, self.radius)
-        #entity_list = self.game.world.quadtree.query_range(Circle(self.center, self.radius))
-        
-        self.targeted_entity = self.game.world.quadtree.query_closest(cir, self.center)
 
     def show_radius(self, surf, offset=(0, 0)):
         pygame.draw.circle(surf, 'white', (self.center[0] - offset[0], self.center[1] - offset[1]), self.radius, width=1)
@@ -126,3 +126,4 @@ class Tower:
             self.outline(surf, (self.center[0] - (self.rect[2] // 2) - offset[0], self.center[1] - (self.rect[3] // 2) - offset[1]))
 
         surf.blit(self.img, (self.center[0] - (self.rect[2] // 2) - offset[0], self.center[1] - (self.rect[3] // 2) - offset[1]))
+        self.draw_shadow(surf, offset)

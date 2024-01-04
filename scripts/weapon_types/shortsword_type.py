@@ -36,7 +36,7 @@ class ShortswordWeapon(Weapon):
         if self.attacking:
             self.process_swing(dt)
 
-    def render(self, surf, loc):
+    def render(self, surf, loc, offset=(0, 0)):
         self.invisible = 0
         img = self.game.assets.weapons[self.type].copy()
         if not self.invisible:
@@ -58,4 +58,4 @@ class ShortswordWeapon(Weapon):
                 self.flip = False
                 angle_offset = 20
             img = pygame.transform.rotate(img, -self.rotation + angle_offset - self.weapon_angle)
-            surf.blit(img, (loc[0] - (img.get_width() // 2) + (math.cos(math.radians(self.rotation + self.weapon_angle)) * 10), loc[1] - (img.get_height() // 2) - (math.sin(math.radians(-self.rotation - self.weapon_angle)) * 10)))
+            surf.blit(img, (loc[0] - (img.get_width() // 2) + (math.cos(math.radians(self.rotation + self.weapon_angle)) * 10) - offset[0], loc[1] - (img.get_height() // 2) - (math.sin(math.radians(-self.rotation - self.weapon_angle)) * 10) - offset[1]))

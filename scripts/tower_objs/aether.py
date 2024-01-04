@@ -1,6 +1,6 @@
 import  math, random
 from ..tower import Tower
-from ..ease_functions import easeInExpo
+from ..ease_functions import easeInOutExpo
 
 class Aether(Tower):
     def __init__(self, *args, **kwargs):
@@ -17,7 +17,7 @@ class Aether(Tower):
                 speed = random.randint(60, 100)
                 angle = self.rotation + random.random() * math.pi / 4 - math.pi / 8
                 self.game.world.vfx.spawn_group('aether_sparks', self.center, angle + math.pi, color=self.color)
-                self.game.world.entities.projectiles.spawn_projectile(self.type + '_projectile', self.center, angle, speed, 2, self, ease=easeInExpo)
+                self.game.world.entities.projectiles.spawn_projectile(self.type + '_projectile', self.center, angle, speed, 2, self)
                 self.active_projectiles.append(self.game.world.entities.projectiles.get_last())
             self.attack_timer = 0
 

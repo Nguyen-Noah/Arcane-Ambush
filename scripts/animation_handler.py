@@ -25,8 +25,8 @@ class AnimationData:
         except FileNotFoundError:
             self.config = {
                 'frames': [5 for i in range(len(self.image_list))],
-                'loop': False,
-                'speed': 30.0,
+                'loop': True,
+                'speed': 10.0,
                 'centered': True,
                 'paused': False,
                 'outline': None,

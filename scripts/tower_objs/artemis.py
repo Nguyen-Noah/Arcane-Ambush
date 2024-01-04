@@ -32,13 +32,13 @@ class Artemis(Tower):
             if self.attack_timer >= self.attack_cd:
                 # spawn the first vfx circle
                 if not self.since_first_circle:
-                    self.game.world.vfx.spawn_vfx('circle', self.center, 120, 10, 8, 100, reverse=True, ease=easeInOutExpo)
+                    self.game.world.vfx.spawn_vfx('circle', self.center, 170, 10, 150, reverse=True, ease=easeInOutExpo)
                 
                 # once 0.5 seconds passed since the first circle, start the second one
                 self.since_first_circle += dt
                 if self.since_first_circle >= 0.5:
                     if not self.second_circle_spawned:
-                        self.game.world.vfx.spawn_vfx('circle', self.center, 100, 10, 10, 100, reverse=True, ease=easeInOutExpo)
+                        self.game.world.vfx.spawn_vfx('circle', self.center, 150, 10, 150, reverse=True, ease=easeInOutExpo)
                         self.second_circle_spawned = True
                         self.circle_status = self.game.world.vfx.get_last()
 
@@ -57,4 +57,4 @@ class Artemis(Tower):
     def render(self, surf, offset=[0, 0]):
         super().render(surf, offset)
         #if self.shooting:
-        pygame.draw.line(self.game.window.display, 'red', (self.center[0] - offset[0], self.center[1] - offset[1]), (self.targeted_entity.center[0] - offset[0], self.targeted_entity.center[1] - offset[1]), 20)
+        pygame.draw.line(self.game.window.display, 'red', (self.center[0] - offset[0], self.center[1] - offset[1]), (self.targeted_entity.center[0] - offset[0], self.targeted_entity.center[1] - offset[1]), 1)
