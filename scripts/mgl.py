@@ -19,11 +19,11 @@ class MGL:
         self.initialize()
 
     def initialize(self):
-        self.load_texture('noise')
         self.load_texture('perlin_noise')
-        #self.compile_program('texture', 'default_shader', 'default_texture')
         self.compile_program('texture', 'main_display', 'game_display')
         self.compile_program('texture', 'ui', 'ui')
+        # post processing
+        #self.compile_program('texture', 'bright_filter', 'luma filter')
 
     def load_texture(self, name):
         surf = pygame.image.load('data/graphics/misc/' + name + '.png').convert()
@@ -42,9 +42,11 @@ class MGL:
         self.ctx.enable(moderngl.BLEND)
         self.ctx.blend_equation = moderngl.ONE, moderngl.ONE
         if 'base_display' in self.textures:
+            self.update('luma_filter', {
+                'surface': self.textures['base_display']
+            })
             self.update_render('game_display', {
                 'surface': self.textures['base_display'],
-                'noise': self.textures['noise'],
                 'perlin_noise': self.textures['perlin_noise'],
                 'world_timer': world_timer,
                 'base_resolution': base_resolution,
@@ -59,6 +61,9 @@ class MGL:
             })
         self.ctx.disable(moderngl.BLEND)
         pygame.display.flip()
+
+    def update(self, program_name, uniforms):
+        self.update_shader(program_name, uniforms)
 
     def update_render(self, program_name, uniforms):
         self.update_shader(program_name, uniforms)

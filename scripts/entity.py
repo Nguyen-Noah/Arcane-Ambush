@@ -84,6 +84,10 @@ class Entity:
         self.current_image = surf.copy()
         self.image_base_dimensions = list(surf.get_size())
 
+    def draw_hitframe(self, surf, offset):
+        mask = pygame.mask.from_surface(self.img)
+        surf.blit(mask.to_surface(unsetcolor=(0, 0, 0, 0), setcolor=(255, 255, 255, 255)), ((self.pos[0] - offset[0]) // 1, (self.pos[1] - offset[1] - self.height) // 1))
+
     def get_target_distance(self, target):
         dist = [target.center[0] - self.center[0], target.center[1] - self.center[1]]
 
@@ -147,7 +151,7 @@ class Entity:
         self.alive = False
 
     def damage(self, amount, angle=0):
-        self.hurt = 1
+        self.hurt = 0.05
         self.health -= amount
 
         if self.type == 'player':
@@ -180,10 +184,16 @@ class Entity:
             offset[0] += self.img.get_width() // 2
             offset[1] += self.img.get_height() // 2
         surf.blit(self.img, ((self.pos[0] - offset[0]) // 1, (self.pos[1] - offset[1] - self.height) // 1))
+        if self.hurt:
+            self.draw_hitframe(surf, offset)
 
     def update(self, dt):
         if self.active_animation:
             #self.print_hitbox()
             self.active_animation.play(dt)
+            if self.hurt > 0:
+                self.hurt -= dt
+            else:
+                self.hurt = 0
         
         return self.alive

@@ -3,7 +3,6 @@
 const int max_lights =  200;
 
 uniform sampler2D surface;
-uniform sampler2D noise;
 uniform sampler2D perlin_noise;
 uniform float world_timer;
 uniform vec2 base_resolution;
@@ -69,3 +68,28 @@ void main() {
 
     f_color = vec4(render_color, 1.0);
 }
+
+/* #version 330 core
+
+uniform sampler2D surface;
+
+const float weight[5] = float[](0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216); 
+
+in vec2 uv;
+out vec4 f_color;
+
+void main() {
+    vec4 display_sample = texture(surface, uv);
+    float brightness = (display_sample.r * 0.2126) + (display_sample.g * 0.7152) + (display_sample.b * 0.722);
+    vec3 render_color = display_sample.rgb * brightness;
+
+    float pixelSize = 1 / 1080;
+
+    for (int i = -4; i <= 4; i++) {
+        weight[abs(i)] = 
+        render_color += texture(display_sample, uv + vec2(offset, 0.0)).rgb * weight[abs(i)];
+    }
+
+    f_color = vec4(render_color, 1.0);
+}
+ */
