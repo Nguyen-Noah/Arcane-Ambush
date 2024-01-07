@@ -1,12 +1,15 @@
 import moderngl, pygame
 from array import array
 from .core_funcs import read_f
+from .config import config
 
 class MGL:
     def __init__(self):
         self.ctx = moderngl.create_context()
         self.textures = {}
         self.programs = {}
+        self.fbos = {}
+        self.fbo_textures = {}
         self.quad_buffer = self.ctx.buffer(data=array('f', [
             # position (x, y), uv coords (x, y)
             -1.0, 1.0, 0.0, 0.0,  # topleft
@@ -20,10 +23,13 @@ class MGL:
 
     def initialize(self):
         self.load_texture('perlin_noise')
+        self.compile_program('screen', 'screen', 'main_display')
         self.compile_program('texture', 'main_display', 'game_display')
         self.compile_program('texture', 'ui', 'ui')
         # post processing
-        #self.compile_program('texture', 'bright_filter', 'luma filter')
+        self.compile_program('texture', 'bright_filter', 'luma_filter')
+        self.create_framebuffer('test')
+        self.create_framebuffer('luma_filter')
 
     def load_texture(self, name):
         surf = pygame.image.load('data/graphics/misc/' + name + '.png').convert()
@@ -38,13 +44,22 @@ class MGL:
         self.vaos[program_name] = self.ctx.vertex_array(program, [(self.quad_buffer, '2f 2f', 'vert', 'texcoord')])
 
     def render(self, world_timer, base_resolution, lights_pos, light_rad_int, light_colors, i_frames):
+        # ------------------------------------------------- RENDERING PIPELINE ------------------------------------------------- #
+
+        # clear everything so your gpu doesnt explode
         self.ctx.clear()
+        self.clear_fbos()
+
+        self.fbos['luma_filter'].use()
         self.ctx.enable(moderngl.BLEND)
-        self.ctx.blend_equation = moderngl.ONE, moderngl.ONE
         if 'base_display' in self.textures:
             self.update('luma_filter', {
                 'surface': self.textures['base_display']
             })
+
+        # use the test fbo
+        self.fbos['test'].use()
+        if 'base_display' in self.textures:
             self.update_render('game_display', {
                 'surface': self.textures['base_display'],
                 'perlin_noise': self.textures['perlin_noise'],
@@ -54,6 +69,13 @@ class MGL:
                 'light_rad_int': light_rad_int,
                 'light_colors': light_colors,
                 'i_frames': i_frames
+            })
+
+        # switch to the main screen fbo
+        self.ctx.screen.use()
+        if 'luma_filter' in self.fbo_textures:
+            self.update_render('main_display', {
+                'surface': self.fbo_textures['luma_filter']
             })
         if 'ui_surf' in self.textures:
             self.update_render('ui', {
@@ -81,6 +103,18 @@ class MGL:
                     self.programs[program_name][uniform].value = uniforms[uniform]
             except:
                 pass
+
+    def clear_fbos(self):
+        for fbo in self.fbos:
+            self.fbos[fbo].clear()
+
+    def create_framebuffer(self, fbo_name):
+        channels = 4
+        if fbo_name not in self.fbo_textures:
+            new_fbo = self.ctx.texture(config['window']['base_resolution'], channels)
+            new_fbo.filter = (moderngl.NEAREST, moderngl.NEAREST)
+            self.fbo_textures[fbo_name] = new_fbo
+            self.fbos[fbo_name] = self.ctx.framebuffer(color_attachments=[new_fbo])
 
     def pg2tx(self, surf, texture_name):
         channels = 4
