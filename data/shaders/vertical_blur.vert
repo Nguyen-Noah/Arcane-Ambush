@@ -5,7 +5,6 @@ in vec2 texcoord;
 out vec2 blurTextureCoords[11];
 
 void main() {
-    uv = texcoord;
     gl_Position = vec4(vert, 0.0, 1.0);
 
     vec2 centerTexCoords = vert * 0.5 + 0.5;

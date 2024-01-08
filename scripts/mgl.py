@@ -9,7 +9,6 @@ class MGL:
         self.textures = {}
         self.programs = {}
         self.fbos = {}
-        self.fbo_textures = {}
         self.quad_buffer = self.ctx.buffer(data=array('f', [
             # position (x, y), uv coords (x, y)
             -1.0, 1.0, 0.0, 0.0,  # topleft
@@ -28,8 +27,13 @@ class MGL:
         self.compile_program('texture', 'ui', 'ui')
         # post processing
         self.compile_program('texture', 'bright_filter', 'luma_filter')
+        self.compile_program('horizontal_blur', 'blur', 'horizontal_blur')
+        self.compile_program('vertical_blur', 'blur', 'vertical_blur')
+
         self.create_framebuffer('test')
         self.create_framebuffer('luma_filter')
+        self.create_framebuffer('horizontal_blur')
+        self.create_framebuffer('vertical_blur')
 
     def load_texture(self, name):
         surf = pygame.image.load('data/graphics/misc/' + name + '.png').convert()
@@ -49,19 +53,30 @@ class MGL:
         # clear everything so your gpu doesnt explode
         self.ctx.clear()
         self.clear_fbos()
-
-        self.fbos['luma_filter'].use()
+        
+        """ self.fbos['luma_filter'].use()
         self.ctx.enable(moderngl.BLEND)
         if 'base_display' in self.textures:
-            self.update('luma_filter', {
+            self.update_render('luma_filter', {
                 'surface': self.textures['base_display']
-            })
+            }) """
+
+        self.fbos['horizontal_blur'].use()
+        self.update_render('horizontal_blur', {
+            'surface': self.textures['base_display']
+        })
+
+        """ self.fbos['vertical_blur'].use()
+        if 'horizontal_blur' in self.fbos:
+            self.update_render('vertical_blur', {
+                'surface': self.fbos['horizontal_blur'].color_attachments[0]
+            }) """
 
         # use the test fbo
-        self.fbos['test'].use()
+        """ self.fbos['test'].use()
         if 'base_display' in self.textures:
             self.update_render('game_display', {
-                'surface': self.textures['base_display'],
+                'surface': self.fbos['luma_filter'].color_attachments[0],
                 'perlin_noise': self.textures['perlin_noise'],
                 'world_timer': world_timer,
                 'base_resolution': base_resolution,
@@ -69,13 +84,13 @@ class MGL:
                 'light_rad_int': light_rad_int,
                 'light_colors': light_colors,
                 'i_frames': i_frames
-            })
+            }) """
 
         # switch to the main screen fbo
         self.ctx.screen.use()
-        if 'luma_filter' in self.fbo_textures:
+        if 'horizontal_blur' in self.fbos:
             self.update_render('main_display', {
-                'surface': self.fbo_textures['luma_filter']
+                'surface': self.fbos['horizontal_blur'].color_attachments[0]
             })
         if 'ui_surf' in self.textures:
             self.update_render('ui', {
@@ -83,9 +98,6 @@ class MGL:
             })
         self.ctx.disable(moderngl.BLEND)
         pygame.display.flip()
-
-    def update(self, program_name, uniforms):
-        self.update_shader(program_name, uniforms)
 
     def update_render(self, program_name, uniforms):
         self.update_shader(program_name, uniforms)
@@ -110,10 +122,9 @@ class MGL:
 
     def create_framebuffer(self, fbo_name):
         channels = 4
-        if fbo_name not in self.fbo_textures:
+        if fbo_name not in self.fbos:
             new_fbo = self.ctx.texture(config['window']['base_resolution'], channels)
             new_fbo.filter = (moderngl.NEAREST, moderngl.NEAREST)
-            self.fbo_textures[fbo_name] = new_fbo
             self.fbos[fbo_name] = self.ctx.framebuffer(color_attachments=[new_fbo])
 
     def pg2tx(self, surf, texture_name):
