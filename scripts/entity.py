@@ -10,7 +10,7 @@ def collision_list(obj, obj_list):
     return hit_list
 
 class Entity:
-    def __init__(self, game, pos, size, type, category):
+    def __init__(self, game, pos, size, type, category, controller=None):
         self.game = game
         self.pos = list(pos).copy()
         self.size = size
@@ -37,9 +37,9 @@ class Entity:
         if self.type + '_walk_side' in self.game.assets.animations.animations:
             self.set_action('walk', 'side')
 
-        self.target_index = 1
-        self.offset = [0, 0]
-        self.path_complete = True
+        self.controller = controller
+        if self.controller not in ['player', None]:
+            self.controller = controller(self)
 
         self.gen_mask()
 
@@ -188,6 +188,9 @@ class Entity:
             self.draw_hitframe(surf, offset)
 
     def update(self, dt):
+        if self.controller not in ['player', None]:
+            self.controller.update(dt)
+
         if self.active_animation:
             #self.print_hitbox()
             self.active_animation.play(dt)

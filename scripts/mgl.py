@@ -31,7 +31,7 @@ class MGL:
         self.compile_program('vertical_blur', 'blur', 'vertical_blur')
         self.compile_program('texture', 'bloom', 'combine_bloom')
 
-        self.create_framebuffer('test')
+        self.create_framebuffer('overlays')
         self.create_framebuffer('luma_filter')
         self.create_framebuffer('horizontal_blur', filter=(moderngl.LINEAR, moderngl.LINEAR))
         self.create_framebuffer('vertical_blur', filter=(moderngl.LINEAR, moderngl.LINEAR))
@@ -67,7 +67,7 @@ class MGL:
         # ------ BLOOM
         self.fbos['horizontal_blur'].use()
         self.update_render('horizontal_blur', {
-            'surface': self.textures['base_display']#self.fbos['luma_filter'].color_attachments[0]
+            'surface': self.fbos['luma_filter'].color_attachments[0]
         })
 
         self.fbos['vertical_blur'].use()
@@ -81,11 +81,11 @@ class MGL:
             'blurred_surface': self.fbos['vertical_blur'].color_attachments[0]
         })
 
-        # use the test fbo
-        """ self.fbos['test'].use()
+        # use the overlays fbo
+        self.fbos['overlays'].use()
         if 'base_display' in self.textures:
             self.update_render('game_display', {
-                'surface': self.fbos['luma_filter'].color_attachments[0],
+                'surface': self.fbos['combine_bloom'].color_attachments[0],
                 'perlin_noise': self.textures['perlin_noise'],
                 'world_timer': world_timer,
                 'base_resolution': base_resolution,
@@ -93,13 +93,13 @@ class MGL:
                 'light_rad_int': light_rad_int,
                 'light_colors': light_colors,
                 'i_frames': i_frames
-            }) """
+            })
 
         # switch to the main screen fbo
         self.ctx.screen.use()
-        if 'horizontal_blur' in self.fbos:
+        if 'overlays' in self.fbos:
             self.update_render('main_display', {
-                'surface': self.fbos['vertical_blur'].color_attachments[0]
+                'surface': self.fbos['overlays'].color_attachments[0]
             })
         if 'ui_surf' in self.textures:
             self.update_render('ui', {

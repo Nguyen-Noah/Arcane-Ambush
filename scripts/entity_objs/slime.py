@@ -4,8 +4,8 @@ from ..core_funcs import tuplify
 from ..config import config
 
 class Slime(Entity):
-    def __init__(self, *args):
-        super().__init__(*args)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.category = 'enemy'
         self.velocity = [0, 0]
         self.size = (14, 14)
