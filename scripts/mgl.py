@@ -29,11 +29,13 @@ class MGL:
         self.compile_program('texture', 'bright_filter', 'luma_filter')
         self.compile_program('horizontal_blur', 'blur', 'horizontal_blur')
         self.compile_program('vertical_blur', 'blur', 'vertical_blur')
+        self.compile_program('texture', 'bloom', 'combine_bloom')
 
         self.create_framebuffer('test')
         self.create_framebuffer('luma_filter')
-        self.create_framebuffer('horizontal_blur')
-        self.create_framebuffer('vertical_blur')
+        self.create_framebuffer('horizontal_blur', filter=(moderngl.LINEAR, moderngl.LINEAR))
+        self.create_framebuffer('vertical_blur', filter=(moderngl.LINEAR, moderngl.LINEAR))
+        self.create_framebuffer('combine_bloom')
 
     def load_texture(self, name):
         surf = pygame.image.load('data/graphics/misc/' + name + '.png').convert()
@@ -53,24 +55,31 @@ class MGL:
         # clear everything so your gpu doesnt explode
         self.ctx.clear()
         self.clear_fbos()
-        
-        """ self.fbos['luma_filter'].use()
-        self.ctx.enable(moderngl.BLEND)
+        self.ctx.enable(moderngl.BLEND)    
+
+        # ------ LUMA FILTERING
+        self.fbos['luma_filter'].use()
         if 'base_display' in self.textures:
             self.update_render('luma_filter', {
                 'surface': self.textures['base_display']
-            }) """
+            })
 
+        # ------ BLOOM
         self.fbos['horizontal_blur'].use()
         self.update_render('horizontal_blur', {
-            'surface': self.textures['base_display']
+            'surface': self.textures['base_display']#self.fbos['luma_filter'].color_attachments[0]
         })
 
-        """ self.fbos['vertical_blur'].use()
-        if 'horizontal_blur' in self.fbos:
-            self.update_render('vertical_blur', {
-                'surface': self.fbos['horizontal_blur'].color_attachments[0]
-            }) """
+        self.fbos['vertical_blur'].use()
+        self.update_render('vertical_blur', {
+            'surface': self.fbos['horizontal_blur'].color_attachments[0]
+        })
+
+        self.fbos['combine_bloom'].use()
+        self.update_render('combine_bloom', {
+            'surface': self.textures['base_display'],
+            'blurred_surface': self.fbos['vertical_blur'].color_attachments[0]
+        })
 
         # use the test fbo
         """ self.fbos['test'].use()
@@ -90,7 +99,7 @@ class MGL:
         self.ctx.screen.use()
         if 'horizontal_blur' in self.fbos:
             self.update_render('main_display', {
-                'surface': self.fbos['horizontal_blur'].color_attachments[0]
+                'surface': self.fbos['vertical_blur'].color_attachments[0]
             })
         if 'ui_surf' in self.textures:
             self.update_render('ui', {
@@ -120,11 +129,11 @@ class MGL:
         for fbo in self.fbos:
             self.fbos[fbo].clear()
 
-    def create_framebuffer(self, fbo_name):
+    def create_framebuffer(self, fbo_name, display_resize=1, filter=(moderngl.NEAREST, moderngl.NEAREST)):
         channels = 4
         if fbo_name not in self.fbos:
-            new_fbo = self.ctx.texture(config['window']['base_resolution'], channels)
-            new_fbo.filter = (moderngl.NEAREST, moderngl.NEAREST)
+            new_fbo = self.ctx.texture((config['window']['scaled_resolution'][0] // display_resize, config['window']['scaled_resolution'][1] // display_resize), channels)
+            new_fbo.filter = filter
             self.fbos[fbo_name] = self.ctx.framebuffer(color_attachments=[new_fbo])
 
     def pg2tx(self, surf, texture_name):
