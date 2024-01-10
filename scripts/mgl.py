@@ -29,6 +29,7 @@ class MGL:
         self.compile_program('texture', 'bright_filter', 'luma_filter')
         self.compile_program('horizontal_blur', 'blur', 'horizontal_blur')
         self.compile_program('vertical_blur', 'blur', 'vertical_blur')
+        self.compile_program('texture', 'lights', 'lights')
         self.compile_program('texture', 'bloom', 'combine_bloom')
 
         self.create_framebuffer('overlays')
@@ -36,6 +37,7 @@ class MGL:
         self.create_framebuffer('horizontal_blur', filter=(moderngl.LINEAR, moderngl.LINEAR))
         self.create_framebuffer('vertical_blur', filter=(moderngl.LINEAR, moderngl.LINEAR))
         self.create_framebuffer('combine_bloom')
+        self.create_framebuffer('lights')
 
     def load_texture(self, name):
         surf = pygame.image.load('data/graphics/misc/' + name + '.png').convert()
@@ -49,7 +51,7 @@ class MGL:
         # render object
         self.vaos[program_name] = self.ctx.vertex_array(program, [(self.quad_buffer, '2f 2f', 'vert', 'texcoord')])
 
-    def render(self, world_timer, base_resolution, lights_pos, light_rad_int, light_colors, i_frames):
+    def render(self, world_timer, base_resolution, i_frames):
         # ------------------------------------------------- RENDERING PIPELINE ------------------------------------------------- #
 
         # clear everything so your gpu doesnt explode
@@ -81,17 +83,21 @@ class MGL:
             'blurred_surface': self.fbos['vertical_blur'].color_attachments[0]
         })
 
+        self.fbos['lights'].use()
+        self.update_render('lights', {
+            'surface': self.fbos['combine_bloom'].color_attachments[0],
+            'light_surface': self.textures['light_surf'],
+            'ratio': config['window']['scaled_resolution'][0] / config['window']['base_resolution'][0]
+        })
+
         # use the overlays fbo
         self.fbos['overlays'].use()
         if 'base_display' in self.textures:
             self.update_render('game_display', {
-                'surface': self.fbos['combine_bloom'].color_attachments[0],
+                'surface': self.fbos['lights'].color_attachments[0],
                 'perlin_noise': self.textures['perlin_noise'],
                 'world_timer': world_timer,
                 'base_resolution': base_resolution,
-                'lights': lights_pos,
-                'light_rad_int': light_rad_int,
-                'light_colors': light_colors,
                 'i_frames': i_frames
             })
 

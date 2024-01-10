@@ -12,10 +12,9 @@ from .particles import ParticleManager
 from .builder_menu import Builder
 from .vfx import VFX, set_glow_surf
 from .ease_functions import easeInExpo, easeInOutExpo
+from .lights import Lights
 
 from .quadtree import QuadTree, Rectangle
-
-MAX_LIGHT_SOURCES = 200
 
 class World:
     def __init__(self, game):
@@ -25,9 +24,6 @@ class World:
         self.builder_mode = False
         self.show_builder_menu = False
         self.world_timer = 0
-        self.render_lights_pos = []
-        self.render_lights_rad_int = []
-        self.render_light_colors = []
 
     def load(self, map_id):
         self.map_id = map_id
@@ -40,6 +36,7 @@ class World:
         self.particles = ParticleManager(self.game)
         self.vfx = VFX(self.game)
         self.weapon_anims = WeaponAnimations(self.game)
+        self.lights = Lights(self.game)
 
         self.camera = Camera(self.game)
 
@@ -63,18 +60,8 @@ class World:
 
         self.master_clock = 0
 
-    def add_light_source(self, x, y, radius, intensity, col):
-        normalized_color = normalize_color(col)
-        self.render_lights_pos.append(((x - self.camera.true_pos[0]) / self.game.window.display.get_width(), (y - self.camera.true_pos[1]) / self.game.window.display.get_height()))
-        self.render_lights_rad_int.append((radius, intensity))
-        self.render_light_colors.append(normalized_color)
-
     def update(self):
         dt = self.game.window.dt
-        
-        self.render_lights_pos = []
-        self.render_lights_rad_int = []
-        self.render_light_colors = []
 
         self.camera.update()
         self.world_animations.update()
@@ -84,12 +71,7 @@ class World:
         self.towers.update()
         self.entities.update(dt)
         self.destruction_particles.update()
-
-        # pad the lights list with empty light sources -- stupid glsl stuff
-        while len(self.render_lights_pos) < MAX_LIGHT_SOURCES:
-            self.render_lights_pos.append((0, 0))
-            self.render_lights_rad_int.append((-1, 0))
-            self.render_light_colors.append((0, 0, 0))
+        self.lights.update()
 
         # builder mode handler -------------------------------------------------------- #
         if self.game.input.states['open_build_mode']:
@@ -122,30 +104,33 @@ class World:
     def render(self, surf):
         if not self.loaded:
             self.loaded = True
+        
+        offset = self.camera.true_pos
 
-        self.vfx.render_back(self.game.window.ui_surf, self.camera.true_pos)
+        self.vfx.render_back(self.game.window.ui_surf, offset)
 
         self.collideables = []
         self.render_list = []
 
         surf.blit(self.floor, (0 - self.camera.true_pos[0], 0 - self.camera.true_pos[1]))
-        offset = config['level_data'][self.game.state]['tile_offset']
+        map_offset = config['level_data'][self.game.state]['tile_offset']
         for row_index, row in enumerate(self.map_data):
             for col_index, col in enumerate(row):
                 if col != '-1':
                     x = col_index * 16
                     y = row_index * 16
                     #img = self.game.assets.collideables[col]
-                    #self.collideables.append(self.obs_rect((x + offset[0], y + offset[1] - img.get_size()[1]), img, int(col)))
+                    #self.collideables.append(self.obs_rect((x + map_offset[0], y + map_offset[1] - img.get_size()[1]), img, int(col)))
                     self.collideables.append(pygame.Rect(x, y, 16, 16))
                     #rect = self.world_rects[int(col)]
-                    #self.collideables.append((x + offset[0] - rect[0], y + offset[1] - rect[1], rect[2], rect[3]))
+                    #self.collideables.append((x + map_offset[0] - rect[0], y + map_offset[1] - rect[1], rect[2], rect[3]))
                     """ if col != '10':
                         self.render_list.append([img, (x + offset[0] - self.camera.true_pos[0], y + offset[1] - self.camera.true_pos[1] - img.get_size()[1])]) """
 
-        self.world_animations.render(surf, self.camera.pos)
-        self.weapon_anims.render(surf, self.camera.pos)
+        self.world_animations.render(surf, offset)
+        self.weapon_anims.render(surf, offset)
 
-        self.towers.render(surf, self.camera.true_pos)
+        self.lights.render(self.game.window.light_surf, offset)
+        self.towers.render(surf, offset)
         self.destruction_particles.render(surf, self.camera.true_pos)
-        self.vfx.render_front(self.game.window.ui_surf, self.camera.true_pos)
+        self.vfx.render_front(self.game.window.ui_surf, offset)

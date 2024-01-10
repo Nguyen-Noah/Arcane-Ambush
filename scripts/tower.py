@@ -23,8 +23,11 @@ class Tower:
         self.targeted_entity = self.game.world.player
         self.shooting = True
         self.animation = self.game.assets.animations.new(self.type + '_tower')
+        self.alive = True
         
         self.gen_mask()
+        if self.hoverable:
+            self.game.world.lights.add_light(100, self.color, self)
 
     @property
     def img(self):
@@ -119,7 +122,7 @@ class Tower:
 
         self.rotation = math.atan2(self.targeted_entity.center[1] - self.center[1], self.targeted_entity.center[0] - self.center[0])
         self.attack_timer += dt
-        self.game.world.add_light_source(self.center[0], self.center[1], 0.8, 0.8, color)
+        return self.alive
 
     def render(self, surf, offset=(0, 0)):
         if self.hoverable:

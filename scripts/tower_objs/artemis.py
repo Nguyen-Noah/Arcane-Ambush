@@ -5,6 +5,7 @@ from ..ease_functions import easeInOutExpo
 
 class Artemis(Tower):
     def __init__(self, *args, **kwargs):
+        self.color = (200, 200, 50)
         super().__init__(*args, **kwargs)
         self.target_pos = None
         self.since_first_circle = 0
