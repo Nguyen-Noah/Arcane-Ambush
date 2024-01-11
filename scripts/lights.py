@@ -3,7 +3,8 @@ from .custom_shapes import gradient_circle
 from .core_funcs import itr
 
 class Light:
-    def __init__(self, radius, color, owner):
+    def __init__(self, game, radius, color, owner):
+        self.game = game
         self.radius = radius
         self.color = color
         self.owner = owner
@@ -15,7 +16,7 @@ class Light:
         return self.owner.alive
 
     def render(self, surf, offset=(0, 0)):
-        surf.blit(self.surf, (self.pos[0] - offset[0] - (self.surf.get_width() // 2), self.pos[1] - offset[1] - (self.surf.get_height() // 2)), special_flags=pygame.BLEND_RGBA_ADD)
+        surf.blit(self.surf, (((self.pos[0] - offset[0]) * 3) - (self.surf.get_width() // 2), ((self.pos[1] - offset[1]) * 3) - (self.surf.get_height() // 2)), special_flags=pygame.BLEND_RGBA_ADD)
 
 class Lights:
     def __init__(self, game):
@@ -23,7 +24,7 @@ class Lights:
         self.lights = []
 
     def add_light(self, radius, color, owner):
-        self.lights.append(Light(radius, color, owner))
+        self.lights.append(Light(self.game, radius, color, owner))
 
     def update(self):
         for i, light in itr(self.lights):

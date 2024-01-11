@@ -14,10 +14,6 @@ void main() {
     
     float aspect_ratio = base_resolution.x / base_resolution.y;
 
-    // Adjusted uv to render circles as circles instead of ovals
-    float aspect_shift = (aspect_ratio - 1) * 0.5;
-    vec2 adjusted_uv = vec2(uv.x * aspect_ratio - aspect_shift, uv.y);
-
     vec2 pixel_uv = vec2(floor(uv.x * base_resolution.x) / base_resolution.x, floor(uv.y * base_resolution.y) / base_resolution.y);
     vec4 perlin_noise = texture(perlin_noise, vec2(pixel_uv.x * aspect_ratio * 2 + (world_timer * 0.1), pixel_uv.y * 2 - (world_timer * 0.1)));
 
@@ -37,7 +33,6 @@ void main() {
         float darkness = max(0, noise_val - 0.75) * 2.5;
         render_color = darkness * dark_color + (1 - darkness) * render_color;
     }
-
 
     // DAMAGE VIGNETTE -------------------------------------------- //
     

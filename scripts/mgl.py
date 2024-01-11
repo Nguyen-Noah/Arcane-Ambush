@@ -85,7 +85,7 @@ class MGL:
 
         self.fbos['lights'].use()
         self.update_render('lights', {
-            'surface': self.fbos['combine_bloom'].color_attachments[0],
+            'surface': self.textures['base_display'], #self.fbos['combine_bloom'].color_attachments[0],
             'light_surface': self.textures['light_surf'],
             'ratio': config['window']['scaled_resolution'][0] / config['window']['base_resolution'][0]
         })
@@ -105,7 +105,7 @@ class MGL:
         self.ctx.screen.use()
         if 'overlays' in self.fbos:
             self.update_render('main_display', {
-                'surface': self.fbos['overlays'].color_attachments[0]
+                'surface': self.fbos['lights'].color_attachments[0]
             })
         if 'ui_surf' in self.textures:
             self.update_render('ui', {

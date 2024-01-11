@@ -18,8 +18,8 @@ class Window:
 
         # screen ------------------------------------------------------------------------- #
         self.screen = pygame.display.set_mode(self.scaled_resolution, pygame.OPENGL | pygame.DOUBLEBUF)
-        self.display = pygame.Surface((self.base_resolution[0], self.base_resolution[1]), pygame.SRCALPHA)
-        self.light_surf = self.display.copy() #pygame.Surface((self.scaled_resolution), pygame.SRCALPHA)
+        self.display = pygame.Surface(self.base_resolution, pygame.SRCALPHA)
+        self.light_surf = pygame.Surface((self.scaled_resolution), pygame.SRCALPHA)
         self.ui_surf = self.display.copy()
         self.mgl = MGL()
 
@@ -106,5 +106,5 @@ class Window:
         self.frame_history = self.frame_history[-200:]
 
         self.display.fill(self.background_color)
-        self.light_surf.fill((0, 0, 0))
+        self.light_surf.fill((255, 0, 0, 255))
         self.ui_surf.fill((0, 0, 0, 0))
