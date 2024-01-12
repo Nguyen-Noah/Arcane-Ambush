@@ -3,28 +3,34 @@ from .custom_shapes import gradient_circle
 from .core_funcs import itr
 
 class Light:
-    def __init__(self, game, radius, color, owner):
-        self.game = game
+    def __init__(self, radius, color, owner, manager):
         self.radius = radius
         self.color = color
         self.owner = owner
+        self.manager = manager
         self.pos = self.owner.pos
-        self.surf = gradient_circle(self.radius, self.color, (0, 0, 0))
 
     def update(self):
         self.pos = self.owner.pos
         return self.owner.alive
 
     def render(self, surf, offset=(0, 0)):
-        surf.blit(self.surf, (((self.pos[0] - offset[0]) * 3) - (self.surf.get_width() // 2), ((self.pos[1] - offset[1]) * 3) - (self.surf.get_height() // 2)), special_flags=pygame.BLEND_RGBA_ADD)
+        cache_id = (self.radius, self.color)
+        if cache_id not in self.manager.light_cache:
+            img = gradient_circle(self.radius, self.color, (0, 0, 0))
+            self.manager.light_cache[cache_id] = img
+        else:
+            img = self.manager.light_cache[cache_id]
+        surf.blit(img, (((self.pos[0] - offset[0]) * 1) - (img.get_width() // 2) + (self.owner.img.get_width() // 2), ((self.pos[1] - offset[1]) * 1) - (img.get_height() // 2) + (self.owner.img.get_height() // 2)), special_flags=pygame.BLEND_RGBA_ADD)
 
 class Lights:
     def __init__(self, game):
         self.game = game
         self.lights = []
+        self.light_cache = {}
 
     def add_light(self, radius, color, owner):
-        self.lights.append(Light(self.game, radius, color, owner))
+        self.lights.append(Light(radius, color, owner, self))
 
     def update(self):
         for i, light in itr(self.lights):

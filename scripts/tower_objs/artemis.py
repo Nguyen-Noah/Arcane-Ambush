@@ -53,7 +53,7 @@ class Artemis(Tower):
                             self.attack_timer = 0
                             self.since_first_circle = 0
                             self.second_circle_spawned = False
-                        print('BVVVV')
+                        #print('BVVVV')
 
     def render(self, surf, offset=[0, 0]):
         super().render(surf, offset)

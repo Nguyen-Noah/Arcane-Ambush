@@ -29,7 +29,6 @@ class MGL:
         self.compile_program('texture', 'bright_filter', 'luma_filter')
         self.compile_program('horizontal_blur', 'blur', 'horizontal_blur')
         self.compile_program('vertical_blur', 'blur', 'vertical_blur')
-        self.compile_program('texture', 'lights', 'lights')
         self.compile_program('texture', 'bloom', 'combine_bloom')
 
         self.create_framebuffer('overlays')
@@ -37,7 +36,6 @@ class MGL:
         self.create_framebuffer('horizontal_blur', filter=(moderngl.LINEAR, moderngl.LINEAR))
         self.create_framebuffer('vertical_blur', filter=(moderngl.LINEAR, moderngl.LINEAR))
         self.create_framebuffer('combine_bloom')
-        self.create_framebuffer('lights')
 
     def load_texture(self, name):
         surf = pygame.image.load('data/graphics/misc/' + name + '.png').convert()
@@ -59,14 +57,13 @@ class MGL:
         self.clear_fbos()
         self.ctx.enable(moderngl.BLEND)    
 
-        # ------ LUMA FILTERING
+        """
         self.fbos['luma_filter'].use()
         if 'base_display' in self.textures:
             self.update_render('luma_filter', {
                 'surface': self.textures['base_display']
             })
 
-        # ------ BLOOM
         self.fbos['horizontal_blur'].use()
         self.update_render('horizontal_blur', {
             'surface': self.fbos['luma_filter'].color_attachments[0]
@@ -81,20 +78,12 @@ class MGL:
         self.update_render('combine_bloom', {
             'surface': self.textures['base_display'],
             'blurred_surface': self.fbos['vertical_blur'].color_attachments[0]
-        })
+        }) """
 
-        self.fbos['lights'].use()
-        self.update_render('lights', {
-            'surface': self.textures['base_display'], #self.fbos['combine_bloom'].color_attachments[0],
-            'light_surface': self.textures['light_surf'],
-            'ratio': config['window']['scaled_resolution'][0] / config['window']['base_resolution'][0]
-        })
-
-        # use the overlays fbo
         self.fbos['overlays'].use()
         if 'base_display' in self.textures:
             self.update_render('game_display', {
-                'surface': self.fbos['lights'].color_attachments[0],
+                'surface': self.textures['base_display'],
                 'perlin_noise': self.textures['perlin_noise'],
                 'world_timer': world_timer,
                 'base_resolution': base_resolution,
@@ -105,7 +94,7 @@ class MGL:
         self.ctx.screen.use()
         if 'overlays' in self.fbos:
             self.update_render('main_display', {
-                'surface': self.fbos['lights'].color_attachments[0]
+                'surface': self.fbos['overlays'].color_attachments[0]
             })
         if 'ui_surf' in self.textures:
             self.update_render('ui', {

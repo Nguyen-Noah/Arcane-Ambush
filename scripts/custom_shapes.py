@@ -2,6 +2,7 @@ import pygame, math
 
 # don't use every frame, put into a list
 def gradient_circle(radius, inner_color, outer_color):
+    print('new light')
     circle_surf = pygame.Surface((radius*2, radius*2), pygame.SRCALPHA)
     for y in range(radius*2):
         for x in range(radius*2):

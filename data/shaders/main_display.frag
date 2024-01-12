@@ -10,7 +10,7 @@ in vec2 uv;
 out vec4 f_color;
 
 void main() {
-    vec4 display_sample = texture(surface, vec2(uv.x, uv.y));
+    vec4 display_sample = texture(surface, uv);
     
     float aspect_ratio = base_resolution.x / base_resolution.y;
 

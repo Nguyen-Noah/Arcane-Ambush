@@ -312,22 +312,16 @@ class Circle:
             self.current_radius = min(self.target_radius, self.current_radius)
             radius_value = self.ease(self.current_radius / self.target_radius)
             if self.reverse:
-                # stuff to affect the circle
-                print(self.true_width)
                 self.width = self.true_width * radius_value
-
                 radius_value = 1 - radius_value
                 #self.width += self.dw * dt
-                # stuff to kill the circle
                 if radius_value == 0:
                     self.alive = False
             else:
-                # stuff to affect the circle
                 self.width = self.width * (1 - radius_value)
-                # stuff to kill the circle
-                if radius_value == 1 or self.width <= 0:
-                    self.alive = False
             self.radius = radius_value * self.target_radius
+        else:
+            self.alive = False
         return self.alive
     
     def render(self, surf, offset=(0, 0)):

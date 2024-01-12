@@ -11,7 +11,7 @@ from .weapon_anims import WeaponAnimations
 from .particles import ParticleManager
 from .builder_menu import Builder
 from .vfx import VFX, set_glow_surf
-from .ease_functions import easeInExpo, easeInOutExpo
+from .ease_functions import easeOutSin
 from .lights import Lights
 
 from .quadtree import QuadTree, Rectangle
@@ -96,7 +96,8 @@ class World:
                 self.player.weapon.invisible = 0.2
 
         if self.game.input.mouse_state['right_click']:
-            #self.game.world.vfx.spawn_vfx('circle', self.game.input.get_mouse_pos(), 100, 12, 100, reverse=True, ease=easeInExpo)#
+            self.game.world.vfx.spawn_vfx('circle', self.game.input.get_mouse_pos(), 25, 20, 150, reverse=False, ease=easeOutSin)
+            self.game.world.vfx.spawn_vfx('circle', self.game.input.get_mouse_pos(), 20, 20, 100, reverse=False, ease=easeOutSin)
             self.towers.selected_tower = 'artemis'
 
         self.world_timer += self.game.window.dt

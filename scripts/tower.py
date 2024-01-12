@@ -27,7 +27,7 @@ class Tower:
         
         self.gen_mask()
         if self.hoverable:
-            self.game.world.lights.add_light(100, self.color, self)
+            self.game.world.lights.add_light(180, self.color, self)
 
     @property
     def img(self):
