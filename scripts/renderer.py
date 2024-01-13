@@ -127,10 +127,6 @@ class Renderer:
         # tooltips ----------------------------------------------------------------------------------------------- #
         #self.tooltips.render(ui_surf, self.game.window.dt)
 
-        # builder menu ------------------------------------------------------------------------------------------- #
-        if self.game.world.show_builder_menu and self.game.world.builder_mode:
-            self.game.world.builder_menu.render(ui_surf)
-
         # display the player money ------------------------------------------------------------------------------- #
         self.game.assets.money_text.render(ui_surf, str(self.game.world.entities.player.money), (10, 27))
 

@@ -9,7 +9,6 @@ from .standalone_animations import StandaloneAnimations
 from .destruction_particles import DestructionParticles
 from .weapon_anims import WeaponAnimations
 from .particles import ParticleManager
-from .builder_menu import Builder
 from .vfx import VFX, set_glow_surf
 from .ease_functions import easeOutSin
 from .lights import Lights
@@ -22,7 +21,6 @@ class World:
         self.loaded = False
         self.collideables = []
         self.builder_mode = False
-        self.show_builder_menu = False
         self.world_timer = 0
 
     def load(self, map_id):
@@ -49,14 +47,10 @@ class World:
         self.quadtree = QuadTree(4, Rectangle(pygame.math.Vector2(0, 0), pygame.math.Vector2(self.floor.get_size())))
 
         # camera ----------------------------------------------------------------------- #
-        #self.camera.set_restriction(self.player.pos)
         self.camera.set_tracked_entity(self.player)
 
         # hitboxes --------------------------------------------------------------------- #
         self.hitboxes = Hitboxes(self.game)
-
-        # building --------------------------------------------------------------------- #
-        self.builder_menu = Builder(self.game)
 
         self.master_clock = 0
 
@@ -77,18 +71,17 @@ class World:
         if self.game.input.states['open_build_mode']:
             self.entities.render_entities = False
             self.game.input.hold_reset()
-            self.camera.set_tracked_entity(None)
             self.builder_mode = True
             self.game.input.input_mode = 'builder'
-            self.show_builder_menu = False
-            self.towers.set_display_tower(self.towers.selected_tower, 0, self.game.input.get_mouse_pos())
+            if not self.towers.displayed_tower:
+                self.towers.set_display_tower(self.towers.selected_tower, 0, self.game.input.get_mouse_pos())
 
         if self.game.input.states['close_build_mode']:
             self.entities.render_entities = True
-            self.camera.set_tracked_entity(self.player)
             self.builder_mode = False
             self.game.input.input_mode = 'core'
-            self.towers.displayed_tower = None
+            if self.towers.displayed_tower:
+                self.towers.displayed_tower = None
 
         if self.builder_mode:
             self.game.window.add_freeze(0.0001, 0.1)
