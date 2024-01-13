@@ -34,8 +34,8 @@ class Entity:
         self.health = self.max_health
         self.invincible = 0
 
-        if self.type + '_walk_side' in self.game.assets.animations.animations:
-            self.set_action('walk', 'side')
+        if self.type + '_walk' in self.game.assets.animations.animations:
+            self.set_action('walk')
 
         self.controller = controller
         if self.controller not in ['player', None]:
@@ -74,11 +74,11 @@ class Entity:
         else:
             return [self.rect[0] + (self.size[0] // 2), self.rect[1] + (self.size[1] // 2)]
 
-    def set_action(self, action_id, direction, force=False):
+    def set_action(self, action_id, force=False):
         if force:
-            self.active_animation = self.assets.new(self.type + '_' + action_id + '_' + direction)
-        elif (not self.active_animation) or (self.active_animation.data.id != self.type + '_' + action_id + '_' + direction):
-            self.active_animation = self.game.assets.animations.new(self.type + '_' + action_id + '_' + direction)
+            self.active_animation = self.assets.new(self.type + '_' + action_id)
+        elif (not self.active_animation) or (self.active_animation.data.id != self.type + '_' + action_id):
+            self.active_animation = self.game.assets.animations.new(self.type + '_' + action_id)
 
     def set_image(self, surf):
         self.current_image = surf.copy()

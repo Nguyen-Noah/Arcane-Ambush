@@ -11,7 +11,6 @@ class Player(Entity):
         self.velocity = [0, 0]
         self.allow_movement = True
         self.moving = False
-        self.direction = 'side'
         self.vx = 0
         self.vy = 0
         self.last_move_attempt = 0
@@ -60,7 +59,6 @@ class Player(Entity):
         if self.allow_movement:
             if axis == 0:
                 self.flip[0] = direction < 0
-                self.direction = 'side'
             if not self.moving:
                 if direction != self.last_move_attempt:
                     self.game.world.world_animations.spawn('player_dust', self.center.copy(), flip=self.flip)
@@ -128,9 +126,9 @@ class Player(Entity):
         # animations code
         if self.targetable:
             if self.game.input.states['left'] or self.game.input.states['right'] or self.game.input.states['up'] or self.game.input.states['down']:
-                self.set_action('walk', self.direction)
+                self.set_action('walk')
             else:
-                self.set_action('idle', self.direction)
+                self.set_action('idle')
                 self.moving = False
 
             # weapon
