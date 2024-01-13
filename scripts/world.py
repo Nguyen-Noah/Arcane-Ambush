@@ -35,6 +35,7 @@ class World:
         self.vfx = VFX(self.game)
         self.weapon_anims = WeaponAnimations(self.game)
         self.lights = Lights(self.game)
+        self.lights.load()
 
         self.camera = Camera(self.game)
 

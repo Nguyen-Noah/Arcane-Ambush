@@ -29,7 +29,7 @@ class Player(Entity):
         # PUT THIS IN THE CONFIG EVENTUALLY
         self.mana = 100
 
-        self.game.world.lights.add_light(100, (255, 255, 255), self)
+        self.game.world.lights.attach_owner('player', self)
 
     @property
     def weapon(self):
