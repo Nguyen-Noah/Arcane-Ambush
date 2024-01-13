@@ -41,21 +41,19 @@ class ShortswordWeapon(Weapon):
         img = self.game.assets.weapons[self.type].copy()
         if not self.invisible:
             img = self.game.assets.weapons[self.type].copy()
+            flips = False
+            if self.swing == -1:
+                flips = False
+                img = pygame.transform.flip(img, False, flips)
+            else:
+                flips = True
+                img = pygame.transform.flip(img, False, flips)
             if (self.rotation % 360 < 270) and (self.rotation % 360 > 90):
                 # FACING LEFT
-                if self.swing == -1:
-                    img = pygame.transform.flip(img, False, False)
-                else:
-                    img = pygame.transform.flip(img, False, True)
-                self.flip = True
                 angle_offset = -20
             else:
                 # FACING RIGHT
-                if self.swing == -1:
-                    img = pygame.transform.flip(img, False, False)
-                else:
-                    img = pygame.transform.flip(img, False, True)
-                self.flip = False
                 angle_offset = 20
             img = pygame.transform.rotate(img, -self.rotation + angle_offset - self.weapon_angle)
-            surf.blit(img, (loc[0] - (img.get_width() // 2) + (math.cos(math.radians(self.rotation + self.weapon_angle)) * 10) - offset[0], loc[1] - (img.get_height() // 2) - (math.sin(math.radians(-self.rotation - self.weapon_angle)) * 10) - offset[1]))
+            render_pos = (loc[0] - (img.get_width() // 2) + (math.cos(math.radians(self.rotation + self.weapon_angle)) * 10) - offset[0], loc[1] - (img.get_height() // 2) - (math.sin(math.radians(-self.rotation - self.weapon_angle)) * 10) - offset[1])
+            surf.blit(img, render_pos)

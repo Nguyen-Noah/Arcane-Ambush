@@ -29,6 +29,8 @@ class Player(Entity):
         # PUT THIS IN THE CONFIG EVENTUALLY
         self.mana = 100
 
+        self.game.world.lights.attach_owner('player', self)
+
     @property
     def weapon(self):
         if self.selected_inventory_slot < len(self.inventory.get_custom_group('active_weapons')):
@@ -157,8 +159,6 @@ class Player(Entity):
         else:
             #self.velocity = [0, 0]
             self.weapon.invisible = 0.2
-
-        self.game.world.add_light_source(self.center[0], self.center[1], 0.8, 0.4, (255, 255, 255))
 
         # collisions and move ---------------------------------------------------------- #
         self.collisions = self.move(self.frame_motion, self.game.world.collideables)

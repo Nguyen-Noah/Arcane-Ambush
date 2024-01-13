@@ -44,35 +44,20 @@ class Camera:
         else:
             self.rate = 0.25
 
-        if self.mode == 'freeroam':
-            x_direction = 0
-            y_direction = 0
-            if self.game.input.states['pan_left']:
-                x_direction = -1
-            elif self.game.input.states['pan_right']:
-                x_direction = 1
-            if self.game.input.states['pan_up']:
-                y_direction = -1
-            elif self.game.input.states['pan_down']:
-                y_direction = 1
-            
-            self.camera_offset[0] += x_direction * 1.5
-            self.camera_offset[1] += y_direction * 1.5
-        else:
-            # Weapon Lead --------------------------------------- #
-            if self.track_entity:
-                if self.track_entity.type == 'player':
-                    target_pos = self.track_entity.pos.copy()
-                    if self.track_entity.weapon and self.track_entity.alive:
-                        angle = math.radians(self.track_entity.weapon.rotation)
-                        dis = math.sqrt((self.game.input.mouse_pos[1] - self.track_entity.center[1] + self.game.world.camera.render_offset[1]) ** 2 + (self.game.input.mouse_pos[0] - self.track_entity.center[0] + self.game.world.camera.render_offset[0]) ** 2)
-                        target_pos[0] += math.cos(angle) * (dis / 8)
-                        target_pos[1] += math.sin(angle) * (dis / 8)
-                self.set_target((target_pos[0] - self.game.window.display.get_width() // 2, target_pos[1] - self.game.window.display.get_height() // 2))
+        # Weapon Lead --------------------------------------- #
+        if self.track_entity:
+            if self.track_entity.type == 'player':
+                target_pos = self.track_entity.pos.copy()
+                if self.track_entity.weapon and self.track_entity.alive:
+                    angle = math.radians(self.track_entity.weapon.rotation)
+                    dis = math.sqrt((self.game.input.mouse_pos[1] - self.track_entity.center[1] + self.render_offset[1]) ** 2 + (self.game.input.mouse_pos[0] - self.track_entity.center[0] + self.render_offset[0]) ** 2)
+                    target_pos[0] += math.cos(angle) * (dis / 8)
+                    target_pos[1] += math.sin(angle) * (dis / 8)
+            self.set_target((target_pos[0] - self.game.window.display.get_width() // 2, target_pos[1] - self.game.window.display.get_height() // 2))
 
-            # Core Camera Functionality -------------------------- #
-            self.camera_offset[0] += math.floor(self.target_pos[0] - self.camera_offset[0]) / (self.rate / self.game.window.dt)
-            self.camera_offset[1] += math.floor(self.target_pos[1] - self.camera_offset[1]) / (self.rate / self.game.window.dt)
+        # Core Camera Functionality -------------------------- #
+        self.camera_offset[0] += math.floor(self.target_pos[0] - self.camera_offset[0]) / (self.rate / self.game.window.dt)
+        self.camera_offset[1] += math.floor(self.target_pos[1] - self.camera_offset[1]) / (self.rate / self.game.window.dt)
 
         # clamp the camera so that the camera will not show anything outside of the map
         # use 4 pixel padding to compensate for screenshake

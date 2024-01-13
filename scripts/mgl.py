@@ -49,7 +49,7 @@ class MGL:
         # render object
         self.vaos[program_name] = self.ctx.vertex_array(program, [(self.quad_buffer, '2f 2f', 'vert', 'texcoord')])
 
-    def render(self, world_timer, base_resolution, lights_pos, light_rad_int, light_colors, i_frames):
+    def render(self, world_timer, base_resolution, i_frames):
         # ------------------------------------------------- RENDERING PIPELINE ------------------------------------------------- #
 
         # clear everything so your gpu doesnt explode
@@ -57,14 +57,13 @@ class MGL:
         self.clear_fbos()
         self.ctx.enable(moderngl.BLEND)    
 
-        # ------ LUMA FILTERING
+        """
         self.fbos['luma_filter'].use()
         if 'base_display' in self.textures:
             self.update_render('luma_filter', {
                 'surface': self.textures['base_display']
             })
 
-        # ------ BLOOM
         self.fbos['horizontal_blur'].use()
         self.update_render('horizontal_blur', {
             'surface': self.fbos['luma_filter'].color_attachments[0]
@@ -79,19 +78,15 @@ class MGL:
         self.update_render('combine_bloom', {
             'surface': self.textures['base_display'],
             'blurred_surface': self.fbos['vertical_blur'].color_attachments[0]
-        })
+        }) """
 
-        # use the overlays fbo
         self.fbos['overlays'].use()
         if 'base_display' in self.textures:
             self.update_render('game_display', {
-                'surface': self.fbos['combine_bloom'].color_attachments[0],
+                'surface': self.textures['base_display'],
                 'perlin_noise': self.textures['perlin_noise'],
                 'world_timer': world_timer,
                 'base_resolution': base_resolution,
-                'lights': lights_pos,
-                'light_rad_int': light_rad_int,
-                'light_colors': light_colors,
                 'i_frames': i_frames
             })
 

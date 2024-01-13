@@ -18,9 +18,12 @@ class Window:
 
         # screen ------------------------------------------------------------------------- #
         self.screen = pygame.display.set_mode(self.scaled_resolution, pygame.OPENGL | pygame.DOUBLEBUF)
-        self.display = pygame.Surface((self.base_resolution[0], self.base_resolution[1]), pygame.SRCALPHA)
+        self.display = pygame.Surface(self.base_resolution, pygame.SRCALPHA)
+        self.light_surf = self.display.copy()#pygame.Surface((self.scaled_resolution))
         self.ui_surf = self.display.copy()
         self.mgl = MGL()
+
+        self.screen_ratio = self.scaled_resolution[0] // self.base_resolution[0]
         
         # icon and caption --------------------------------------------------------------- #
         self.icon = pygame.image.load('data/graphics/icon/icon.png')
@@ -56,13 +59,14 @@ class Window:
         self.ui_surf.blit(self.cursor, (self.game.input.mouse_pos[0] - self.offset[0] - self.game.assets.cursor[self.cursor_id].get_width() // 2, self.game.input.mouse_pos[1] - self.offset[1] - self.game.assets.cursor[self.cursor_id].get_height() // 2))
 
         # converting the screen surfaces into mgl textures
-        #self.display = pygame.transform.gaussian_blur(self.display, 2)
+        self.display.blit(self.light_surf, (0,0), special_flags=pygame.BLEND_RGBA_MULT)
         self.mgl.pg2tx(self.display, 'base_display')
+        self.mgl.pg2tx(self.light_surf, 'light_surf')
         self.mgl.pg2tx(self.ui_surf, 'ui_surf')
 
         # passing in uniforms to the shaders
         world = self.game.world
-        self.mgl.render(world.world_timer, self.base_resolution, world.render_lights_pos, world.render_lights_rad_int, world.render_light_colors, world.player.invincible)
+        self.mgl.render(world.world_timer, self.base_resolution, world.player.invincible)
 
         # get dt
         self.dt = time.time() - self.frame_start
@@ -102,4 +106,5 @@ class Window:
         self.frame_history = self.frame_history[-200:]
 
         self.display.fill(self.background_color)
+        self.light_surf.fill((25, 25, 25, 0))
         self.ui_surf.fill((0, 0, 0, 0))

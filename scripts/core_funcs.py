@@ -141,3 +141,20 @@ def colideRectLine(rect, p1, p2):
             collideLineLine(p1, p2, rect.bottomleft, rect.bottomright) or
             collideLineLine(p1, p2, rect.bottomright, rect.topright) or
             collideLineLine(p1, p2, rect.topright, rect.topleft))
+
+def outline(img, color=(255, 255, 255)):
+    mask = pygame.mask.from_surface(img)
+    mask_outline = mask.outline()
+    mask_surf = pygame.Surface(img.get_size())
+    for pixel in mask_outline:
+        mask_surf.set_at(pixel, color)
+    mask_surf.set_colorkey((0, 0, 0))
+    center = ((img.get_width() // 2) - (mask_surf.get_width() // 2), (img.get_height() // 2) - (mask_surf.get_height() // 2))
+    surf = pygame.Surface((img.get_width() + 2, img.get_height() + 2))
+    surf.set_colorkey((0, 0, 0))
+    surf.blit(mask_surf, (center[0]-1, center[1]))
+    surf.blit(mask_surf, (center[0]+1, center[1]))
+    surf.blit(mask_surf, (center[0], center[1]-1))
+    surf.blit(mask_surf, (center[0], center[1]+1))
+
+    return surf

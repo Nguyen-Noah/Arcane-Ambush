@@ -1,6 +1,6 @@
 import pygame, math, random
 from .config import config
-from .core_funcs import tuplify, normalize_vector
+from .ease_functions import easeOutExpo
 
 def collision_list(obj, obj_list):
     hit_list = []
@@ -139,7 +139,7 @@ class Entity:
     def die(self, angle=0):
         #self.game.world.world_animations.spawn('death_sparks', self.center, flip=self.flip)
         self.game.world.vfx.spawn_vfx('circle', self.center.copy(), 4, 6, 25)
-        self.game.world.vfx.spawn_vfx('circle', self.center.copy(), 4, 8, 100)
+        #self.game.world.vfx.spawn_vfx('circle', self.center.copy(), 4, 8, 100)
         for i in range(random.randint(7, 20)):
             random_angle = angle + (random.random() - 0.5) / 3.5
             if random.randint(1, 4) == 1:
@@ -192,7 +192,6 @@ class Entity:
             self.controller.update(dt)
 
         if self.active_animation:
-            #self.print_hitbox()
             self.active_animation.play(dt)
             if self.hurt > 0:
                 self.hurt -= dt

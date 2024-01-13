@@ -29,7 +29,9 @@ class Towers:
             skills[index] = SKILLS[config['towers'][type]['player_skill']](self.game, self.game.world.player)
 
         if cost <= self.game.world.player.money:
-            self.towers.append(tower_map[type](game, type, rank, pos))
+            new_tower = tower_map[type](game, type, rank, pos)
+            self.towers.append(new_tower)
+            self.game.world.lights.attach_owner(type, new_tower)
             self.game.world.player.money -= cost
 
     def get_selected_tower(self):
