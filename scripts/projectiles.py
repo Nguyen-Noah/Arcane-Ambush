@@ -33,9 +33,6 @@ class Projectile:
         self.duration -= dt
         self.move(dt)
 
-        if self.config['group'] == 'player':
-            self.game.world.add_light_source(self.pos[0] - (self.img.get_width() // 2), self.pos[1] - (self.img.get_height() // 2), 0.8, 0.2, (225, 0, 0))
-
         for entity in self.game.world.entities.entities:
             if (entity != self.owner) and ((entity.type == 'player') or (entity.type != self.owner.type)) and (entity.type != 'item') and (entity.health > 0) and entity.targetable and (entity.invincible == 0):
                 if entity.rect.collidepoint(self.pos):
