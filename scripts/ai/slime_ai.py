@@ -5,6 +5,7 @@ from ..core_funcs import normalize
 class SlimeAI(BaseAI):
     def init(self):
         self.allow_ai_movement = 1
+        self.state = 'wander'           # WANDER OR PURSUIT
 
     def choose_new_target_pos(self):
         player = self.game.world.player
@@ -20,4 +21,7 @@ class SlimeAI(BaseAI):
         return 1 + random.random()
     
     def update(self, dt):
-        pass
+        if self.state == 'wander':
+            pass
+        else:
+            pass
