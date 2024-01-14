@@ -18,8 +18,6 @@ class Slime(Entity):
         #if self.game.input.mouse_state['right_click']:
             #self.active_animation.paused = not self.active_animation.paused
 
-        print(self.anim_offset)
-
         return self.alive
 
     def render(self, surf, offset):

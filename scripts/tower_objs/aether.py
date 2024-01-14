@@ -15,7 +15,7 @@ class Aether(Tower):
             for i in range(num_shots):
                 speed = random.randint(60, 100)
                 angle = self.rotation + random.random() * math.pi / 4 - math.pi / 8
-                self.game.world.vfx.spawn_group('aether_sparks', self.center, angle + math.pi, color=self.color)
+                self.game.world.vfx.spawn_group('aether_sparks', self.center, angle + math.pi, color=(205, 180, 20))
                 self.game.world.entities.projectiles.spawn_projectile(self.type + '_projectile', self.center, angle, speed, 2, self)
                 self.active_projectiles.append(self.game.world.entities.projectiles.get_last())
             self.attack_timer = 0

@@ -43,6 +43,7 @@ class Entity:
             self.controller = controller(self)
 
         self.gen_mask()
+        self.gen_shadow()
 
     @property
     def img(self):
@@ -85,9 +86,9 @@ class Entity:
         self.current_image = surf.copy()
         self.image_base_dimensions = list(surf.get_size())
 
-    def draw_hitframe(self, surf, offset):
+    def draw_hitframe(self, surf, pos, anim_offset):
         mask = pygame.mask.from_surface(self.img)
-        surf.blit(mask.to_surface(unsetcolor=(0, 0, 0, 0), setcolor=(255, 255, 255, 255)), ((self.pos[0] - offset[0]) // 1, (self.pos[1] - offset[1] - self.height) // 1))
+        surf.blit(mask.to_surface(unsetcolor=(0, 0, 0, 0), setcolor=(255, 255, 255, 255)), (pos[0] - anim_offset[0], pos[1] - anim_offset[1]))
 
     def move(self, motion, tiles):
         self.pos[0] += motion[0]
@@ -139,7 +140,7 @@ class Entity:
         self.alive = False
 
     def damage(self, amount, angle=0):
-        self.hurt = 0.05
+        self.hurt = 0.2
         self.health -= amount
 
         if self.type == 'player':
@@ -152,6 +153,13 @@ class Entity:
 
     def gen_mask(self):
         self.mask = pygame.mask.from_surface(self.img)
+
+    def gen_shadow(self):
+        self.shadow = pygame.Surface((self.img.get_width(), self.img.get_height() / 3))
+        self.shadow.fill((0, 0, 0))
+        self.shadow.set_colorkey((0, 0, 0))
+        self.shadow.set_alpha(150)
+        pygame.draw.ellipse(self.shadow, (17, 17, 17), (0, 0, self.shadow.get_width(), self.shadow.get_height()))
 
     def calculate_render_offset(self, offset=(0, 0)):
         offset = list(offset)
@@ -171,11 +179,15 @@ class Entity:
         if self.centered:
             offset[0] += self.img.get_width() // 2
             offset[1] += self.img.get_height() // 2
-        surf.blit(self.img, (self.pos[0] - offset[0] - anim_offset[0], self.pos[1] - offset[1] - self.height - anim_offset[1]))
+        render_pos = (self.pos[0] - offset[0], self.pos[1] - offset[1])
+        surf.blit(self.shadow, (render_pos[0], render_pos[1] + self.height - (self.shadow.get_height() / 2)))
+        surf.blit(self.img, (render_pos[0] - anim_offset[0], render_pos[1] - anim_offset[1]))
         if self.hurt:
-            self.draw_hitframe(surf, offset)
+            self.draw_hitframe(surf, render_pos, anim_offset)
 
     def update(self, dt):
+        self.height = self.img.get_height()
+
         if self.controller not in ['player', None]:
             self.controller.update(dt)
 
