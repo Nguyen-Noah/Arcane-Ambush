@@ -62,7 +62,7 @@ class Projectile:
 
                         random_speed = random.randint(20, 200)
                         vel = [math.cos(random_angle) * random_speed, math.sin(random_angle) * random_speed]
-                        self.game.world.vfx.spawn_vfx('spark', self.pos.copy(), vel, 1 + random.random(), (15, 15, 8), drag=50, color=color)
+                        self.game.world.vfx.spawn_vfx('spark', self.pos.copy(), vel, 1 + random.random(),  drag=50, color=color)
                     self.alive = False
 
         if self.duration <= 0:

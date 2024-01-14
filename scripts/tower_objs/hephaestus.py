@@ -1,4 +1,4 @@
-import pygame, math
+import math
 from ..tower import Tower
 
 class Hephaestus(Tower):
@@ -6,7 +6,7 @@ class Hephaestus(Tower):
         super().__init__(*args, **kwargs)
 
     def update(self, dt):
-        super().update(dt, color=(255, 50, 50))
+        super().update(dt)
         if self.hoverable:
             if self.attack_timer >= self.attack_cd:
                 num_projectiles = 20

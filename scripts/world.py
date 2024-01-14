@@ -90,9 +90,10 @@ class World:
                 self.player.weapon.invisible = 0.2
 
         if self.game.input.mouse_state['right_click']:
-            self.game.world.vfx.spawn_vfx('circle', self.game.input.get_mouse_pos(), 25, 20, 150, reverse=False, ease=easeOutSin)
-            self.game.world.vfx.spawn_vfx('circle', self.game.input.get_mouse_pos(), 20, 20, 100, reverse=False, ease=easeOutSin)
-            self.towers.selected_tower = 'artemis'
+            self.vfx.spawn_vfx('spark', self.game.input.get_mouse_pos(), (10, -20), 1, gravity=100)
+            #self.vfx.spawn_vfx('circle', self.game.input.get_mouse_pos(), 25, 20, 150, reverse=False, ease=easeOutSin)
+            #self.vfx.spawn_vfx('circle', self.game.input.get_mouse_pos(), 20, 20, 100, reverse=False, ease=easeOutSin)
+            #self.towers.selected_tower = 'artemis'
 
         self.world_timer += self.game.window.dt
 

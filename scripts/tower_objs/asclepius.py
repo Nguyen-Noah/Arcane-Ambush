@@ -6,7 +6,7 @@ class Asclepius(Tower):
         super().__init__(*args, **kwargs)
 
     def update(self, dt):
-        super().update(dt, color=(246, 129, 129))
+        super().update(dt)
 
     def render(self, surf, offset):
         super().render(surf, offset)

@@ -13,6 +13,7 @@ class Entity:
     def __init__(self, game, pos, size, type, category, controller=None):
         self.game = game
         self.pos = list(pos).copy()
+        self.home = self.pos.copy()
         self.size = size
         self.type = type
         self.category = category
@@ -88,19 +89,6 @@ class Entity:
         mask = pygame.mask.from_surface(self.img)
         surf.blit(mask.to_surface(unsetcolor=(0, 0, 0, 0), setcolor=(255, 255, 255, 255)), ((self.pos[0] - offset[0]) // 1, (self.pos[1] - offset[1] - self.height) // 1))
 
-    def get_target_distance(self, target):
-        dist = [target.center[0] - self.center[0], target.center[1] - self.center[1]]
-
-        magnitude = math.sqrt(dist[0] ** 2 + dist[1] ** 2)
-        if magnitude == 0:
-            return [0, 0]
-        normalized_dist = [dist[0] / magnitude, dist[1] / magnitude]
-
-        normalized_dist[0] *= self.speed * self.game.window.dt
-        normalized_dist[1] *= self.speed * self.game.window.dt
-
-        return normalized_dist
-
     def move(self, motion, tiles):
         self.pos[0] += motion[0]
         hit_list = collision_list(self.rect, tiles)
@@ -146,7 +134,7 @@ class Entity:
                 random_angle = angle + (random.random() - 0.5) / 7 + math.pi
             random_speed = random.randint(20, 100)
             vel = [math.cos(random_angle) * random_speed, math.sin(random_angle) * random_speed]
-            self.game.world.vfx.spawn_vfx('spark', self.center.copy(), vel, 1 + random.random(), (15, 15, 8), drag=50)
+            self.game.world.vfx.spawn_vfx('spark', self.center.copy(), vel, 1 + random.random(), drag=50)
 
         self.alive = False
 
@@ -175,7 +163,7 @@ class Entity:
             offset[1] += self.img.get_height() // 2
         return offset
 
-    def render(self, surf, offset=(0, 0)):
+    def render(self, surf, offset=(0, 0), anim_offset=(0, 0)):
         offset = list(offset)
         if self.active_animation:
             offset[0] += self.active_animation.data.config['offset'][0]
@@ -183,7 +171,7 @@ class Entity:
         if self.centered:
             offset[0] += self.img.get_width() // 2
             offset[1] += self.img.get_height() // 2
-        surf.blit(self.img, ((self.pos[0] - offset[0]) // 1, (self.pos[1] - offset[1] - self.height) // 1))
+        surf.blit(self.img, (self.pos[0] - offset[0] - anim_offset[0], self.pos[1] - offset[1] - self.height - anim_offset[1]))
         if self.hurt:
             self.draw_hitframe(surf, offset)
 

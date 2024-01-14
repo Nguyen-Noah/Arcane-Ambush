@@ -40,14 +40,6 @@ class Hitbox:
                                     #self.owner.process_kill(entity)
                             for i in range(random.randint(10, 15)):
                                 self.game.world.vfx.spawn_group('arrow_impact_sparks', collision_point.copy(), self.angle)
-                            '''for i in range(random.randint(14, 20)):
-                                random_angle = self.angle + (random.random() - 0.5) / 3.5
-                                if random.randint(1, 4) == 1:
-                                    random_angle = self.angle + (random.random() - 0.5) / 7 + math.pi
-
-                                random_speed = random.randint(20, 200)
-                                vel = [math.cos(random_angle) * random_speed, math.sin(random_angle) * random_speed]
-                                self.game.world.vfx.spawn_vfx('spark', collision_point.copy(), vel, 1 + random.random() * 3, (15, 15, 8), drag=50)'''
                         self.ignore.append(entity)
             return self.tracked.alive
 

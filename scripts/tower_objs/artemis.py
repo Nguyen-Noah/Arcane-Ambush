@@ -5,7 +5,6 @@ from ..ease_functions import easeInOutExpo
 
 class Artemis(Tower):
     def __init__(self, *args, **kwargs):
-        self.color = (200, 200, 50)
         super().__init__(*args, **kwargs)
         self.target_pos = None
         self.since_first_circle = 0
@@ -25,7 +24,7 @@ class Artemis(Tower):
         """
 
     def update(self, dt):
-        super().update(dt, color=(200, 200, 50))
+        super().update(dt)
         if self.hoverable:
             # idle time
             # self.attack_timer being incremented in parent Tower class

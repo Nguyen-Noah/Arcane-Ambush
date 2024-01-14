@@ -4,12 +4,11 @@ from ..ease_functions import easeInOutExpo
 
 class Aether(Tower):
     def __init__(self, *args, **kwargs):
-        self.color = (205, 180, 20)
         super().__init__(*args, **kwargs)
         self.active_projectiles = []
 
     def update(self, dt):
-        super().update(dt, color=self.color)
+        super().update(dt)
         num_shots = 12
         # add particle emitters
         if self.attack_timer >= self.attack_cd:

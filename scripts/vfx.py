@@ -225,13 +225,12 @@ class Arc:
 SPARK_CACHE = {}
 
 class Spark:
-    def __init__(self, game, pos, velocity, duration, glow_color, color=(255, 255, 255), drag=0, gravity=5):
+    def __init__(self, game, pos, velocity, duration, color=(255, 255, 255), drag=0, gravity=5):
         self.game = game
         self.pos = list(pos)
         self.velocity = list(velocity)
         self.orig_duration = duration
         self.duration = duration
-        self.glow_color = glow_color
         self.color = color
         self.drag = drag
         self.gravity = gravity
@@ -247,9 +246,7 @@ class Spark:
         return True
 
     def render(self, surf, offset=(0, 0)):
-        radius = int(self.duration / self.orig_duration * 20) + 1
         center = (int(self.pos[0] - offset[0]), int(self.pos[1] - offset[1]))
-        #glow(center, radius, 0, color=self.glow_color)
         surf.set_at(center, self.color)
 
 class Slice:

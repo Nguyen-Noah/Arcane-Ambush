@@ -127,6 +127,20 @@ def tuplify(list):
         new_tuple.append(tuple(i))
     return new_tuple
 
+# make sure to multiply this by dt and speed
+"""
+self.frame_motion[0] += dist[0] * speed * dt
+self.frame_motion[1] += dist[1] * speed * dt
+"""
+def get_target_dist(origin, target):
+    dist = [target[0] - origin[0], target[1] - origin[1]]
+
+    magnitude = math.sqrt(dist[0] ** 2 + dist[1] ** 2)
+    if magnitude == 0:
+        return [0, 0]
+
+    return [dist[0] / magnitude, dist[1] / magnitude]
+
 # used in tandem to check for collisions of a rotated rect
 def collideLineLine(P0, P1, Q0, Q1):  
     d = (P1[0]-P0[0]) * (Q1[1]-Q0[1]) + (P1[1]-P0[1]) * (Q0[0]-Q1[0]) 

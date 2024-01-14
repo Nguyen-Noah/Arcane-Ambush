@@ -114,7 +114,7 @@ class Tower:
                 surf.blit(mask_surf, (loc[0], loc[1] - 1))
                 surf.blit(mask_surf, (loc[0], loc[1] + 1))
 
-    def update(self, dt, color=(0, 0, 0)):
+    def update(self, dt):
         if self.animation:
             self.animation.play(dt)
 
