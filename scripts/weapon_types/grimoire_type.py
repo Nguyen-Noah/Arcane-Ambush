@@ -41,7 +41,7 @@ class GrimoireWeapon(Weapon):
             else:
                 self.flip = False
             img = pygame.transform.rotate(img, -self.rotation)
-            outline_surf = self.get_outline_surf(img, self.rotation, (17,17,17))
+            outline_surf = self.get_outline_surf(img, self.rotation, color=(17,17,17))
             render_pos = (loc[0] - (img.get_width() // 2) + (math.cos(math.radians(self.rotation)) * 10) - offset[0], loc[1] - (img.get_height() // 2) - (math.sin(math.radians(-self.rotation)) * 10) + 2 - offset[1])
             surf.blit(outline_surf, render_pos)
             surf.blit(img, render_pos)

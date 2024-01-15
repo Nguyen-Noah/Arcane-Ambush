@@ -122,6 +122,8 @@ class World:
                     #self.collideables.append((x + map_offset[0] - rect[0], y + map_offset[1] - rect[1], rect[2], rect[3]))
                     """ if col != '10':
                         self.render_list.append([img, (x + offset[0] - self.camera.true_pos[0], y + offset[1] - self.camera.true_pos[1] - img.get_size()[1])]) """
+                    
+        print(self.collideables)
 
         self.world_animations.render(surf, offset)
         self.weapon_anims.render(surf, offset)
