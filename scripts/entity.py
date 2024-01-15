@@ -1,6 +1,5 @@
 import pygame, math, random
 from .config import config
-from .ease_functions import easeOutExpo
 
 def collision_list(obj, obj_list):
     hit_list = []

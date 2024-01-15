@@ -1,5 +1,4 @@
 import pygame
-from .config import config
 
 class Builder:
     def __init__(self, game):

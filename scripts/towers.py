@@ -1,4 +1,4 @@
-from .core_funcs import round_nearest, tuplify
+from .core_funcs import round_nearest
 from .config import config
 from .tower_map import tower_map
 from .skills import SKILLS

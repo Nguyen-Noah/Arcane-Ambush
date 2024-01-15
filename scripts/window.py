@@ -1,6 +1,5 @@
-import pygame, time, random
+import pygame, time
 from .config import config
-from .core_funcs import clip
 from .mgl import MGL
 
 class Window:

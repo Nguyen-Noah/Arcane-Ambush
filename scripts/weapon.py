@@ -1,5 +1,4 @@
-import pygame, math, random, time
-from .projectiles import Projectile
+import time
 from .config import config
 from .core_funcs import outline
 from .item import Item

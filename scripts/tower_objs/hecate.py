@@ -1,5 +1,3 @@
-import math
-from ..core_funcs import load_img
 from ..tower import Tower
 
 class Hecate(Tower):

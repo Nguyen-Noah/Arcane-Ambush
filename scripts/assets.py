@@ -1,6 +1,4 @@
 import pygame, os
-from . import spritesheet_loader
-from .config import config
 from .animation_handler import AnimationManager
 from .text import Text
 
@@ -9,7 +7,6 @@ class Assets:
         self.game = game
         
         self.animations = AnimationManager()
-        self.spritesheets, self.spritesheet_data = spritesheet_loader.load_spritesheets('data/graphics/tilesets')
         self.maps = self.load_dir('data/maps/maps')
         self.collideables = self.load_dir('data/graphics/tilesets')
         self.particles = self.load_dirs('data/graphics/particles')

@@ -1,8 +1,6 @@
 import pygame, math
 from .config import config
 from .core_funcs import get_dis
-from .quadtree import Circle
-from .vfx import glow
 
 path = 'data/graphics/towers/'
 colorkey = (0, 0, 0, 0)

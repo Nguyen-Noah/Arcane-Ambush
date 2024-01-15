@@ -14,7 +14,7 @@ class Light:
         return self.owner.alive
 
     def render(self, surf, offset=(0, 0)):
-        surf.blit(self.img, (((self.pos[0] - offset[0]) * 1) - (self.img.get_width() // 2) + (self.owner.img.get_width() // 2), ((self.pos[1] - offset[1]) * 1) - (self.img.get_height() // 2) + (self.owner.img.get_height() // 2)), special_flags=pygame.BLEND_RGBA_ADD)
+        surf.blit(self.img, (((self.pos[0] - offset[0]) * 1) - (self.img.get_width() // 2) + (self.owner.img.get_width() // 2), ((self.pos[1] - offset[1]) * 1) - (self.img.get_height() // 2) + (self.owner.img.get_height() // 2)), special_flags=pygame.BLEND_RGBA_ADD)#
 
 class Lights:
     def __init__(self, game):

@@ -1,5 +1,5 @@
-import pygame, math, random
-from .core_funcs import import_csv_layout, normalize_color
+import pygame
+from .core_funcs import import_csv_layout
 from .camera import Camera
 from .config import config
 from .entities import EntityManager
@@ -10,7 +10,6 @@ from .destruction_particles import DestructionParticles
 from .weapon_anims import WeaponAnimations
 from .particles import ParticleManager
 from .vfx import VFX, set_glow_surf
-from .ease_functions import easeOutSin
 from .lights import Lights
 
 from .quadtree import QuadTree, Rectangle

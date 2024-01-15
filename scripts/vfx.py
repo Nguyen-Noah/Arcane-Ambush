@@ -1,8 +1,4 @@
-import math
-import random
-
-import pygame
-
+import pygame, math, random
 from .core_funcs import *
 from .ease_functions import linear
 

@@ -1,5 +1,4 @@
 import pygame
-
 from .core_funcs import blit_center, itr
 
 class DestructionParticles:

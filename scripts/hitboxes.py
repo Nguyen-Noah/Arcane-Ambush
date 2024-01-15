@@ -1,4 +1,4 @@
-import random, pygame
+import random
 import math
 
 from .config import config

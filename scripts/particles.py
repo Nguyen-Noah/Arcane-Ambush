@@ -1,5 +1,4 @@
 import random
-
 from .core_funcs import blit_center, swap_color, itr
 from .vfx import glow
 import pygame

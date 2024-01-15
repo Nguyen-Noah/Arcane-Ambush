@@ -1,5 +1,4 @@
-import math, pygame
-from .core_funcs import tuplify
+import math
 from .config import config
 from .entity_objs.player import Player
 from .spawner import Spawner

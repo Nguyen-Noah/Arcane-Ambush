@@ -1,4 +1,4 @@
-import pygame, math
+import pygame
 from .core_funcs import itr
 
 class WeaponAnimation:

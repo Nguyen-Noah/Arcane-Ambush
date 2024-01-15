@@ -11,10 +11,12 @@ class GrimoireWeapon(Weapon):
 
     def attack(self):
         angle_offset = (1 - self.accuracy) * math.pi
-        #self.game.world.entities.projectiles.spawn_projectile(self.projectile_type + '_projectile', self.owner.center.copy(), math.radians(self.rotation) - angle_offset + random.random() * angle_offset * 2, 250, 2, self.owner)
         self.game.world.entities.projectiles.spawn_projectile(self.projectile_type + '_projectile', self.owner.center.copy(), math.radians(self.rotation) - angle_offset + random.random() * angle_offset * 2, 250, 2, self.owner)
         self.game.world.vfx.spawn_group('bow_sparks', advance(self.owner.center.copy(), math.radians(self.rotation), 8), math.radians(self.rotation))
-        self.active_projectiles.append(self.game.world.entities.projectiles.get_last())
+        new_projectile = self.game.world.entities.projectiles.get_last()
+        self.active_projectiles.append(new_projectile)
+        if self.type in self.game.world.lights.lights:
+            self.game.world.lights.add_light(self.type, new_projectile)
     
     def attempt_attack(self):
         if self.owner:

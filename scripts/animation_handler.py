@@ -1,7 +1,6 @@
 import pygame, os, json
 
 from .core_funcs import *
-from .config import config
 
 ANIMATION_PATH = 'data/graphics/animations'
 COLORKEY = (0, 0, 0)

@@ -1,5 +1,5 @@
 import pygame, math, random
-from .core_funcs import swap_color, normalize_vector, normalize
+from .core_funcs import normalize_vector, normalize
 
 class Skill:
     def __init__(self, game, owner, skill_type):
