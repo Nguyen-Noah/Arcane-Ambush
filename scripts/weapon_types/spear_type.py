@@ -13,7 +13,7 @@ class SpearWeapon(Weapon):
             self.owner.weapon_hide = 3
             super().attempt_attack()
             
-    def render(self, surf, loc):
+    def render(self, surf, loc, offset):
         self.invisible = max(0, self.invisible - self.game.window.dt)
         img = self.game.assets.weapons[self.type].copy()
         if not self.invisible:
@@ -23,4 +23,4 @@ class SpearWeapon(Weapon):
             else:
                 self.flip = False
             img = pygame.transform.rotate(img, -self.rotation)
-            surf.blit(img, (loc[0] - (img.get_width() // 2) + (math.cos(math.radians(self.rotation)) * 8), loc[1] - (img.get_height() // 2) - (math.sin(math.radians(-self.rotation)) * 8) + 7))
+            surf.blit(img, (loc[0] - offset[0] - (img.get_width() // 2) + (math.cos(math.radians(self.rotation)) * 8), loc[1] - offset[1] - (img.get_height() // 2) - (math.sin(math.radians(-self.rotation)) * 8) + 7))

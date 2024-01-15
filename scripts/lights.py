@@ -24,6 +24,7 @@ class Lights:
     def __init__(self, game):
         self.game = game
         self.lights = {}
+        self.active_lights = []
 
     def load(self):
         lights = config['lights']
