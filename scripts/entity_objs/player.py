@@ -28,7 +28,7 @@ class Player(Entity):
         # PUT THIS IN THE CONFIG EVENTUALLY
         self.mana = 100
 
-        self.game.world.lights.attach_owner('player', self)
+        self.game.world.lights.add_light('player', self)
 
     @property
     def weapon(self):

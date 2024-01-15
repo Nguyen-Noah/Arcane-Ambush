@@ -31,7 +31,7 @@ class Towers:
         if cost <= self.game.world.player.money:
             new_tower = tower_map[type](game, type, rank, pos)
             self.towers.append(new_tower)
-            self.game.world.lights.attach_owner(type, new_tower)
+            self.game.world.lights.add_light(type, new_tower)
             self.game.world.player.money -= cost
 
     def get_selected_tower(self):

@@ -4,14 +4,10 @@ from .core_funcs import itr
 from .config import config
 
 class Light:
-    def __init__(self, radius, color):
-        self.radius = radius
-        self.color = color
-        self.owner = None
-        self.img = gradient_circle(radius, color, (0, 0, 0))
-
-    def set_owner(self, owner):
+    def __init__(self, img, owner):
         self.owner = owner
+        self.img = img
+        self.pos = self.owner.pos.copy()
 
     def update(self):
         self.pos = self.owner.pos
@@ -29,20 +25,17 @@ class Lights:
     def load(self):
         lights = config['lights']
         for light in lights:
-            self.lights[light] = Light(*lights[light])
+            self.lights[light] = gradient_circle(*lights[light])
 
-    def attach_owner(self, light, owner):
-        if light in self.lights:
-            self.lights[light].set_owner(owner)
+    def add_light(self, light, owner):
+        self.active_lights.append(Light(self.lights[light], owner))
 
     def update(self):
-        for light in self.lights:
-            if self.lights[light].owner:
-                alive = self.lights[light].update()
-                if not alive:
-                    self.lights.pop(light)
+        for i, light in itr(self.active_lights):
+            alive = light.update()
+            if not alive:
+                self.active_lights.pop(i)
 
     def render(self, surf, offset=(0, 0)):
-        for light in self.lights:
-            if self.lights[light].owner:
-                self.lights[light].render(surf, offset)
+        for light in self.active_lights:
+            light.render(surf, offset)
