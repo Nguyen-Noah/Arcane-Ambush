@@ -8,6 +8,12 @@ class Window:
 
         pygame.init()
 
+        # opengl stuff ------------------------------------------------------------------- #
+        pygame.display.gl_set_attribute(pygame.GL_CONTEXT_MAJOR_VERSION, 3)
+        pygame.display.gl_set_attribute(pygame.GL_CONTEXT_MINOR_VERSION, 3)
+        pygame.display.gl_set_attribute(pygame.GL_CONTEXT_PROFILE_MASK, pygame.GL_CONTEXT_PROFILE_CORE)
+        pygame.display.gl_set_attribute(pygame.GL_CONTEXT_FORWARD_COMPATIBLE_FLAG, True)
+
         # config ------------------------------------------------------------------------- #
         self.scaled_resolution = config['window']['scaled_resolution']
         self.base_resolution = config['window']['base_resolution']
