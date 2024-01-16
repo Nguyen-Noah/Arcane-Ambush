@@ -1,4 +1,4 @@
-import pygame, math
+import pygame, math, random
 from ..tower import Tower
 from ..core_funcs import colideRectLine
 from ..ease_functions import easeInOutExpo
@@ -52,7 +52,13 @@ class Artemis(Tower):
                             self.attack_timer = 0
                             self.since_first_circle = 0
                             self.second_circle_spawned = False
-                        #print('BVVVV')
+                        # SHOOTING
+                        angle = self.rotation + random.random() * math.pi / 8
+                        green = random.randint(100, 180)
+                        blue = min(255, green * 2)
+                        vfx_color = (0, green, blue)
+                        print(vfx_color)
+                        self.game.world.vfx.spawn_group('aether_sparks', self.center, angle + math.pi, color=vfx_color)
 
     def render(self, surf, offset=[0, 0]):
         super().render(surf, offset)

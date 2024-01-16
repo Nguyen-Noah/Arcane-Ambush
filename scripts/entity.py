@@ -131,8 +131,8 @@ class Entity:
                 self.pos[1] += self.size[1] // 2
         return directions
 
-    def print_hitbox(self):
-        pygame.draw.rect(self.game.window.display, 'blue', (self.rect[0] - self.game.world.camera.true_pos[0], self.rect[1] - self.game.world.camera.true_pos[1], self.rect[2], self.rect[3]), 1)
+    def print_hitbox(self, surf, offset=(0, 0)):
+        surf.blit(self.mask.to_surface(), (self.pos[0] - offset[0], self.pos[1] - offset[1]))
 
     def die(self, angle=0):
         #self.game.world.world_animations.spawn('death_sparks', self.center, flip=self.flip)
@@ -199,6 +199,9 @@ class Entity:
 
     def update(self, dt):
         self.height = self.img.get_height()
+
+        # update the mask for animations
+        self.gen_mask()
 
         if self.i_frames > 0:
             self.i_frames = normalize(self.i_frames, dt)

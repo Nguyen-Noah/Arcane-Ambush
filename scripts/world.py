@@ -11,6 +11,8 @@ from .weapon_anims import WeaponAnimations
 from .particles import ParticleManager
 from .vfx import VFX, set_glow_surf
 from .lights import Lights
+from .entity_map import entity_map
+from .ai.slime_ai import SlimeAI
 
 from .quadtree import QuadTree, Rectangle
 
@@ -90,10 +92,11 @@ class World:
                 self.player.weapon.invisible = 0.2
 
         if self.game.input.mouse_state['right_click']:
-            self.vfx.spawn_vfx('spark', self.game.input.get_mouse_pos(), (10, -20), 1, gravity=100)
-            #self.vfx.spawn_vfx('circle', self.game.input.get_mouse_pos(), 25, 20, 150, reverse=False, ease=easeOutSin)
-            #self.vfx.spawn_vfx('circle', self.game.input.get_mouse_pos(), 20, 20, 100, reverse=False, ease=easeOutSin)
-            #self.towers.selected_tower = 'artemis'
+            #self.vfx.spawn_vfx('spark', self.game.input.get_mouse_pos(), (10, -20), 1, gravity=100)
+            #self.vfx.spawn_vfx('circle', self.game.input.get_mouse_pos(), 30, 20, 150, reverse=False)
+            #self.vfx.spawn_vfx('circle', self.game.input.get_mouse_pos(), 20, 50, 75, reverse=False)
+            #self.game.world.entities.entities.append(entity_map['slime'](self.game, (300, 300), (14, 14), 'slime', 'enemy', controller=SlimeAI, movement_type='jump'))
+            self.towers.selected_tower = 'artemis'
 
         self.world_timer += self.game.window.dt
 
