@@ -65,7 +65,7 @@ class Window:
 
         # passing in uniforms to the shaders
         world = self.game.world
-        self.mgl.render(world.world_timer, self.base_resolution, world.player.invincible)
+        self.mgl.render(world.world_timer, self.base_resolution, world.player.i_frames)
 
         # get dt
         self.dt = time.time() - self.frame_start

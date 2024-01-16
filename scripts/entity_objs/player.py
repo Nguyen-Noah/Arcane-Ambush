@@ -18,12 +18,12 @@ class Player(Entity):
         self.skills = [SKILLS['dash'](self.game, self), None, None, None, None, None, None, None, None]
         self.inventory = Inventory(self)
         self.selected_inventory_slot = 0
-        self.counter = [False, False]
         self.aim_angle = 0
         self.attacking = False
         self.attack_movement_slow = 0
         self.movement_skill = False
         self.base_health = config['entities']['player']['health']
+        self.dust_particle_timer = 0.03
 
         # PUT THIS IN THE CONFIG EVENTUALLY
         self.mana = 100
@@ -86,10 +86,12 @@ class Player(Entity):
     def update(self, dt):
         self.frame_motion = self.velocity.copy()
 
+        # base Entity update
         r = super().update(dt)
         if not r:
             return r
         
+        # update skills
         for skill in self.skills:
             if skill:
                 skill.update()
@@ -97,22 +99,13 @@ class Player(Entity):
         # movement
         if self.game.input.states['left']:
             self.attempt_move(0, -1)
-            self.counter[0] = True
         if self.game.input.states['right']:
             self.attempt_move(0, 1)
-            self.counter[0] = True
 
         if self.game.input.states['up']:
             self.attempt_move(1, -1)
-            self.counter[1] = True
         if self.game.input.states['down']:
             self.attempt_move(1, 1)
-            self.counter[1] = True
-
-        if not self.game.input.states['left'] and not self.game.input.states['right']:
-            self.counter[0] = False
-        if not self.game.input.states['up'] and not self.game.input.states['down']:
-            self.counter[1] = False
 
         # weapon stuff ----------------------------------------------------------------- #
         angle = math.atan2(self.game.input.mouse_pos[1] - self.center[1] + self.game.world.camera.render_offset[1], self.game.input.mouse_pos[0] - self.center[0] + self.game.world.camera.render_offset[0])
@@ -149,8 +142,8 @@ class Player(Entity):
             else:
                 self.flip[0] = False
 
-            if self.invincible > 0:
-                self.invincible = normalize(self.invincible, dt)
+            if self.i_frames > 0:
+                self.i_frames = normalize(self.i_frames, dt)
             
             if not self.movement_skill:
                 normalize_vector(self.velocity, dt * 8)

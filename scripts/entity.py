@@ -32,7 +32,7 @@ class Entity:
             self.speed = config['entities'][self.type]['speed']
         self.bounce = 0
         self.health = self.max_health
-        self.invincible = 0
+        self.i_frames = 0
 
         if self.type + '_walk' in self.game.assets.animations.animations:
             self.set_action('walk')
