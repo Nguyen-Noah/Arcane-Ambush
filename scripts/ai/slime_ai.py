@@ -8,12 +8,13 @@ class SlimeAI(BaseAI):
         self.radius = 90
         self.state = 'wander'           # WANDER OR PURSUIT
         self.targeted_entity = self.game.world.player
+        self.target_angle = math.atan2(self.parent.pos[1] - self.targeted_entity.pos[1], self.parent.pos[0] - self.targeted_entity.pos[0])
         self.target_pos = self.parent.home.copy()
         self.wait_time = self.wait(1)
         self.jump_vector = [0, 0]
         self.jump_timer = 0.5
         self.interest_timer = 2             # timer for how long it takes for the slime to lose interest and go back to wandering
-        
+
     def choose_new_wander_pos(self):
         angle = math.radians(random.randint(0, 360))
         distance = 60
@@ -29,6 +30,8 @@ class SlimeAI(BaseAI):
         return min + random.random()
     
     def update(self, dt):
+        self.target_angle = math.atan2(self.targeted_entity.pos[1] - self.parent.pos[1], self.targeted_entity.pos[0] - self.parent.pos[0])
+
         if self.state == 'wander':
             # the parent finished the random movement, pick another after a short delay and pick a new wander position
             if not any(self.jump_vector):
@@ -68,8 +71,11 @@ class SlimeAI(BaseAI):
                 self.jump_vector = [0, 0]
                 self.parent.active_animation.paused = False
                 self.jump_timer = 0.5
+                if random.randint(0, 1) == 1:
+                    self.game.world.entities.projectiles.spawn_projectile('lightStaff_projectile', self.parent.center.copy(), self.target_angle, 150, 4, self.parent)
 
-            if self.jump_timer > 0.5 / 2:
-                self.parent.anim_offset[1] += 0.1
-            else:
-                self.parent.anim_offset[1] -= 0.1
+            if not self.game.world.builder_mode:
+                if self.jump_timer > 0.5 / 2 :
+                    self.parent.anim_offset[1] += 0.1
+                else:
+                    self.parent.anim_offset[1] -= 0.1

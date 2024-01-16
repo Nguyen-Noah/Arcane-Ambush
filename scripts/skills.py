@@ -69,8 +69,13 @@ class Dash(Skill):
             self.dash_distance = 6
             self.owner.movement_skill = True
 
-            self.owner.velocity[0] = math.cos(self.owner.aim_angle) * self.dash_distance
-            self.owner.velocity[1] = math.sin(self.owner.aim_angle) * self.dash_distance
+            if self.owner.moving:
+                # fix vertical movement > linear movement
+                self.owner.velocity[0] = (self.owner.direction[0] * self.dash_distance) * 0.8
+                self.owner.velocity[1] = (self.owner.direction[1] * self.dash_distance) * 0.8
+            else:
+                self.owner.velocity[0] = math.cos(self.owner.aim_angle) * self.dash_distance
+                self.owner.velocity[1] = math.sin(self.owner.aim_angle) * self.dash_distance
 
             for i in range(random.randint(30, 50)):
                 self.game.world.vfx.spawn_group('arrow_impact_sparks', self.owner.center.copy(), self.owner.aim_angle)

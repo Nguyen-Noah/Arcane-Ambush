@@ -36,9 +36,9 @@ class Projectile:
         for entity in self.game.world.entities.entities:
             if (entity != self.owner) and ((entity.type == 'player') or (entity.type != self.owner.type)) and (entity.type != 'item') and (entity.health > 0) and entity.targetable and (entity.i_frames == 0):
                 if entity.rect.collidepoint(self.pos):
+                    entity.i_frames = 0.4
                     if entity.category == 'player':
                         self.game.window.add_freeze(0.2, 0.2)
-                        entity.i_frames = 0.4
                         color = (100, 0, 0)
                     else:
                         color = (255, 255, 255)

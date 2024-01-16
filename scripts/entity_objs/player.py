@@ -1,5 +1,5 @@
 import pygame, math
-from ..core_funcs import normalize_vector, normalize
+from ..core_funcs import normalize_vector
 from ..entity import Entity
 from ..skills import SKILLS
 from ..inventory import Inventory
@@ -10,9 +10,7 @@ class Player(Entity):
         super().__init__(*args, **kwargs)
         self.velocity = [0, 0]
         self.allow_movement = True
-        self.moving = False
-        self.vx = 0
-        self.vy = 0
+        self.direction = [0, 0]
         self.last_move_attempt = 0
         self.money = 100000
         self.skills = [SKILLS['dash'](self.game, self), None, None, None, None, None, None, None, None]
@@ -23,7 +21,6 @@ class Player(Entity):
         self.attack_movement_slow = 0
         self.movement_skill = False
         self.base_health = config['entities']['player']['health']
-        self.dust_particle_timer = 0.03
 
         # PUT THIS IN THE CONFIG EVENTUALLY
         self.mana = 100
@@ -97,15 +94,20 @@ class Player(Entity):
                 skill.update()
 
         # movement
+        self.direction = [0, 0]
         if self.game.input.states['left']:
             self.attempt_move(0, -1)
+            self.direction[0] = -1
         if self.game.input.states['right']:
             self.attempt_move(0, 1)
+            self.direction[0] = 1
 
         if self.game.input.states['up']:
             self.attempt_move(1, -1)
+            self.direction[1] = -1
         if self.game.input.states['down']:
             self.attempt_move(1, 1)
+            self.direction[1] = 1
 
         # weapon stuff ----------------------------------------------------------------- #
         angle = math.atan2(self.game.input.mouse_pos[1] - self.center[1] + self.game.world.camera.render_offset[1], self.game.input.mouse_pos[0] - self.center[0] + self.game.world.camera.render_offset[0])
@@ -141,9 +143,6 @@ class Player(Entity):
                 self.flip[0] = True
             else:
                 self.flip[0] = False
-
-            if self.i_frames > 0:
-                self.i_frames = normalize(self.i_frames, dt)
             
             if not self.movement_skill:
                 normalize_vector(self.velocity, dt * 8)

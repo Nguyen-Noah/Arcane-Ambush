@@ -1,5 +1,6 @@
 import pygame, math, random
 from .config import config
+from .core_funcs import normalize
 
 def collision_list(obj, obj_list):
     hit_list = []
@@ -9,7 +10,7 @@ def collision_list(obj, obj_list):
     return hit_list
 
 class Entity:
-    def __init__(self, game, pos, size, type, category, controller=None):
+    def __init__(self, game, pos, size, type, category, controller=None, movement_type='ground'):
         self.game = game
         self.pos = list(pos).copy()
         self.home = self.pos.copy()
@@ -33,6 +34,7 @@ class Entity:
         self.bounce = 0
         self.health = self.max_health
         self.i_frames = 0
+        self.moving = False
 
         if self.type + '_walk' in self.game.assets.animations.animations:
             self.set_action('walk')
@@ -40,6 +42,14 @@ class Entity:
         self.controller = controller
         if self.controller not in ['player', None]:
             self.controller = controller(self)
+
+        self.movement_type = movement_type
+        if self.movement_type == 'ground':
+            self.orig_particle_timer = 0.03
+            self.dust_particle_timer = 0.03
+        else:
+            self.orig_particle_timer = 0
+            self.dust_particle_timer = 0
 
         self.gen_mask()
         self.gen_shadow()
@@ -178,6 +188,9 @@ class Entity:
         if self.centered:
             offset[0] += self.img.get_width() // 2
             offset[1] += self.img.get_height() // 2
+
+        if self.type in self.game.world.particles.particle_groups:
+            self.game.world.particles.render(self.type, surf, offset)
         render_pos = (self.pos[0] - offset[0], self.pos[1] - offset[1])
         surf.blit(self.shadow, (render_pos[0], render_pos[1] + self.height - (self.shadow.get_height() / 2)))
         surf.blit(self.img, (render_pos[0] - anim_offset[0], render_pos[1] - anim_offset[1]))
@@ -186,6 +199,14 @@ class Entity:
 
     def update(self, dt):
         self.height = self.img.get_height()
+
+        if self.i_frames > 0:
+            self.i_frames = normalize(self.i_frames, dt)
+
+        if self.moving:
+            if random.randint(1, 50) == 1:
+                smoke_emitter = 'smoke_' + str(random.randint(0, 2))
+                self.game.world.particles.add_particle(self.type, (self.pos[0] + random.randint(0, self.img.get_width()), self.pos[1] + self.height), smoke_emitter, [0, 0], 5, random.randint(2, 4))
 
         if self.controller not in ['player', None]:
             self.controller.update(dt)

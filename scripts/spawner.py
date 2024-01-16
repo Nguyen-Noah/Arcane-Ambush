@@ -36,7 +36,7 @@ class Spawner:
         if self.game.world.loaded:
             if not self.loaded:
                 self.loaded = True
-                self.game.world.entities.entities.append(entity_map['slime'](self.game, (300, 300), (14, 14), 'slime', 'enemy', controller=SlimeAI))
+                self.game.world.entities.entities.append(entity_map['slime'](self.game, (300, 300), (14, 14), 'slime', 'enemy', controller=SlimeAI, movement_type='jump'))
             """ if len(self.game.world.entities.entities) < 50:
                 angle = random.uniform(0, 2 * math.pi)
                 distance = random.uniform(100, 200)

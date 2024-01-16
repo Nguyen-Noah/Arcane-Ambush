@@ -66,6 +66,7 @@ class World:
         self.entities.update(dt)
         self.destruction_particles.update()
         self.lights.update()
+        self.particles.update()
 
         # builder mode handler -------------------------------------------------------- #
         if self.game.input.states['open_build_mode']:
