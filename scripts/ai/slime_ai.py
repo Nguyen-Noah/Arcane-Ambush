@@ -71,7 +71,7 @@ class SlimeAI(BaseAI):
                 self.jump_vector = [0, 0]
                 self.parent.active_animation.paused = False
                 self.jump_timer = 0.5
-                if random.randint(0, 1) == 1:
+                if self.state == 'pursuit' and random.randint(0, 1) == 1:
                     self.game.world.entities.projectiles.spawn_projectile('lightStaff_projectile', self.parent.center.copy(), self.target_angle, 150, 4, self.parent)
 
             if not self.game.world.builder_mode:

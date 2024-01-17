@@ -10,5 +10,9 @@
     "spear": {
         "power": 7,
         "knockback": 0.7
+    },
+    "artemis": {
+        "power": 0,
+        "knockback": 0
     }
 }
