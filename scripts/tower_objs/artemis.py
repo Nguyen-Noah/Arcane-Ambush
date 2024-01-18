@@ -46,8 +46,16 @@ class Artemis(Tower):
 
                     self.beam_delay -= dt
                     if self.beam_delay <= 0:
+                        # SHOOTING
                         self.shooting = True
                         self.shooting_counter -= dt
+                        angle = self.beam_angle + random.random() * math.pi / 8
+                        green = random.randint(0, 127)
+                        vfx_color = (0, green, 255)
+                        self.game.world.vfx.spawn_group('aether_sparks', self.center, angle + math.pi, color=vfx_color)
+
+                        self.game.world.camera.add_screen_shake(1, 'light')
+
                         if self.shooting_counter <= 0:
                             # resetting everything
                             self.shooting = False
@@ -56,14 +64,18 @@ class Artemis(Tower):
                             self.since_first_circle = 0
                             self.second_circle_spawned = False
                             self.beam_delay = 0.9
-                        # SHOOTING
-                        angle = self.beam_angle + random.random() * math.pi / 8
-                        green = random.randint(0, 127)
-                        vfx_color = (0, green, 255)
-                        self.game.world.vfx.spawn_group('aether_sparks', self.center, angle + math.pi, color=vfx_color)
+                            self.beam_angle = 0
 
     def render(self, surf, offset=[0, 0]):
         super().render(surf, offset)
+        if self.beam_angle != 0 and self.beam_delay > 0:
+            beam_surf = pygame.Surface(self.game.window.base_resolution)
+            beam_surf.fill((0, 0, 0))
+            beam_surf.set_colorkey((0, 0, 0))
+            beam_surf.set_alpha(255 * (1 - self.beam_delay))
+            endpoint = (self.center[0] - offset[0] + (math.cos(self.beam_angle) * 300), self.center[1] - offset[1] + (math.sin(self.beam_angle) * 300))
+            pygame.draw.line(beam_surf, 'red', (self.center[0] - offset[0], self.center[1] - offset[1]), endpoint, int(3 * (1 - self.beam_delay)))
+            surf.blit(beam_surf, (0, 0))
 
         # add an animation for the beam to make it look better
         if self.shooting:

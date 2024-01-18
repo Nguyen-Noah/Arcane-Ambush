@@ -14,6 +14,7 @@ class Camera:
         self.lock_distance = config['level_data'][self.game.state]['lock_distance']
         self.mode = None
         self.screen_shake = 0
+        self.shake_amount = 'medium'
 
     def focus(self):
         self.update()
@@ -28,15 +29,17 @@ class Camera:
     def set_restriction(self, pos):
         self.restriction_point = list(pos)
 
-    def add_screen_shake(self, amt):
-        self.screen_shake = amt
+    def add_screen_shake(self, duration, amt='medium'):
+        self.screen_shake = duration
+        self.shake_amount = amt
 
     def update(self):
         self.true_pos = self.camera_offset.copy()
 
         if self.screen_shake:
-            self.true_pos[0] += random.randint(0, 8) - 4
-            self.true_pos[1] += random.randint(0, 8) - 4
+            amt = config['camera'][self.shake_amount]
+            self.true_pos[0] += random.randint(0, amt*2) - amt
+            self.true_pos[1] += random.randint(0, amt*2) - amt
             self.screen_shake -= 1
 
         if self.game.world.builder_mode:
