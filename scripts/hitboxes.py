@@ -4,7 +4,7 @@ from .config import config
 from .core_funcs import itr
 
 class Hitbox:
-    def __init__(self, game, hitbox_type, duration=-1, rect=None, tracked=None, owner=None, angle=None, offset=None):
+    def __init__(self, game, hitbox_type, duration=-1, rect=None, tracked=None, entity=None, owner=None, angle=None, offset=None):
         self.game = game
         if tracked:
             self.mode = 'tracked'
@@ -13,6 +13,9 @@ class Hitbox:
         if rect:
             self.mode = 'rotated_rect'
             self.rect = rect
+        if entity:
+            self.mode = 'entity'
+            self.entity = entity
         self.duration = duration
         self.hitbox_type = hitbox_type
         self.config = config['hitboxes'][hitbox_type]
@@ -21,6 +24,7 @@ class Hitbox:
         self.ignore = [owner]
 
     def update(self):
+        # mainly for vfx
         if self.mode == 'tracked':
             tracked_mask, offset = self.tracked.create_mask()
 
@@ -44,6 +48,7 @@ class Hitbox:
                         self.ignore.append(entity)
             return self.tracked.alive
         
+        # used for artemis' beam
         if self.mode == 'rotated_rect':
             tracked_mask = pygame.mask.from_surface(self.rect)
 
@@ -62,6 +67,9 @@ class Hitbox:
 
             self.duration -= self.game.window.dt
             return self.duration > 0
+        
+        if self.mode == 'entity':
+            tracked_mask = self.entity.mask
                     
 class Hitboxes:
     def __init__(self, game):

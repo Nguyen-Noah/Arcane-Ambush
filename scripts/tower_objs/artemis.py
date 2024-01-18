@@ -50,8 +50,7 @@ class Artemis(Tower):
                         self.shooting = True
                         self.shooting_counter -= dt
                         angle = self.beam_angle + random.random() * math.pi / 8
-                        green = random.randint(0, 127)
-                        vfx_color = (0, green, 255)
+                        vfx_color = (random.randint(0, 100), random.randint(0, 127), 255)
                         self.game.world.vfx.spawn_group('aether_sparks', self.center, angle + math.pi, color=vfx_color)
 
                         self.game.world.camera.add_screen_shake(1, 'light')
@@ -77,10 +76,10 @@ class Artemis(Tower):
             pygame.draw.line(beam_surf, 'red', (self.center[0] - offset[0], self.center[1] - offset[1]), endpoint, int(3 * (1 - self.beam_delay)))
             surf.blit(beam_surf, (0, 0))
 
-        # add an animation for the beam to make it look better
+        # MAKE THIS ONLY CALCULATE ONCE
         if self.shooting:
             img = self.game.assets.projectiles['artemis_beam']
             render_pos = (self.center[0] - offset[0], self.center[1] - offset[1])
             img, pos = pivot_rotate(img, math.degrees(self.beam_angle), render_pos, pygame.math.Vector2(img.get_width() // 2, 0))
-            self.game.world.hitboxes.add_hitbox(self.game, 'artemis', duration=self.shooting_counter, rect=img, owner=self, angle=self.beam_angle, offset=pos)
+            #self.game.world.hitboxes.add_hitbox(self.game, 'artemis', duration=self.shooting_counter, rect=img, owner=self, angle=self.beam_angle, offset=pos)
             surf.blit(img, pos)
