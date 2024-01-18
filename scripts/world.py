@@ -11,8 +11,6 @@ from .weapon_anims import WeaponAnimations
 from .particles import ParticleManager
 from .vfx import VFX, set_glow_surf
 from .lights import Lights
-from .entity_map import entity_map
-from .ai.slime_ai import SlimeAI
 
 from .quadtree import QuadTree, Rectangle
 
@@ -23,11 +21,16 @@ class World:
         self.collideables = []
         self.builder_mode = False
         self.world_timer = 0
+        self.tilesize = 16
 
     def load(self, map_id):
         self.map_id = map_id
         self.floor = self.game.assets.maps[self.map_id]
         self.map_data = import_csv_layout('data/maps/' + self.map_id + '/' + self.map_id + '_Collideables.csv')
+        for i, row in enumerate(self.map_data):
+            for j, tile in enumerate(row):
+                if int(tile) == 0:
+                    self.collideables.append(pygame.Rect(j * self.tilesize, i * self.tilesize, self.tilesize, self.tilesize))
 
         # polish ----------------------------------------------------------------------- #
         self.destruction_particles = DestructionParticles(self.game)
@@ -108,7 +111,6 @@ class World:
 
         self.vfx.render_back(self.game.window.ui_surf, offset)
 
-        self.collideables = []
         self.render_list = []
 
         surf.blit(self.floor, (0 - self.camera.true_pos[0], 0 - self.camera.true_pos[1]))
@@ -120,7 +122,7 @@ class World:
                     y = row_index * 16
                     #img = self.game.assets.collideables[col]
                     #self.collideables.append(self.obs_rect((x + map_offset[0], y + map_offset[1] - img.get_size()[1]), img, int(col)))
-                    self.collideables.append(pygame.Rect(x, y, 16, 16))
+                    #self.collideables.append(pygame.Rect(x, y, 16, 16))
                     #rect = self.world_rects[int(col)]
                     #self.collideables.append((x + map_offset[0] - rect[0], y + map_offset[1] - rect[1], rect[2], rect[3]))
                     """ if col != '10':

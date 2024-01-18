@@ -188,3 +188,10 @@ def pivot_rotate(surface, angle, pivot, offset):
     # Add the offset vector to the center/pivot point to shift the rect.
     rect = rotated_image.get_rect(center=pivot+rotated_offset)
     return rotated_image, rect  # Return the rotated image and shifted rect.
+
+def collision_list(obj, obj_list):
+    hit_list = []
+    for r in obj_list:
+        if obj.colliderect(r):
+            hit_list.append(r)
+    return hit_list

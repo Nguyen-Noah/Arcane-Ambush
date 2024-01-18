@@ -1,13 +1,6 @@
 import pygame, math, random
 from .config import config
-from .core_funcs import normalize
-
-def collision_list(obj, obj_list):
-    hit_list = []
-    for r in obj_list:
-        if obj.colliderect(r):
-            hit_list.append(r)
-    return hit_list
+from .core_funcs import normalize, collision_list
 
 class Entity:
     def __init__(self, game, pos, size, type, category, controller=None, movement_type='ground'):

@@ -9,11 +9,14 @@ class Artemis(Tower):
         self.target_pos = None
         self.since_first_circle = 0
         self.second_circle_spawned = False
-        self.shooting_counter = 1               # shoot the beam for 1 second
+        self.shooting_counter = 100               # shoot the beam for 1 second
         self.beam_rect = pygame.Rect(self.center[0], self.center[1], 100, 100)
         self.shooting = False
         self.beam_angle = 0
         self.beam_delay = 0.9
+        self.beam_calculated = False
+        self.true_pos = [0, 0]
+        self.beam_img = self.game.assets.projectiles['artemis_beam']
 
         """
         1. set the target to the player
@@ -51,7 +54,9 @@ class Artemis(Tower):
                         self.shooting_counter -= dt
                         angle = self.beam_angle + random.random() * math.pi / 8
                         vfx_color = (random.randint(0, 100), random.randint(0, 127), 255)
-                        self.game.world.vfx.spawn_group('aether_sparks', self.center, angle + math.pi, color=vfx_color)
+
+                        if random.randint(1, 20) == 1:
+                            self.game.world.vfx.spawn_group('aether_sparks', self.center, angle + math.pi, color=vfx_color)
 
                         self.game.world.camera.add_screen_shake(1, 'light')
 
@@ -64,6 +69,7 @@ class Artemis(Tower):
                             self.second_circle_spawned = False
                             self.beam_delay = 0.9
                             self.beam_angle = 0
+                            self.beam_calculated = False
 
     def render(self, surf, offset=[0, 0]):
         super().render(surf, offset)
@@ -78,8 +84,10 @@ class Artemis(Tower):
 
         # MAKE THIS ONLY CALCULATE ONCE
         if self.shooting:
-            img = self.game.assets.projectiles['artemis_beam']
-            render_pos = (self.center[0] - offset[0], self.center[1] - offset[1])
-            img, pos = pivot_rotate(img, math.degrees(self.beam_angle), render_pos, pygame.math.Vector2(img.get_width() // 2, 0))
-            #self.game.world.hitboxes.add_hitbox(self.game, 'artemis', duration=self.shooting_counter, rect=img, owner=self, angle=self.beam_angle, offset=pos)
-            surf.blit(img, pos)
+            if self.beam_calculated:
+                surf.blit(self.beam_img, (self.true_pos[0] - offset[0], self.true_pos[1] - offset[1]))
+            else:
+                self.beam_img, pos = pivot_rotate(self.beam_img, math.degrees(self.beam_angle), self.center, pygame.math.Vector2(self.beam_img.get_width() // 2, 0))
+                self.game.world.hitboxes.add_hitbox(self.game, 'artemis', duration=self.shooting_counter, rect=self.beam_img, owner=self, angle=self.beam_angle, offset=pos)
+                self.beam_calculated = True
+                self.true_pos = pos

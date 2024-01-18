@@ -61,9 +61,11 @@ class Hitbox:
                     if (degrees < 180 and degrees > 90) or (degrees > -180 and degrees < -90):      # Q3 or Q4
                         offset[0] += self.rect.get_width()
                     collision = tracked_mask.overlap(entity.mask, offset)
-                    if collision:
+                    """ if collision:
                         # fix collision point and add more particles
                         collision_point = [offset[0] + collision[0], offset[1] + collision[1]]
+                        pygame.draw.circle(self.game.window.display, 'red', collision_point, 50)
+ """
 
             self.duration -= self.game.window.dt
             return self.duration > 0

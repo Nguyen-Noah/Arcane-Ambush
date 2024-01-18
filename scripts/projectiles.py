@@ -1,6 +1,6 @@
 import pygame, math, random
 from .config import config
-from .core_funcs import advance, itr
+from .core_funcs import advance, itr, collision_list
 from .vfx import glow
 from .ease_functions import linear
 
@@ -24,14 +24,34 @@ class Projectile:
         advance(self.pos, self.rotation, self.config['spawn_advance'])
 
     def move(self, dt):
+        rect = pygame.Rect(self.pos[0], self.pos[1], self.img.get_width(), self.img.get_height())
+        directions = {k: False for k in ['top', 'left', 'right', 'bottom']}  
+
+        hit_list = collision_list(rect, self.game.world.collideables)
         cx = math.cos(self.rotation) * self.speed * dt
         self.pos[0] += cx
+        if len(hit_list) > 0:
+            if cx > 0:
+                directions['right'] = True
+            else:
+                directions['left'] = True
+                
         cy = math.sin(self.rotation) * self.speed * dt
         self.pos[1] += cy
+        if len(hit_list) > 0:
+            if cy > 0:
+                directions['bottom'] = True
+            else:
+                directions['top'] = True
+        
+        return directions
 
     def update(self, dt):
         self.duration -= dt
-        self.move(dt)
+        collisions = self.move(dt)
+
+        if any(hit for hit in collisions.values()):
+            self.alive = False
 
         for entity in self.game.world.entities.entities:
             if (entity != self.owner) and ((entity.type == 'player') or (entity.type != self.owner.type)) and (entity.type != 'item') and (entity.health > 0) and entity.targetable and (entity.i_frames == 0):
